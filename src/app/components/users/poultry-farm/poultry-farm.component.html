@@ -1,0 +1,99 @@
+<div class="app-container">
+  <div class="sidebar" [ngClass]="status ? 'show' : 'hide'">
+    <div
+      class="d-flex justify-content-center mt-2"
+      style="background-color: white"
+    >
+      <img
+        src="./assets/Images/loginLogo.png"
+        alt="Logo"
+        width="140px"
+        height="140px"
+      />
+    </div>
+    <ul class="menu">
+      <li [routerLinkActive]="['active']">
+        <!-- <svg xmlns="http://www.w3.org/2000/svg" width="25px" height="25px" viewBox="0 0 24 24"><path fill="currentColor" d="M15.192 19v-5.808H21V19zm-4-8.192V5H21v5.808zM3 19v-5.808h9.808V19zm0-8.192V5h5.808v5.808zm9.192-1H20V6h-7.808zM4 18h7.808v-3.808H4zm12.192 0H20v-3.808h-3.808zM4 9.808h3.808V6H4zm3.808 0"/></svg> -->
+        <span>Dashboard</span>
+      </li>
+
+      <!-- <li  [routerLink]="['/poultryFarm/live-stock']" [routerLinkActive]="['active']" >
+          <svg xmlns="http://www.w3.org/2000/svg" width="25px" height="25px" viewBox="0 0 48 48"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M37.28 41.08a1.63 1.63 0 0 0 1.63-1.63V26.17H41a2.45 2.45 0 0 0 1.59-4.32L25.94 7.64a3 3 0 0 0-3.88 0L5.37 21.85A2.45 2.45 0 0 0 7 26.17h2.09v13.28a1.63 1.63 0 0 0 1.63 1.63Zm-13.28 0V18.32m0 0l2.72-2.71" stroke-width="1"/><circle cx="27.71" cy="14.62" r="1.4" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/><circle cx="32.16" cy="37.12" r="1.4" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/><circle cx="20.29" cy="14.62" r="1.4" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/><circle cx="15.02" cy="32.1" r="1.4" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="m24 18.32l-2.72-2.71m-.99 21.76v-3.85" stroke-width="1"/><circle cx="20.29" cy="32.12" r="1.4" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/><circle cx="15.05" cy="37.37" r="1.4" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M20.29 37.37h-3.84m11.68-5.25h4.89" stroke-width="1"/><circle cx="34.42" cy="32.12" r="1.4" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/><circle cx="28.13" cy="27.42" r="1.4" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M28.13 32.12v-3.3m-7.86-1.9v-3.84" stroke-width="1"/><circle cx="20.27" cy="21.68" r="1.4" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/><circle cx="15.02" cy="26.92" r="1.4" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M20.27 26.92h-3.85M24 41.08l3.96-3.96h2.79" stroke-width="1"/><circle cx="15.02" cy="18.52" r="1.4" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M15.02 21.68v-1.76M24 41.08l-7.99-7.99" stroke-width="1"/><circle cx="32.34" cy="18.52" r="1.4" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="m32.34 25.96l2.72-2.71" stroke-width="1"/><circle cx="36.05" cy="22.26" r="1.4" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/><circle cx="28.63" cy="22.26" r="1.4" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="m32.34 25.96l-2.72-2.71m2.72 4.68v-8.01M24 30.65l-8.98-8.97M24 36.27l8.34-8.34" stroke-width="1"/></svg>
+          <span>Live stock</span>
+        </li> -->
+      <!-- <li [routerLink]="['/poultryFarm/feed-stock']"  [routerLinkActive]="['active']" >
+          <svg xmlns="http://www.w3.org/2000/svg" width="25px" height="25px" viewBox="0 0 16 16"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7.25 14.25h-4.5V1.75h10.5v7.5m-3.5 3.5l1.5 1.5l3-2.5m-8.5-4h4.5m-4.5 3h1.5m-1.5-6h4.5"/></svg>
+          <span>Feed stock</span>
+        </li> -->
+      <li
+        [routerLink]="['/poultryFarm/flocks']"
+        [routerLinkActive]="['active']"
+      >
+        <span>Flocks</span>
+      </li>
+      <li
+        [routerLink]="['/poultryFarm/egg-production']"
+        [routerLinkActive]="['active']"
+      >
+        <span>Egg Productions</span>
+      </li>
+      <li
+        [routerLink]="['/poultryFarm/vaccinations']"
+        [routerLinkActive]="['active']"
+      >
+        <span>Vaccinations</span>
+      </li>
+      <li
+        [routerLink]="['/poultryFarm/feed-records']"
+        [routerLinkActive]="['active']"
+      >
+        <span>Feed Records</span>
+      </li>
+      <!-- <li
+        [routerLink]="['/poultryFarm/egg-transfers']"
+        [routerLinkActive]="['active']"
+      >
+        <span>Egg Transfers </span>
+      </li> -->
+      <li
+        [routerLink]="['/poultryFarm/ledger-transactions']"
+        [routerLinkActive]="['active']"
+      >
+        <span>Ledger </span>
+      </li>
+      <li
+        [routerLink]="['/poultryFarm/Poultry-farm-sales']"
+        [routerLinkActive]="['active']"
+      >
+        <span>Sales </span>
+      </li>
+      <hr class="mt-5" />
+      <li [routerLink]="['/login']">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+        >
+          <path
+            fill="currentColor"
+            d="M5 5h7V3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h7v-2H5zm16 7l-4-4v3H9v2h8v3z"
+          />
+        </svg>
+        <span>Logout</span>
+      </li>
+    </ul>
+  </div>
+  <div class="main-content" style="padding: 25px">
+    <img
+      title="Menu"
+      width="50"
+      class="show-menu"
+      [ngStyle]="{ 'margin-left': chevron == 'chevron-left' ? '15rem' : '0' }"
+      (click)="clickEvent()"
+      src="./assets/Images/{{ chevron }}.png"
+    />
+
+    <router-outlet></router-outlet>
+  </div>
+</div>

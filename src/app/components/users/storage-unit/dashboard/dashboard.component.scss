@@ -1,0 +1,44 @@
+.dashboard-card{
+font-family:'Montserrat', sans-serif;
+font-weight: 400;
+font-size: 20px;
+border: 1px solid #ddd;
+border-radius: 10px;
+display: flex;
+justify-content: center;
+align-items: center;
+color: #000000;
+margin-top: 30px;
+height: 80px;
+}
+.unit-card {
+  background-color: white;
+  transition: 0.3s ease-in-out;
+  border: 1px solid #00000033;
+  border-radius: 10px;
+  min-height: 150px;
+  cursor: pointer;
+
+}
+.card-text{
+font-family:'Montserrat', sans-serif;
+font-weight: 400;
+font-size: 22px;
+color: #000000;
+}
+.count{
+font-family:'Montserrat', sans-serif;
+font-weight: 700;
+font-size: 35px;
+}
+ ::ng-deep canvas {
+    width: 250px !important;
+    height: 250px !important;
+  }
+
+  @media (max-width: 575px) {
+  ::ng-deep canvas {
+    width: 100% !important;
+    height: 250px !important;
+  }
+}

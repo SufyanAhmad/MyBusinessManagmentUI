@@ -1,0 +1,21 @@
+<p-dialog
+  header="Confirmation"
+  [modal]="true"
+  [(visible)]="visible"
+  [draggable]="false"
+  [resizable]="false"
+  styleClass="child-dialog"
+  (onHide)="close()" 
+>
+  <div class="d-flex gap-2 align-items-center">
+    <svg style="color: black;" xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24">
+      <path fill="currentColor" d="m12 1l11.951 20.7H.05zM3.513 19.7h16.974L12 5zM13 9.5V15h-2V9.5zm-2 7h2.004v2.004H11z"/>
+    </svg>
+    <span style="color: black;">{{ message }}</span>
+  </div>
+
+  <div class="d-flex justify-content-end gap-2 mt-4">
+    <p-button (onClick)="close()" label="No" severity="info" styleClass="confirmation-btn"  [outlined]="true" />
+    <p-button (onClick)="confirm()" label="Yes" severity="danger" styleClass="confirmation-btn"  [outlined]="true" />
+  </div>
+</p-dialog>

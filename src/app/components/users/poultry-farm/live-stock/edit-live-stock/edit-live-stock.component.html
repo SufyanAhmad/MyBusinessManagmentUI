@@ -1,0 +1,89 @@
+<div class="container-fluid">
+   <div class="d-pointer">
+    <span class="breadcrumb"  [routerLink]="['/superAdmin/business/units']" style="text-transform: uppercase;"  >{{businessUnitName}} / </span>
+    <span  class="breadcrumb-bold">&nbsp;Live Stock Detail</span>
+    </div>
+  <!-- User Header -->
+  <div class="header-card d-flex align-items-center justify-content-between mb-4" >
+    <div class="heading mb-0" style="color: #03192C;">
+     {{liveStockDetail.breed}}
+    </div>
+    </div>
+  <!-- Customer Details -->
+ <div class="d-flex justify-content-between align-items-center" style="margin-top: 70px;">
+    <span class="heading">
+   Live Stock Detail
+    </span>
+    <span *ngIf="isReadOnly" (click)="isReadOnly = false;">
+        <button class="edit-btn">EDIT</button>
+    </span>
+    <span  *ngIf="!isReadOnly"  class="d-flex justify-content-end gap-4" >
+      <button (click)="discardChanges()"  type="button" class="btn-discard"  
+       >
+          Discard
+          
+        </button>
+       <button  type="button" (click)="(editLiveStockModel.valid && !editLoading)?editLiveStockDetail():null" 
+         [ngClass]="{
+        'btn-save': editLiveStockModel.valid && !editLoading,
+        'btn-disable': editLiveStockModel.invalid || editLoading
+           }"  >
+          Save &nbsp;
+           <span *ngIf="editLoading"  class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+        </button>
+      </span>
+   </div>
+  <form [formGroup]="editLiveStockModel" >
+  <div class="row g-3 align-items-end mt-4">
+    
+    <div class="col-md-4 mb-4">
+      <span class="label">Breed</span>
+    <input type="text" formControlName="breed" class="input-felid" [ngClass]="{ 'input-disable': isReadOnly  }"   class="input-felid" placeholder="Enter breed...">
+    </div>
+    <div class="col-md-4 mb-4 position-relative">
+     <span class="label">Quantity</span>
+    <input type="number" formControlName="quantity" (keydown)="preventDecimal($event)"  class="input-felid" [ngClass]="{ 'input-disable': isReadOnly  }"   class="input-felid" placeholder="Enter quantity">
+        <div class="errorValidation" style="position: absolute;" *ngIf="editLiveStockModel.get('quantity')?.touched && editLiveStockModel.get('quantity')?.errors?.['min']">
+       Quantity should be greater than 0
+        </div>
+    </div>
+    <div class="col-md-4 mb-4">
+     <span class="label">Arrival date</span>
+    <input type="date" formControlName="arrivalDate"  class="input-felid" [ngClass]="{ 'input-disable': isReadOnly  }"   class="input-felid" placeholder="Enter date">
+
+    </div> 
+   <div class="col-md-4 mb-4 position-relative">
+     <span class="label">AGE IN DAYS</span>
+    <input type="number" formControlName="ageInDays" (keydown)="preventDecimal($event)"  class="input-felid" [ngClass]="{ 'input-disable': isReadOnly  }"   placeholder="Enter days">
+    <div class="errorValidation" style="position: absolute;" *ngIf="editLiveStockModel.get('ageInDays')?.touched && editLiveStockModel.get('ageInDays')?.errors?.['min']">
+       Days should be greater than 0
+        </div>
+    </div>
+    <div class="col-md-4 mb-4">
+      <span class="label">HEALTH STATES</span>
+    <input type="text" formControlName="healthStatus" class="input-felid" [ngClass]="{ 'input-disable': isReadOnly  }"    placeholder="Enter health status...">
+    </div>
+    <div class="col-md-4 mb-4">
+     <div class="mt-3">
+        <span class="label">Business Unit</span>
+        <div>
+        <p-select 
+                    [options]="businessUnitTypes" 
+                   formControlName="businessUnitId" 
+                    optionLabel="type"
+                    optionValue="id"
+                     [filter]="true" filterBy="type"
+                    placeholder="Business Unit" 
+                    [ngClass]="{
+                        'my-custom-select': !isReadOnly,
+                        'p-select-disabled': isReadOnly
+                      }"
+                     readonly="{{isReadOnly}}"
+                    />
+        </div>
+      </div>    
+    </div>
+  </div>
+  </form>
+</div>
+<p-toast />

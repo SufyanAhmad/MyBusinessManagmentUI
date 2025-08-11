@@ -1,0 +1,326 @@
+<div class="app-container">
+  <div class="sidebar" [ngClass]="status ? 'show' : 'hide'">
+    <div
+      class="d-flex justify-content-center mt-2"
+      style="background-color: white"
+    >
+      <img
+        src="./assets/Images/loginLogo.png"
+        alt="Logo"
+        [routerLink]="['/superAdmin/dashboard']"
+        width="140px"
+        height="140px"
+      />
+    </div>
+    <ul class="menu">
+      <li
+        [routerLink]="['/superAdmin/dashboard']"
+        [routerLinkActive]="['active']"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="25px"
+          height="25px"
+          viewBox="0 0 24 24"
+        >
+          <path
+            fill="currentColor"
+            d="M15.192 19v-5.808H21V19zm-4-8.192V5H21v5.808zM3 19v-5.808h9.808V19zm0-8.192V5h5.808v5.808zm9.192-1H20V6h-7.808zM4 18h7.808v-3.808H4zm12.192 0H20v-3.808h-3.808zM4 9.808h3.808V6H4zm3.808 0"
+          />
+        </svg>
+        <span>Dashboard</span>
+      </li>
+
+      <li [routerLink]="['/superAdmin/users']" [routerLinkActive]="['active']">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="25px"
+          height="25px"
+          viewBox="0 0 24 24"
+        >
+          <g
+            fill="none"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-width="1"
+          >
+            <circle cx="12" cy="8" r="3.5" />
+            <path
+              d="M4.85 16.948c.639-2.345 3.065-3.448 5.495-3.448h3.31c2.43 0 4.856 1.103 5.496 3.448a10 10 0 0 1 .295 1.553c.06.55-.394.999-.946.999h-13c-.552 0-1.005-.45-.946-.998a10 10 0 0 1 .295-1.554Z"
+            />
+          </g>
+        </svg>
+        <span>Users</span>
+      </li>
+      <li
+        [routerLink]="['/superAdmin/business/units']"
+        [routerLinkActive]="['active']"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="25px"
+          height="25px"
+          viewBox="0 0 24 24"
+        >
+          <path
+            fill="currentColor"
+            d="M20 7h-4V5l-2-2h-4L8 5v2H4c-1.1 0-2 .9-2 2v5c0 .75.4 1.38 1 1.73V19c0 1.11.89 2 2 2h14c1.11 0 2-.89 2-2v-3.28c.59-.35 1-.99 1-1.72V9c0-1.1-.9-2-2-2M10 5h4v2h-4zM4 9h16v5h-5v-3H9v3H4zm9 6h-2v-2h2zm6 4H5v-3h4v1h6v-1h4z"
+          />
+        </svg>
+        <span>Business Units</span>
+      </li>
+      <li 
+        [routerLink]="['/superAdmin/ledger-transactions']"
+        [routerLinkActive]="['active']"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          width="19"
+          height="19"
+          viewBox="0 0 19 19"
+          fill="none"
+        >
+          <rect width="19" height="19" fill="url(#pattern0_124_129)" />
+          <defs>
+            <pattern
+              id="pattern0_124_129"
+              patternContentUnits="objectBoundingBox"
+              width="1"
+              height="1"
+            >
+              <use xlink:href="#image0_124_129" transform="scale(0.0333333)" />
+            </pattern>
+            <image
+              id="image0_124_129"
+              width="30"
+              height="30"
+              preserveAspectRatio="none"
+              xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAACXBIWXMAAAsTAAALEwEAmpwYAAABZUlEQVR4nO3WsUocURQG4MFUolW6VAEVzAtYiNhtoUSQ1Gu6FHmFfYMEJaVg8hSrndk0St5iRVAQLFIENIUWn1y4s7kus7Mzm+wiuD8cmHvOP/fnnv/emZtlUzwrYAFNfEEH57iNEZ6/x9oOFmPsVOA3w9yDRH8YPzpFwjnaaOEtljAXIzxvxVp7VH7WJ9ooLJTbMhIfjTTZ/V/Cw/LoFiV7L+AnTkvG/fxlHCZTHeFNmUY2QPgUJyXjHh+zuMQNdvEZv3GF+VrCdVqNlTj8ltTDxjoIm2ycwq9whz/4ind4WcSv0uq6Hr/HdTLVPfYxU1e4ssdJ7kVseyt6HrA9zlavRT/Xk/rHSPkwTuHF6O8v7OFTbHvIva7b6keelgknqw4/ihzHWC1dnAoeDxOumg8oTw7BqPyAqXCOKjeQ5j/wFbZ6EsgS4fwrMwlcpMKbExK/wEbVk1B0NMJV6SzG36vMFE8RD5mt5fSa481RAAAAAElFTkSuQmCC"
+            />
+          </defs>
+        </svg>
+        <span>Ledger</span>
+      </li>
+      <li 
+        [routerLink]="['/superAdmin/customers']"
+        [routerLinkActive]="['active']"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="25px"
+          height="25px"
+          viewBox="0 0 48 48"
+        >
+          <g
+            fill="none"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="3"
+          >
+            <path
+              d="M30.24 6.212q.387.213.76.444c4.937 3.058 8.238 8.46 8.313 14.63l3.747 5.223c.563.785.465 1.846-.363 2.344c-.83.5-2.063 1.084-3.734 1.488l-.566 6.718a3 3 0 0 1-3.358 2.725l-2.8-.346V43a2 2 0 0 1-1.998 2H13.014a2 2 0 0 1-1.999-2v-7.5c-4.295-3.192-7.075-8.275-7.075-14c0-6.26 3.321-11.75 8.315-14.844"
+            />
+            <path
+              d="M17.023 14.057a8 8 0 1 0 7.954 0Q24.998 12.738 25 11c0-2.551-.044-4.405-.09-5.645c-.043-1.2-.854-2.187-2.05-2.285A24 24 0 0 0 21 3c-.732 0-1.35.029-1.86.07c-1.196.098-2.007 1.085-2.05 2.285C17.043 6.595 17 8.449 17 11q.001 1.739.023 3.057"
+            />
+            <path d="M21 29c3 3 7.6 5 12 5" />
+          </g>
+        </svg>
+        <span>Customers</span>
+      </li>
+       <li 
+        [routerLink]="['/superAdmin/employees']"
+        [routerLinkActive]="['active']"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" width="25px" height="25px" viewBox="0 0 36 36"><ellipse cx="18" cy="11.28" fill="currentColor" rx="4.76" ry="4.7"/><path fill="currentColor" d="M10.78 11.75h.48v-.43a6.7 6.7 0 0 1 3.75-6a4.62 4.62 0 1 0-4.21 6.46Zm13.98-.47v.43h.48A4.58 4.58 0 1 0 21 5.29a6.7 6.7 0 0 1 3.76 5.99m-2.47 5.17a21.5 21.5 0 0 1 5.71 2a2.7 2.7 0 0 1 .68.53H34v-3.42a.72.72 0 0 0-.38-.64a18 18 0 0 0-8.4-2.05h-.66a6.66 6.66 0 0 1-2.27 3.58M6.53 20.92A2.76 2.76 0 0 1 8 18.47a21.5 21.5 0 0 1 5.71-2a6.66 6.66 0 0 1-2.27-3.55h-.66a18 18 0 0 0-8.4 2.05a.72.72 0 0 0-.38.64V22h4.53Zm14.93 5.77h5.96v1.4h-5.96z"/><path fill="currentColor" d="M32.81 21.26h-6.87v-1a1 1 0 0 0-2 0v1H22v-2.83a20 20 0 0 0-4-.43a19.3 19.3 0 0 0-9.06 2.22a.76.76 0 0 0-.41.68v5.61h7.11v6.09a1 1 0 0 0 1 1h16.17a1 1 0 0 0 1-1V22.26a1 1 0 0 0-1-1m-1 10.36H17.64v-8.36h6.3v.91a1 1 0 0 0 2 0v-.91h5.87Z"/></svg>
+        <span>Employees</span>
+      </li>
+      <li 
+        [routerLink]="['/superAdmin/suppliers']"
+        [routerLinkActive]="['active']"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="25px"
+          height="25px"
+          viewBox="0 0 48 48"
+        >
+          <g
+            fill="none"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="3"
+          >
+            <path
+              d="M29.368 3.08c.897.28 3.777 1.422 7.937 5.479c3.92 3.823 5.187 6.538 5.559 7.57C42.947 18.37 43 20.98 43 24c0 8.065-.375 13.204-.717 16.214c-.25 2.202-1.903 3.848-4.103 4.105c-2.815.329-7.413.681-14.18.681s-11.365-.352-14.18-.68c-2.2-.258-3.853-1.904-4.103-4.106C5.375 37.204 5 32.064 5 24s.375-13.204.717-16.214C5.967 5.584 7.62 3.938 9.82 3.68C12.635 3.353 17.233 3 24 3c1.97 0 3.756.03 5.368.08M13 37h22m-22-7h22"
+            />
+            <path
+              d="M13 22.868c2.572-3.93 4.717-5.656 5.896-6.38c.557-.343 1.23-.119 1.52.468c.663 1.345 1.29 3.193 1.737 4.66c.264.86 1.52 1.045 2.073.335C26.452 19.095 29.5 16.5 29.5 16.5m4.067 1.82c.44-2.324.457-4.363.42-5.443a.89.89 0 0 0-.864-.865a25.5 25.5 0 0 0-5.444.42c-.754.143-1.004 1.062-.46 1.605l4.744 4.745c.543.543 1.461.293 1.604-.461"
+            />
+          </g>
+        </svg>
+        <span>Suppliers</span>
+      </li>
+      <li 
+        [routerLink]="['/superAdmin/activity-log']"
+        [routerLinkActive]="['active']"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          width="19"
+          height="19"
+          viewBox="0 0 19 19"
+          fill="none"
+        >
+          <rect width="19" height="19" fill="url(#pattern0_124_133)" />
+          <defs>
+            <pattern
+              id="pattern0_124_133"
+              patternContentUnits="objectBoundingBox"
+              width="1"
+              height="1"
+            >
+              <use xlink:href="#image0_124_133" transform="scale(0.02)" />
+            </pattern>
+            <image
+              id="image0_124_133"
+              width="50"
+              height="50"
+              preserveAspectRatio="none"
+              xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAACXBIWXMAAAsTAAALEwEAmpwYAAACIklEQVR4nO3Y3YtNURgG8KMho/GVj5iUCCEuRYrcudBMaBp/gVKu3LkSSfkTJK64UFwKF75K0hRFJlLDiFyYknKBfP608qrd6eRi7HXOnmM/tdvved613nc/Z717rb1Wo1FjCkE+XMbMbhCScBW9bRXSyBAzcBuzy4zfCSFv434LfWXmaLeQtXgT9l3MLTNPy6S5YmIFxoN6gIVl5mqZNFdMLMdY0A+xqMx8LZPmiomleBKup+ifkkKCX4LH4X6GZdmT5oqJxXgUTV5iZfakuWJiPkai2Susyp40V0zMw71o+hprsifNFRN9uFlYPDdmTzqZmJPARLcIUSkhHXkOtZByoR6RQF1aU620/N4cHcZAC19/+I5hQwv/AuzHCRzErE4KGYom55v4tGGaKCwBn7G14N+B9wX/178dROigkDPBn8TRsK8VRuJdcGexC8P/8hxZhGAGPuBbfC/1xj/+JX4fij7Xy3qOXELS1jVhvMC9CG4dLoV9oOpCNgU3WuBGg9uMO2EPxMv+B0NVE5JmsoSxAvc8uDQJ3Ah7H7bhflWFzMF3fMR09MSs9TOd9+JU9Dke7Y9UUkhCYUM0jL1hj4RvZ2GztLpqQorYjsEYgXT9iPtg9JmGC9E2+T5VQcgWXGy61odvT5y4X8Hupn498aKfS+sLTqfRaXRKSLugFhKoR6RkqEsrUJdWyVCXVqAurZKhLq1uLa2qoPHfC6nRaD9+AcQD+u9CB+8oAAAAAElFTkSuQmCC"
+            />
+          </defs>
+        </svg>
+        <span>Activity Logs</span>
+      </li>
+      <li 
+        [routerLink]="['/superAdmin/bank-ledger']"
+        [routerLinkActive]="['active']"
+      >
+       <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8.94V18m5-9.06V18M7 8.94V18m5.447-14.894l7.764 3.908c.944.475.608 1.907-.447 1.907H4.236c-1.055 0-1.391-1.432-.447-1.907l7.764-3.908a1 1 0 0 1 .894 0M19.5 21h-15a1.5 1.5 0 0 1 0-3h15a1.5 1.5 0 0 1 0 3"/></svg>
+        <span>Bank Ledger</span>
+      </li>
+      <!-- <li [routerLinkActive]="['active']">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="20px"
+          height="20px"
+          viewBox="0 0 15 15"
+        >
+          <path
+            fill="currentColor"
+            fill-rule="evenodd"
+            d="M0 1.5A.5.5 0 0 1 .5 1h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5m4 0a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1h-10a.5.5 0 0 1-.5-.5m0 3a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5m-4 3A.5.5 0 0 1 .5 7h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5m4 0a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1h-10a.5.5 0 0 1-.5-.5m0 3a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5m-4 3a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5m4 0a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1h-10a.5.5 0 0 1-.5-.5"
+            clip-rule="evenodd"
+          />
+        </svg>
+        <span>Inventory Items</span>
+      </li>
+
+      <li [routerLinkActive]="['active']">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="25px"
+          height="25px"
+          viewBox="0 0 24 24"
+        >
+          <path
+            fill="currentColor"
+            d="M16 18a2 2 0 0 1 2 2a2 2 0 0 1-2 2a2 2 0 0 1-2-2a2 2 0 0 1 2-2m0 1a1 1 0 0 0-1 1a1 1 0 0 0 1 1a1 1 0 0 0 1-1a1 1 0 0 0-1-1m-9-1a2 2 0 0 1 2 2a2 2 0 0 1-2 2a2 2 0 0 1-2-2a2 2 0 0 1 2-2m0 1a1 1 0 0 0-1 1a1 1 0 0 0 1 1a1 1 0 0 0 1-1a1 1 0 0 0-1-1M18 6H4.27l2.55 6H15c.33 0 .62-.16.8-.4l3-4c.13-.17.2-.38.2-.6a1 1 0 0 0-1-1m-3 7H6.87l-.77 1.56L6 15a1 1 0 0 0 1 1h11v1H7a2 2 0 0 1-2-2a2 2 0 0 1 .25-.97l.72-1.47L2.34 4H1V3h2l.85 2H18a2 2 0 0 1 2 2c0 .5-.17.92-.45 1.26l-2.91 3.89c-.36.51-.96.85-1.64.85"
+          />
+        </svg>
+        <span>Sales</span>
+      </li>
+      <li [routerLinkActive]="['active']">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="25px"
+          height="25px"
+          viewBox="0 0 24 24"
+        >
+          <path
+            fill="none"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M5 3h14v18l-1.032-.884a2 2 0 0 0-2.603 0L14.333 21l-1.031-.884a2 2 0 0 0-2.604 0L9.667 21l-1.032-.884a2 2 0 0 0-2.603 0L5 21zm10 4H9m6 4H9m6 4h-4"
+            stroke-width="1"
+          />
+        </svg>
+        <span>Invoices</span>
+      </li>
+      <li [routerLinkActive]="['active']">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="25px"
+          height="25px"
+          viewBox="0 0 48 48"
+        >
+          <g
+            fill="none"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="3"
+          >
+            <path
+              d="M29.368 3.08c.897.28 3.777 1.422 7.937 5.479c3.92 3.823 5.187 6.538 5.559 7.57C42.947 18.37 43 20.98 43 24c0 8.065-.375 13.204-.717 16.214c-.25 2.202-1.903 3.848-4.103 4.105c-2.815.329-7.413.681-14.18.681s-11.365-.352-14.18-.68c-2.2-.258-3.853-1.904-4.103-4.106C5.375 37.204 5 32.064 5 24s.375-13.204.717-16.214C5.967 5.584 7.62 3.938 9.82 3.68C12.635 3.353 17.233 3 24 3c1.97 0 3.756.03 5.368.08M13 37h22m-22-7h22"
+            />
+            <path
+              d="M13 22.868c2.572-3.93 4.717-5.656 5.896-6.38c.557-.343 1.23-.119 1.52.468c.663 1.345 1.29 3.193 1.737 4.66c.264.86 1.52 1.045 2.073.335C26.452 19.095 29.5 16.5 29.5 16.5m4.067 1.82c.44-2.324.457-4.363.42-5.443a.89.89 0 0 0-.864-.865a25.5 25.5 0 0 0-5.444.42c-.754.143-1.004 1.062-.46 1.605l4.744 4.745c.543.543 1.461.293 1.604-.461"
+            />
+          </g>
+        </svg>
+        <span>Reports</span>
+      </li>
+
+      <li [routerLinkActive]="['active']">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="25px"
+          height="25px"
+          viewBox="0 0 24 24"
+        >
+          <path
+            fill="currentColor"
+            fill-rule="evenodd"
+            d="M12.563 3.2h-1.126l-.645 2.578l-.647.2a6.3 6.3 0 0 0-1.091.452l-.599.317l-2.28-1.368l-.796.797l1.368 2.28l-.317.598a6.3 6.3 0 0 0-.453 1.091l-.199.647l-2.578.645v1.126l2.578.645l.2.647q.173.568.452 1.091l.317.599l-1.368 2.28l.797.796l2.28-1.368l.598.317q.523.278 1.091.453l.647.199l.645 2.578h1.126l.645-2.578l.647-.2a6.3 6.3 0 0 0 1.091-.452l.599-.317l2.28 1.368l.796-.797l-1.368-2.28l.317-.598q.278-.523.453-1.091l.199-.647l2.578-.645v-1.126l-2.578-.645l-.2-.647a6.3 6.3 0 0 0-.452-1.091l-.317-.599l1.368-2.28l-.797-.796l-2.28 1.368l-.598-.317a6.3 6.3 0 0 0-1.091-.453l-.647-.199zm2.945 2.17l1.833-1.1a1 1 0 0 1 1.221.15l1.018 1.018a1 1 0 0 1 .15 1.221l-1.1 1.833q.33.62.54 1.3l2.073.519a1 1 0 0 1 .757.97v1.438a1 1 0 0 1-.757.97l-2.073.519q-.21.68-.54 1.3l1.1 1.833a1 1 0 0 1-.15 1.221l-1.018 1.018a1 1 0 0 1-1.221.15l-1.833-1.1q-.62.33-1.3.54l-.519 2.073a1 1 0 0 1-.97.757h-1.438a1 1 0 0 1-.97-.757l-.519-2.073a7.5 7.5 0 0 1-1.3-.54l-1.833 1.1a1 1 0 0 1-1.221-.15L4.42 18.562a1 1 0 0 1-.15-1.221l1.1-1.833a7.5 7.5 0 0 1-.54-1.3l-2.073-.519A1 1 0 0 1 2 12.72v-1.438a1 1 0 0 1 .757-.97l2.073-.519q.21-.68.54-1.3L4.27 6.66a1 1 0 0 1 .15-1.221L5.438 4.42a1 1 0 0 1 1.221-.15l1.833 1.1q.62-.33 1.3-.54l.519-2.073A1 1 0 0 1 11.28 2h1.438a1 1 0 0 1 .97.757l.519 2.073q.68.21 1.3.54zM12 14.8a2.8 2.8 0 1 0 0-5.6a2.8 2.8 0 0 0 0 5.6m0 1.2a4 4 0 1 1 0-8a4 4 0 0 1 0 8"
+          />
+        </svg>
+        <span>Settings</span>
+      </li> -->
+      <!-- <hr [ngStyle]="{ 'margin-top': isAdminExit ? '1rem' : '19rem' }" /> -->
+      <hr class="mt-5" />
+      <li [routerLink]="['/login']">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+        >
+          <path
+            fill="currentColor"
+            d="M5 5h7V3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h7v-2H5zm16 7l-4-4v3H9v2h8v3z"
+          />
+        </svg>
+        <span>Logout</span>
+      </li>
+    </ul>
+  </div>
+  <div class="main-content">
+    <img
+      title="Menu"
+      width="50"
+      class="show-menu"
+      [ngStyle]="{ 'margin-left': chevron == 'chevron-left' ? '15rem' : '0' }"
+      (click)="clickEvent()"
+      src="./assets/Images/{{ chevron }}.png"
+    />
+
+    <router-outlet></router-outlet>
+  </div>
+</div>

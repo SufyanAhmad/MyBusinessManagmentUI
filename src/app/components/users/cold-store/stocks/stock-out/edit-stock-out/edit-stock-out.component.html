@@ -1,0 +1,291 @@
+<div class="container-fluid">
+  <div>
+    <span class="breadcrumb" [routerLink]="['/superAdmin']">BINISHAQ /</span>
+    <span class="breadcrumb-bold">&nbsp;{{ businessUnitName }} /</span>
+    <span class="breadcrumb-bold">&nbsp;Stock Out</span>
+  </div>
+  <!-- User Header -->
+  <div
+    class="header-card d-flex align-items-center justify-content-between mb-4"
+  >
+    <div *ngIf="!loading" class="heading mb-0" style="color: #03192c">
+      {{ stockOutDetail.reference }}
+    </div>
+    <p-skeleton *ngIf="loading" height="35px" width="150px" />
+    <span (click)="deleteStockOutDetail()">
+      <button class="edit-btn">Delete</button>
+    </span>
+  </div>
+  <!-- Customer Details -->
+  <div
+    class="d-flex justify-content-between align-items-center"
+    style="margin-top: 70px"
+  >
+    <span class="heading"> Stock Out Detail </span>
+    <span *ngIf="isReadOnly" (click)="isReadOnly = false;">
+        <button class="edit-btn">EDIT</button>
+    </span>
+    <span  *ngIf="!isReadOnly"  class="d-flex justify-content-end gap-4" >
+      <button (click)="discardChanges()"  type="button" class="btn-discard"  
+       >
+          Discard
+          
+        </button>
+       <button  type="button" (click)="(editStockOutModel.valid && !editLoading)?editStockOutDetail():null" 
+         [ngClass]="{
+        'btn-save': editStockOutModel.valid && !editLoading,
+        'btn-disable': editStockOutModel.invalid || editLoading
+           }"  >
+          Save &nbsp;
+           <span *ngIf="editLoading"  class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+        </button>
+      </span>
+  </div>
+    <!-- <div class="row g-3 align-items-end mt-4">
+      <div class="col-md-4 mb-4">
+        <div class="label1">OUT QUANTITY</div>
+        <input
+          *ngIf="!loading"
+          type="text"
+          value="{{ stockOutDetail.outQuantity }}"
+          class="input-field"
+          style="pointer-events: none; border: none"
+        />
+        <p-skeleton *ngIf="loading" height="30px" />
+      </div>
+      <div class="col-md-4 mb-4">
+        <div class="label1">RENT RATE</div>
+        <input
+          *ngIf="!loading"
+          type="text"
+          value="{{ stockOutDetail.rentRate }}"
+          class="input-field"
+          style="pointer-events: none; border: none"
+        />
+        <p-skeleton *ngIf="loading" height="30px" />
+      </div>
+      <div class="col-md-4 mb-4">
+        <div class="label1">REMAINING STOCK</div>
+        <input
+          *ngIf="!loading"
+          type="text"
+          value="{{ stockOutDetail.remainingStock }}"
+          class="input-field"
+          style="pointer-events: none; border: none"
+        />
+        <p-skeleton *ngIf="loading" height="30px" />
+      </div>
+      <div class="col-md-4 mb-4">
+        <div class="label1">TOTAL RENT</div>
+        <input
+          *ngIf="!loading"
+          type="text"
+          value="{{ stockOutDetail.totalRentRate }}"
+          class="input-field"
+          style="pointer-events: none; border: none"
+        />
+        <p-skeleton *ngIf="loading" height="30px" />
+      </div>
+      <div class="col-md-4 mb-4">
+        <div class="label1">STOCK OUT DATE</div>
+        <input
+          *ngIf="!loading"
+          type="date"
+          value="{{ stockOutDetail.stockOutDate }}"
+          class="input-field"
+          style="pointer-events: none; border: none"
+        />
+        <p-skeleton *ngIf="loading" height="30px" />
+      </div>
+      <div class="col-md-4 mb-4">
+        <div class="label1">Created By</div>
+        <input
+          *ngIf="!loading"
+          type="text"
+          value="{{ stockOutDetail.createdBy }}"
+          class="input-field"
+          style="pointer-events: none; border: none"
+        />
+        <p-skeleton *ngIf="loading" height="30px" />
+      </div>
+      <div class="col-md-4 mb-4">
+        <div class="label1">Created At</div>
+        <input
+          *ngIf="!loading"
+          type="date"
+          value="{{ stockOutDetail.createdAt }}"
+          class="input-field"
+          style="pointer-events: none; border: none"
+        />
+        <p-skeleton *ngIf="loading" height="30px" />
+      </div>
+
+      <div class="col-md-4 mb-4">
+        <div class="label1">Updated By</div>
+        <input
+          *ngIf="!loading"
+          type="text"
+          value="{{ stockOutDetail.updatedBy }}"
+          class="input-field"
+          style="pointer-events: none; border: none"
+        />
+        <p-skeleton *ngIf="loading" height="30px" />
+      </div>
+      <div class="col-md-4 mb-4">
+        <div class="label1">Updated At</div>
+        <input
+          *ngIf="!loading"
+          type="date"
+          value="{{ stockOutDetail.updatedAt }}"
+          class="input-field"
+          style="pointer-events: none; border: none"
+        />
+        <p-skeleton *ngIf="loading" height="30px" />
+      </div>
+      </span>
+   </div> -->
+  <form [formGroup]="editStockOutModel">
+    <div class="row g-3 align-items-end mt-4">
+      <div class="col-md-4 mb-4 position-relative">
+        <span class="label">OUT QUANTITY</span>
+        <input
+          type="number"
+          formControlName="outQuantity"
+          class="input-felid"
+          [ngClass]="{ 'input-disable': isReadOnly }"
+          class="input-felid"
+          placeholder="Enter account title..."
+        />
+         <div class="errorValidation position-absolute" 
+              *ngIf="(editStockOutModel.controls['outQuantity'].touched && editStockOutModel.controls['outQuantity'].errors?.['min'])||editStockOutModel.get('outQuantity')?.errors?.['max']">Please enter valid
+               Out Quantity should be in given range 1 to {{maxOutQuantity}}</div>
+   
+      </div>
+      <div class="col-md-4 mb-4">
+        <span class="label">STOCK OUT DATE</span>
+        <input
+          type="date"
+          formControlName="stockOutDate"
+          class="input-felid custom-date"
+          [ngClass]="{ 'input-disable': isReadOnly }"
+          placeholder="Enter date..."
+        />
+      </div>
+      <div class="col-md-4 mb-4">
+        <span class="label">RENT RATE</span>
+        <input
+          type="number"
+          formControlName="rentRate"
+          [ngClass]="{ 'input-disable': isReadOnly }"
+          class="input-felid "
+          placeholder="Enter rent rate..."
+        />
+      </div>
+      <div class="col-md-4 mb-4">
+        <span class="label">RENT Months</span>
+        <input
+          type="number"
+          formControlName="rentMonths"
+           [ngClass]="{ 'input-disable': isReadOnly }"
+          class="input-felid " 
+          placeholder="Enter rent month..."
+        />
+      </div>
+      <!-- <div class="col-md-4 mb-4">
+        <span class="label">REMAINING STOCK</span>
+        <input
+          type="number"
+          formControlName="remainingStock"
+          class="input-felid input-disable"
+          placeholder="Enter branch code..."
+        />
+      </div> -->
+      <div class="col-md-4 mb-4">
+        <span class="label">TOTAL RENT</span>
+        <input
+          type="text"
+          value="{{this.editStockOutModel.value.rentMonths * this.editStockOutModel.value.rentRate * this.editStockOutModel.value.outQuantity}}"
+          class="input-felid input-disable"
+          readonly
+          placeholder="Enter total rent..."
+        />
+      </div>
+      <div class="col-md-12 mb-4">
+        <span class="label">Note</span>
+        <input
+          type="text"
+          formControlName="note"
+          class="input-felid"
+          [ngClass]="{ 'input-disable': isReadOnly }"
+          placeholder="Enter note..."
+        />
+      </div>
+    </div>
+  </form>
+
+  <!-- for simple detail -->
+  <!-- <form  >
+  <div class="row g-3 align-items-end mt-4">
+    
+    <div class="col-md-4 mb-4">
+      <div class="label1">OUT QUANTITY</div>
+      <input *ngIf="!loading" type="text" value="{{stockOutDetail.outQuantity}}" class="input-field" style="pointer-events: none;border: none;" />
+      <p-skeleton *ngIf="loading" height="30px" />
+    </div>
+    <div class="col-md-4 mb-4">
+     <div class="label1">RENT RATE</div>
+      <input *ngIf="!loading"  type="text" value="{{stockOutDetail.rentRate}}" class="input-field" style="pointer-events: none;border: none;" />
+      <p-skeleton *ngIf="loading" height="30px" />
+    </div> 
+    <div class="col-md-4 mb-4">
+     <div class="label1">REMAINING STOCK</div>
+      <input *ngIf="!loading" type="text" value="{{stockOutDetail.remainingStock}}" class="input-field" style="pointer-events: none;border: none;" />
+      <p-skeleton *ngIf="loading" height="30px" />
+    </div>
+    <div class="col-md-4 mb-4">
+     <div class="label1">TOTAL RENT</div>
+      <input *ngIf="!loading" type="text" value="{{stockOutDetail.totalRentRate}}" class="input-field" style="pointer-events: none;border: none;" />
+      <p-skeleton *ngIf="loading" height="30px" />
+    </div>
+    <div class="col-md-4 mb-4">
+      <div class="label1">STOCK OUT DATE</div>
+      <input *ngIf="!loading"  type="date" value="{{stockOutDetail.stockOutDate}}" class="input-field" style="pointer-events: none;border: none;" />
+      <p-skeleton *ngIf="loading" height="30px" />
+    </div>
+    <div class="col-md-4 mb-4">
+    <div class="label1">Created By</div>
+      <input *ngIf="!loading" type="text" value="{{stockOutDetail.createdBy}}" class="input-field" style="pointer-events: none;border: none;" />
+      <p-skeleton *ngIf="loading" height="30px" />
+    </div> 
+    <div class="col-md-4 mb-4">
+      <div class="label1">Created At</div>
+        <input *ngIf="!loading" type="date" value="{{stockOutDetail.createdAt}}" class="input-field" style="pointer-events: none;border: none;" />
+      <p-skeleton *ngIf="loading" height="30px" />
+    </div>
+    
+    <div class="col-md-4 mb-4">
+      <div class="label1">Updated By</div>
+        <input *ngIf="!loading"  type="text" value="{{stockOutDetail.updatedBy}}" class="input-field" style="pointer-events: none;border: none;" />
+      <p-skeleton *ngIf="loading" height="30px" />
+    </div>
+    <div class="col-md-4 mb-4">
+      <div class="label1">Updated At</div>
+        <input *ngIf="!loading"  type="date" value="{{stockOutDetail.updatedAt}}" class="input-field" style="pointer-events: none;border: none;" />
+      <p-skeleton *ngIf="loading" height="30px" />
+    </div>
+      <div class="col-md-12 mb-4">
+        <div class="label1">Note</div>
+          *ngIf="!loading"
+          class="input-field"
+          style="border: 1px solid white"
+        >
+          {{ stockOutDetail.note }}
+        </div>
+        <p-skeleton *ngIf="loading" height="30px" />
+      </div>
+    </div>
+  </form>
+  </div>
+  </form> -->
+</div>
+<p-toast />

@@ -1,0 +1,2200 @@
+<div class="container-fluid">
+  <div>
+    <span class="breadcrumb" [routerLink]="['/superAdmin']">BINISHAQ /</span>
+    <span class="breadcrumb-bold">&nbsp;{{ businessUnitName }} /</span>
+    <span class="breadcrumb-bold">&nbsp;Cold Store Shelf</span>
+  </div>
+  <!-- For Racks -->
+  <span class="d-flex align-items-center justify-content-between">
+    <div class="table-heading">Racks</div>
+    <div class="d-flex align-items-center gap-5">
+      <button
+        (click)="visible = true; initForm()"
+        class="btn mt-4 mb-3"
+        style="min-width: 135px"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="25"
+          height="25"
+          viewBox="0 0 24 24"
+        >
+          <g
+            fill="none"
+            stroke="currentColor"
+            stroke-dasharray="16"
+            stroke-dashoffset="16"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+          >
+            <path d="M5 12h14">
+              <animate
+                fill="freeze"
+                attributeName="stroke-dashoffset"
+                dur="0.48s"
+                values="16;0"
+              />
+            </path>
+            <path d="M12 5v14">
+              <animate
+                fill="freeze"
+                attributeName="stroke-dashoffset"
+                begin="0.48s"
+                dur="0.48s"
+                values="16;0"
+              />
+            </path>
+          </g>
+        </svg>
+        New Rack
+      </button>
+    </div>
+  </span>
+
+  <!-- For Racks Table -->
+  <div class="mat-elevation-z8 mt-4 rounded-table">
+    <table mat-table [dataSource]="dataSource">
+      <ng-container matColumnDef="shelfNo">
+        <th mat-header-cell *matHeaderCellDef class="table-header col-name">
+          Rack No
+        </th>
+        <td mat-cell *matCellDef="let element" class="tableText-bold col-name">
+          {{ element.coldStoreShelfNo }}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef class="table-header col-name">
+          Rack Name
+        </th>
+        <td
+          mat-cell
+          *matCellDef="let element"
+          [routerLink]="[
+            '/coldStore/cold-store-shelf/edit',
+            element.coldStoreShelfId
+          ]"
+          class="tableText-bold col-name"
+        >
+          {{ element.shelfName }}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="capacity">
+        <th
+          mat-header-cell
+          *matHeaderCellDef
+          class="table-header"
+          style="width: 200px"
+        >
+          Capacity Cubic Feet
+        </th>
+        <td
+          mat-cell
+          *matCellDef="let element"
+          class="tableText-thin"
+          style="width: 200px"
+        >
+          <span class="mx-5">
+            {{ element.capacityCubicFeet }}
+          </span>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="occupy">
+        <th
+          mat-header-cell
+          *matHeaderCellDef
+          class="table-header"
+          style="min-width: 120px !important"
+        >
+          Is Occupied
+        </th>
+        <td mat-cell *matCellDef="let element" class="tableText-thin">
+          {{ element.isOccupied ? "YES" : "NO" }}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="business">
+        <th mat-header-cell *matHeaderCellDef class="table-header">
+          Business Unit
+        </th>
+        <td mat-cell *matCellDef="let element" class="tableText-thin">
+          {{ element.businessUnit }}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="dlt">
+        <th
+          mat-header-cell
+          *matHeaderCellDef
+          class="table-header"
+          style="min-width: 120px !important"
+        ></th>
+        <td mat-cell *matCellDef="let element" class="tableText-thin">
+          <div class="d-flex gap-2">
+            <svg
+              (click)="
+                coldStoreShelfId = element.coldStoreShelfId;
+                openConfirmationDialog(element.archived)
+              "
+              style="float: right; margin-right: 20px; cursor: pointer"
+              xmlns="http://www.w3.org/2000/svg"
+              width="25px"
+              height="25px"
+              viewBox="0 0 24 24"
+            >
+              <path
+                fill="currentColor"
+                d="m12 18l4-4l-1.4-1.4l-1.6 1.6V10h-2v4.2l-1.6-1.6L8 14zM5 8v11h14V8zm0 13q-.825 0-1.412-.587T3 19V6.525q0-.35.113-.675t.337-.6L4.7 3.725q.275-.35.687-.538T6.25 3h11.5q.45 0 .863.188t.687.537l1.25 1.525q.225.275.338.6t.112.675V19q0 .825-.587 1.413T19 21zm.4-15h13.2l-.85-1H6.25zm6.6 7.5"
+              />
+            </svg>
+            <!-- for delete -->
+            <svg
+              style="color: red; cursor: pointer"
+              (click)="
+                deletedItemId = element.coldStoreShelfId;
+                deletedItemType = 'rack';
+                openDeleteConfirmationDialog()
+              "
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+            >
+              <path
+                fill="currentColor"
+                d="M7 21q-.825 0-1.412-.587T5 19V6q-.425 0-.712-.288T4 5t.288-.712T5 4h4q0-.425.288-.712T10 3h4q.425 0 .713.288T15 4h4q.425 0 .713.288T20 5t-.288.713T19 6v13q0 .825-.587 1.413T17 21zM17 6H7v13h10zm-7 11q.425 0 .713-.288T11 16V9q0-.425-.288-.712T10 8t-.712.288T9 9v7q0 .425.288.713T10 17m4 0q.425 0 .713-.288T15 16V9q0-.425-.288-.712T14 8t-.712.288T13 9v7q0 .425.288.713T14 17M7 6v13z"
+              />
+            </svg>
+          </div>
+        </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="displayedRackColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedRackColumns"></tr>
+    </table>
+  </div>
+  <app-data-not-found
+    *ngIf="coldStoreShelfList.length == 0 && !isLoadingResults"
+  />
+  <div class="skelton" *ngIf="isLoadingResults">
+    <app-loading></app-loading>
+  </div>
+  <mat-paginator
+    pageSize="10"
+    [length]="coldStoreShelfList.length"
+    aria-label="Select page of periodic elements"
+  >
+  </mat-paginator>
+  <!-- For Room -->
+  <span class="d-flex align-items-center justify-content-between">
+    <div class="table-heading">Rooms</div>
+    <div class="d-flex align-items-center gap-5">
+      <button
+        (click)="isAddRoomPopup = true"
+        class="btn mt-4 mb-3"
+        style="min-width: 135px"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="25"
+          height="25"
+          viewBox="0 0 24 24"
+        >
+          <g
+            fill="none"
+            stroke="currentColor"
+            stroke-dasharray="16"
+            stroke-dashoffset="16"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+          >
+            <path d="M5 12h14">
+              <animate
+                fill="freeze"
+                attributeName="stroke-dashoffset"
+                dur="0.48s"
+                values="16;0"
+              />
+            </path>
+            <path d="M12 5v14">
+              <animate
+                fill="freeze"
+                attributeName="stroke-dashoffset"
+                begin="0.48s"
+                dur="0.48s"
+                values="16;0"
+              />
+            </path>
+          </g>
+        </svg>
+        New Room
+      </button>
+    </div>
+  </span>
+
+  <!-- For Racks Table -->
+  <div class="mat-elevation-z8 mt-4 rounded-table">
+    <table mat-table [dataSource]="roomDataSource">
+      <ng-container matColumnDef="roomNo">
+        <th mat-header-cell *matHeaderCellDef class="table-header col-name">
+          Room No
+        </th>
+        <td mat-cell *matCellDef="let element" class="tableText-bold col-name">
+          {{ element.roomNo }}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef class="table-header col-name">
+          Room Name
+        </th>
+        <td mat-cell *matCellDef="let element" class="tableText-thin col-name">
+          {{ element.name }}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="occupy">
+        <th
+          mat-header-cell
+          *matHeaderCellDef
+          class="table-header"
+          style="min-width: 120px !important"
+        >
+          Is Occupied
+        </th>
+        <td mat-cell *matCellDef="let element" class="tableText-thin">
+          {{ element.isOccupied ? "YES" : "NO" }}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="status">
+        <th
+          mat-header-cell
+          *matHeaderCellDef
+          class="table-header"
+          style="min-width: 120px !important"
+        ></th>
+        <td mat-cell *matCellDef="let element" class="tableText-thin">
+          <div
+            class="d-flex gap-3"
+            style="float: right; margin-right: 20px; cursor: pointer"
+          >
+            <svg
+              (click)="
+                roomId = element.roomId;
+                openRoomConfirmationDialog(element.isArchived)
+              "
+              xmlns="http://www.w3.org/2000/svg"
+              width="25px"
+              height="25px"
+              viewBox="0 0 24 24"
+            >
+              <path
+                fill="currentColor"
+                d="m12 18l4-4l-1.4-1.4l-1.6 1.6V10h-2v4.2l-1.6-1.6L8 14zM5 8v11h14V8zm0 13q-.825 0-1.412-.587T3 19V6.525q0-.35.113-.675t.337-.6L4.7 3.725q.275-.35.687-.538T6.25 3h11.5q.45 0 .863.188t.687.537l1.25 1.525q.225.275.338.6t.112.675V19q0 .825-.587 1.413T19 21zm.4-15h13.2l-.85-1H6.25zm6.6 7.5"
+              />
+            </svg>
+            <!-- for delete -->
+            <svg
+              style="color: red; cursor: pointer"
+              (click)="
+                deletedItemId = element.roomId;
+                deletedItemType = 'room';
+                openDeleteConfirmationDialog()
+              "
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+            >
+              <path
+                fill="currentColor"
+                d="M7 21q-.825 0-1.412-.587T5 19V6q-.425 0-.712-.288T4 5t.288-.712T5 4h4q0-.425.288-.712T10 3h4q.425 0 .713.288T15 4h4q.425 0 .713.288T20 5t-.288.713T19 6v13q0 .825-.587 1.413T17 21zM17 6H7v13h10zm-7 11q.425 0 .713-.288T11 16V9q0-.425-.288-.712T10 8t-.712.288T9 9v7q0 .425.288.713T10 17m4 0q.425 0 .713-.288T15 16V9q0-.425-.288-.712T14 8t-.712.288T13 9v7q0 .425.288.713T14 17M7 6v13z"
+              />
+            </svg>
+          </div>
+        </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="displayedRoomColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedRoomColumns"></tr>
+    </table>
+  </div>
+  <app-data-not-found *ngIf="roomList.length == 0 && !roomLoading" />
+  <div class="skelton" *ngIf="roomLoading">
+    <app-loading></app-loading>
+  </div>
+  <mat-paginator
+    pageSize="10"
+    [length]="roomList.length"
+    aria-label="Select page of periodic elements"
+  >
+  </mat-paginator>
+
+  <!-- For Egg Type  -->
+  <div class="row">
+    <div class="col-md-6">
+      <span class="d-flex align-items-center justify-content-between mt-5">
+        <div class="table-heading">Egg Types</div>
+        <div class="d-flex align-items-center gap-5">
+          <button
+            (click)="openEggPopup()"
+            class="btn mt-4 mb-3"
+            style="min-width: 135px"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="25"
+              height="25"
+              viewBox="0 0 24 24"
+            >
+              <g
+                fill="none"
+                stroke="currentColor"
+                stroke-dasharray="16"
+                stroke-dashoffset="16"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+              >
+                <path d="M5 12h14">
+                  <animate
+                    fill="freeze"
+                    attributeName="stroke-dashoffset"
+                    dur="0.48s"
+                    values="16;0"
+                  />
+                </path>
+                <path d="M12 5v14">
+                  <animate
+                    fill="freeze"
+                    attributeName="stroke-dashoffset"
+                    begin="0.48s"
+                    dur="0.48s"
+                    values="16;0"
+                  />
+                </path>
+              </g>
+            </svg>
+            New Type
+          </button>
+        </div>
+      </span>
+
+      <!-- For Egg Type Table -->
+      <div class="mat-elevation-z8 mt-4 rounded-table">
+        <table mat-table [dataSource]="eggTypeDataSource">
+          <ng-container matColumnDef="typeNo">
+            <th
+              mat-header-cell
+              *matHeaderCellDef
+              class="table-header"
+              style="min-width: 120px !important"
+            >
+              Type No
+            </th>
+            <td mat-cell *matCellDef="let element" class="tableText-bold">
+              {{ element.orderNumber }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef class="table-header">
+              Type Name
+            </th>
+            <td
+              mat-cell
+              *matCellDef="let element"
+              class="tableText-bold"
+              (click)="openEditEggTypePopup(element.id)"
+            >
+              {{ element.type }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="dlt">
+            <th mat-header-cell *matHeaderCellDef class="table-header"></th>
+            <td mat-cell *matCellDef="let element">
+              <div class="d-flex gap-4 align-items-center">
+                <div class="status-toggle d-flex my-1">
+                  <div
+                    class="status-pill"
+                    [ngClass]="{ active: element.isActive }"
+                    (click)="
+                      element.isActive = true;
+                      editTypesStatus(element.id, element.isActive)
+                    "
+                  >
+                    <svg
+                      *ngIf="element.isActive"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      style="margin-right: 10px"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        fill="currentColor"
+                        d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10s10-4.5 10-10S17.5 2 12 2m0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8s8 3.59 8 8s-3.59 8-8 8m4.59-12.42L10 14.17l-2.59-2.58L6 13l4 4l8-8z"
+                      />
+                    </svg>
+                    Active
+                  </div>
+                  <div
+                    class="status-pill"
+                    [ngClass]="{ active: !element.isActive, inactive: true }"
+                    (click)="
+                      element.isActive = false;
+                      editTypesStatus(element.id, element.isActive)
+                    "
+                  >
+                    <svg
+                      *ngIf="!element.isActive"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      style="margin-right: 10px"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        fill="currentColor"
+                        d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10s10-4.5 10-10S17.5 2 12 2m0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8s8 3.59 8 8s-3.59 8-8 8m4.59-12.42L10 14.17l-2.59-2.58L6 13l4 4l8-8z"
+                      />
+                    </svg>
+                    Inactive
+                  </div>
+                </div>
+                <svg
+                  style="color: red; cursor: pointer"
+                  (click)="
+                    deletedItemId = element.id;
+                    deletedItemType = 'eggType';
+                    openDeleteConfirmationDialog()
+                  "
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    fill="currentColor"
+                    d="M7 21q-.825 0-1.412-.587T5 19V6q-.425 0-.712-.288T4 5t.288-.712T5 4h4q0-.425.288-.712T10 3h4q.425 0 .713.288T15 4h4q.425 0 .713.288T20 5t-.288.713T19 6v13q0 .825-.587 1.413T17 21zM17 6H7v13h10zm-7 11q.425 0 .713-.288T11 16V9q0-.425-.288-.712T10 8t-.712.288T9 9v7q0 .425.288.713T10 17m4 0q.425 0 .713-.288T15 16V9q0-.425-.288-.712T14 8t-.712.288T13 9v7q0 .425.288.713T14 17M7 6v13z"
+                  />
+                </svg>
+              </div>
+
+              <!-- for delete -->
+            </td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="displayedTypeColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedTypeColumns"></tr>
+        </table>
+      </div>
+      <app-data-not-found *ngIf="eggTypes.length == 0 && !eggTypeLoading" />
+      <div class="skelton" *ngIf="eggTypeLoading">
+        <app-loading></app-loading>
+      </div>
+      <mat-paginator
+        pageSize="10"
+        [length]="eggTypes.length"
+        aria-label="Select page of periodic elements"
+      >
+      </mat-paginator>
+    </div>
+    <!-- For Potato Type -->
+    <div class="col-md-6">
+      <span class="d-flex align-items-center justify-content-between mt-5">
+        <div class="table-heading">Potato Types</div>
+        <div class="d-flex align-items-center gap-5">
+          <button
+            (click)="openPotatoPopup()"
+            class="btn mt-4 mb-3"
+            style="min-width: 135px"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="25"
+              height="25"
+              viewBox="0 0 24 24"
+            >
+              <g
+                fill="none"
+                stroke="currentColor"
+                stroke-dasharray="16"
+                stroke-dashoffset="16"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+              >
+                <path d="M5 12h14">
+                  <animate
+                    fill="freeze"
+                    attributeName="stroke-dashoffset"
+                    dur="0.48s"
+                    values="16;0"
+                  />
+                </path>
+                <path d="M12 5v14">
+                  <animate
+                    fill="freeze"
+                    attributeName="stroke-dashoffset"
+                    begin="0.48s"
+                    dur="0.48s"
+                    values="16;0"
+                  />
+                </path>
+              </g>
+            </svg>
+            New Type
+          </button>
+        </div>
+      </span>
+
+      <!-- For potato Type Table -->
+      <div class="mat-elevation-z8 mt-4 rounded-table">
+        <table mat-table [dataSource]="potatoTypeDataSource">
+          <ng-container matColumnDef="typeNo">
+            <th
+              mat-header-cell
+              *matHeaderCellDef
+              class="table-header"
+              style="min-width: 120px !important"
+            >
+              Type No
+            </th>
+            <td mat-cell *matCellDef="let element" class="tableText-bold">
+              {{ element.orderNumber }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef class="table-header">
+              Type Name
+            </th>
+            <td
+              mat-cell
+              *matCellDef="let element"
+              class="tableText-bold"
+              (click)="openEditPotatoTypePopup(element.id)"
+            >
+              {{ element.type }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="dlt">
+            <th mat-header-cell *matHeaderCellDef class="table-header"></th>
+            <td mat-cell *matCellDef="let element">
+              <div class="d-flex gap-4 align-items-center">
+                <div class="status-toggle d-flex my-1">
+                  <div
+                    class="status-pill"
+                    [ngClass]="{ active: element.isActive }"
+                    (click)="
+                      element.isActive = true;
+                      editTypesStatus(element.id, element.isActive)
+                    "
+                  >
+                    <svg
+                      *ngIf="element.isActive"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      style="margin-right: 10px"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        fill="currentColor"
+                        d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10s10-4.5 10-10S17.5 2 12 2m0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8s8 3.59 8 8s-3.59 8-8 8m4.59-12.42L10 14.17l-2.59-2.58L6 13l4 4l8-8z"
+                      />
+                    </svg>
+                    Active
+                  </div>
+                  <div
+                    class="status-pill"
+                    [ngClass]="{ active: !element.isActive, inactive: true }"
+                    (click)="
+                      element.isActive = false;
+                      editTypesStatus(element.id, element.isActive)
+                    "
+                  >
+                    <svg
+                      *ngIf="!element.isActive"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      style="margin-right: 10px"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        fill="currentColor"
+                        d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10s10-4.5 10-10S17.5 2 12 2m0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8s8 3.59 8 8s-3.59 8-8 8m4.59-12.42L10 14.17l-2.59-2.58L6 13l4 4l8-8z"
+                      />
+                    </svg>
+                    Inactive
+                  </div>
+                </div>
+                <!-- for delete -->
+                <svg
+                  style="color: red; cursor: pointer"
+                  (click)="
+                    deletedItemId = element.id;
+                    deletedItemType = 'potatoType';
+                    openDeleteConfirmationDialog()
+                  "
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    fill="currentColor"
+                    d="M7 21q-.825 0-1.412-.587T5 19V6q-.425 0-.712-.288T4 5t.288-.712T5 4h4q0-.425.288-.712T10 3h4q.425 0 .713.288T15 4h4q.425 0 .713.288T20 5t-.288.713T19 6v13q0 .825-.587 1.413T17 21zM17 6H7v13h10zm-7 11q.425 0 .713-.288T11 16V9q0-.425-.288-.712T10 8t-.712.288T9 9v7q0 .425.288.713T10 17m4 0q.425 0 .713-.288T15 16V9q0-.425-.288-.712T14 8t-.712.288T13 9v7q0 .425.288.713T14 17M7 6v13z"
+                  />
+                </svg>
+              </div>
+            </td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="displayedTypeColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedTypeColumns"></tr>
+        </table>
+      </div>
+      <app-data-not-found
+        *ngIf="potatoTypes.length == 0 && !potatoTypeLoading"
+      />
+      <div class="skelton" *ngIf="potatoTypeLoading">
+        <app-loading></app-loading>
+      </div>
+      <mat-paginator
+        pageSize="10"
+        [length]="potatoTypes.length"
+        aria-label="Select page of periodic elements"
+      >
+      </mat-paginator>
+    </div>
+
+    <!-- For Egg Units -->
+    <div class="col-md-6">
+      <span class="d-flex align-items-center justify-content-between mt-5">
+        <div class="table-heading">Egg Units</div>
+        <div class="d-flex align-items-center gap-5">
+          <button
+            (click)="openEggUnitPopup()"
+            class="btn mt-4 mb-3"
+            style="min-width: 135px"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="25"
+              height="25"
+              viewBox="0 0 24 24"
+            >
+              <g
+                fill="none"
+                stroke="currentColor"
+                stroke-dasharray="16"
+                stroke-dashoffset="16"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+              >
+                <path d="M5 12h14">
+                  <animate
+                    fill="freeze"
+                    attributeName="stroke-dashoffset"
+                    dur="0.48s"
+                    values="16;0"
+                  />
+                </path>
+                <path d="M12 5v14">
+                  <animate
+                    fill="freeze"
+                    attributeName="stroke-dashoffset"
+                    begin="0.48s"
+                    dur="0.48s"
+                    values="16;0"
+                  />
+                </path>
+              </g>
+            </svg>
+            New Unit
+          </button>
+        </div>
+      </span>
+
+      <!-- For Egg Unit Table -->
+      <div class="mat-elevation-z8 mt-4 rounded-table">
+        <table mat-table [dataSource]="eggUnitDataSource">
+          <ng-container matColumnDef="unitNo">
+            <th
+              mat-header-cell
+              *matHeaderCellDef
+              class="table-header"
+              style="min-width: 120px !important"
+            >
+              Unit No
+            </th>
+            <td mat-cell *matCellDef="let element" class="tableText-bold">
+              {{ element.orderNumber }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef class="table-header">
+              Unit In Gram
+            </th>
+            <td
+              mat-cell
+              *matCellDef="let element"
+              class="tableText-bold"
+              (click)="openEditEggUnitPopup(element.id)"
+            >
+              {{ element.type }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="dlt">
+            <th mat-header-cell *matHeaderCellDef class="table-header"></th>
+            <td mat-cell *matCellDef="let element">
+              <div class="d-flex gap-4 align-items-center">
+                <div class="status-toggle d-flex my-1">
+                  <div
+                    class="status-pill"
+                    [ngClass]="{ active: element.isActive }"
+                    (click)="
+                      element.isActive = true;
+                      editUnitStatus(element.id, element.isActive)
+                    "
+                  >
+                    <svg
+                      *ngIf="element.isActive"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      style="margin-right: 10px"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        fill="currentColor"
+                        d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10s10-4.5 10-10S17.5 2 12 2m0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8s8 3.59 8 8s-3.59 8-8 8m4.59-12.42L10 14.17l-2.59-2.58L6 13l4 4l8-8z"
+                      />
+                    </svg>
+                    Active
+                  </div>
+                  <div
+                    class="status-pill"
+                    [ngClass]="{ active: !element.isActive, inactive: true }"
+                    (click)="
+                      element.isActive = false;
+                      editUnitStatus(element.id, element.isActive)
+                    "
+                  >
+                    <svg
+                      *ngIf="!element.isActive"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      style="margin-right: 10px"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        fill="currentColor"
+                        d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10s10-4.5 10-10S17.5 2 12 2m0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8s8 3.59 8 8s-3.59 8-8 8m4.59-12.42L10 14.17l-2.59-2.58L6 13l4 4l8-8z"
+                      />
+                    </svg>
+                    Inactive
+                  </div>
+                </div>
+                <!-- for delete -->
+                <svg
+                  style="color: red; cursor: pointer"
+                  (click)="
+                    deletedItemId = element.id;
+                    deletedItemType = 'eggUnit';
+                    openDeleteConfirmationDialog()
+                  "
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    fill="currentColor"
+                    d="M7 21q-.825 0-1.412-.587T5 19V6q-.425 0-.712-.288T4 5t.288-.712T5 4h4q0-.425.288-.712T10 3h4q.425 0 .713.288T15 4h4q.425 0 .713.288T20 5t-.288.713T19 6v13q0 .825-.587 1.413T17 21zM17 6H7v13h10zm-7 11q.425 0 .713-.288T11 16V9q0-.425-.288-.712T10 8t-.712.288T9 9v7q0 .425.288.713T10 17m4 0q.425 0 .713-.288T15 16V9q0-.425-.288-.712T14 8t-.712.288T13 9v7q0 .425.288.713T14 17M7 6v13z"
+                  />
+                </svg>
+              </div>
+            </td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="displayedUnitColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedUnitColumns"></tr>
+        </table>
+      </div>
+      <app-data-not-found *ngIf="eggUnits.length == 0 && !eggUnitLoading" />
+      <div class="skelton" *ngIf="eggUnitLoading">
+        <app-loading></app-loading>
+      </div>
+      <mat-paginator
+        pageSize="10"
+        [length]="eggUnits.length"
+        aria-label="Select page of periodic elements"
+      >
+      </mat-paginator>
+    </div>
+    <!-- For Potato Units -->
+    <div class="col-md-6">
+      <span class="d-flex align-items-center justify-content-between mt-5">
+        <div class="table-heading">Potato Units</div>
+        <div class="d-flex align-items-center gap-5">
+          <button
+            (click)="openPotatoUnitPopup()"
+            class="btn mt-4 mb-3"
+            style="min-width: 135px"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="25"
+              height="25"
+              viewBox="0 0 24 24"
+            >
+              <g
+                fill="none"
+                stroke="currentColor"
+                stroke-dasharray="16"
+                stroke-dashoffset="16"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+              >
+                <path d="M5 12h14">
+                  <animate
+                    fill="freeze"
+                    attributeName="stroke-dashoffset"
+                    dur="0.48s"
+                    values="16;0"
+                  />
+                </path>
+                <path d="M12 5v14">
+                  <animate
+                    fill="freeze"
+                    attributeName="stroke-dashoffset"
+                    begin="0.48s"
+                    dur="0.48s"
+                    values="16;0"
+                  />
+                </path>
+              </g>
+            </svg>
+            New Unit
+          </button>
+        </div>
+      </span>
+
+      <!-- For Potato Unit Table -->
+      <div class="mat-elevation-z8 mt-4 rounded-table">
+        <table mat-table [dataSource]="potatoUnitDataSource">
+          <ng-container matColumnDef="unitNo">
+            <th
+              mat-header-cell
+              *matHeaderCellDef
+              class="table-header"
+              style="min-width: 120px !important"
+            >
+              Unit No
+            </th>
+            <td mat-cell *matCellDef="let element" class="tableText-bold">
+              {{ element.orderNumber }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef class="table-header">
+              Unit In Kgs
+            </th>
+            <td
+              mat-cell
+              *matCellDef="let element"
+              class="tableText-bold"
+              (click)="openEditPotatoUnitPopup(element.id)"
+            >
+              {{ element.type }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="dlt">
+            <th mat-header-cell *matHeaderCellDef class="table-header"></th>
+            <td mat-cell *matCellDef="let element">
+              <div class="d-flex gap-4 align-items-center">
+                <div class="status-toggle d-flex my-1">
+                  <div
+                    class="status-pill"
+                    [ngClass]="{ active: element.isActive }"
+                    (click)="
+                      element.isActive = true;
+                      editUnitStatus(element.id, element.isActive)
+                    "
+                  >
+                    <svg
+                      *ngIf="element.isActive"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      style="margin-right: 10px"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        fill="currentColor"
+                        d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10s10-4.5 10-10S17.5 2 12 2m0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8s8 3.59 8 8s-3.59 8-8 8m4.59-12.42L10 14.17l-2.59-2.58L6 13l4 4l8-8z"
+                      />
+                    </svg>
+                    Active
+                  </div>
+                  <div
+                    class="status-pill"
+                    [ngClass]="{ active: !element.isActive, inactive: true }"
+                    (click)="
+                      element.isActive = false;
+                      editUnitStatus(element.id, element.isActive)
+                    "
+                  >
+                    <svg
+                      *ngIf="!element.isActive"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      style="margin-right: 10px"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        fill="currentColor"
+                        d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10s10-4.5 10-10S17.5 2 12 2m0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8s8 3.59 8 8s-3.59 8-8 8m4.59-12.42L10 14.17l-2.59-2.58L6 13l4 4l8-8z"
+                      />
+                    </svg>
+                    Inactive
+                  </div>
+                </div>
+                <!-- for delete -->
+                <svg
+                  style="color: red; cursor: pointer"
+                  (click)="
+                    deletedItemId = element.id;
+                    deletedItemType = 'potatoUnit';
+                    openDeleteConfirmationDialog()
+                  "
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    fill="currentColor"
+                    d="M7 21q-.825 0-1.412-.587T5 19V6q-.425 0-.712-.288T4 5t.288-.712T5 4h4q0-.425.288-.712T10 3h4q.425 0 .713.288T15 4h4q.425 0 .713.288T20 5t-.288.713T19 6v13q0 .825-.587 1.413T17 21zM17 6H7v13h10zm-7 11q.425 0 .713-.288T11 16V9q0-.425-.288-.712T10 8t-.712.288T9 9v7q0 .425.288.713T10 17m4 0q.425 0 .713-.288T15 16V9q0-.425-.288-.712T14 8t-.712.288T13 9v7q0 .425.288.713T14 17M7 6v13z"
+                  />
+                </svg>
+              </div>
+            </td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="displayedUnitColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedUnitColumns"></tr>
+        </table>
+      </div>
+      <app-data-not-found
+        *ngIf="potatoUnits.length == 0 && !potatoUnitLoading"
+      />
+      <div class="skelton" *ngIf="potatoUnitLoading">
+        <app-loading></app-loading>
+      </div>
+      <mat-paginator
+        pageSize="10"
+        [length]="potatoUnits.length"
+        aria-label="Select page of periodic elements"
+      >
+      </mat-paginator>
+    </div>
+    <!-- for egg variety -->
+    <div class="col-md-6">
+      <!-- For Egg Varieties  -->
+
+      <span class="d-flex align-items-center justify-content-between mt-5">
+        <div class="table-heading">Egg Varieties</div>
+        <div class="d-flex align-items-center gap-5">
+          <button
+            (click)="openEggVarietyPopup()"
+            class="btn mt-4 mb-3"
+            style="min-width: 135px"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="25"
+              height="25"
+              viewBox="0 0 24 24"
+            >
+              <g
+                fill="none"
+                stroke="currentColor"
+                stroke-dasharray="16"
+                stroke-dashoffset="16"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+              >
+                <path d="M5 12h14">
+                  <animate
+                    fill="freeze"
+                    attributeName="stroke-dashoffset"
+                    dur="0.48s"
+                    values="16;0"
+                  />
+                </path>
+                <path d="M12 5v14">
+                  <animate
+                    fill="freeze"
+                    attributeName="stroke-dashoffset"
+                    begin="0.48s"
+                    dur="0.48s"
+                    values="16;0"
+                  />
+                </path>
+              </g>
+            </svg>
+            New Variety
+          </button>
+        </div>
+      </span>
+
+      <!-- For Egg Variety Table -->
+      <div class="mat-elevation-z8 mt-4 rounded-table">
+        <table mat-table [dataSource]="eggVarietyDataSource">
+          <ng-container matColumnDef="varietyNo">
+            <th
+              mat-header-cell
+              *matHeaderCellDef
+              class="table-header"
+              style="min-width: 120px !important"
+            >
+              Variety No
+            </th>
+            <td mat-cell *matCellDef="let element" class="tableText-bold">
+              {{ element.orderNumber }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef class="table-header">
+              Variety Name
+            </th>
+            <td
+              mat-cell
+              *matCellDef="let element"
+              class="tableText-bold"
+              (click)="openEditEggVarietyPopup(element.id)"
+            >
+              {{ element.type }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="dlt">
+            <th mat-header-cell *matHeaderCellDef class="table-header"></th>
+            <td mat-cell *matCellDef="let element">
+              <div class="d-flex gap-4 align-items-center">
+                <div class="status-toggle d-flex my-1">
+                  <div
+                    class="status-pill"
+                    [ngClass]="{ active: element.isActive }"
+                    (click)="
+                      element.isActive = true;
+                      editVarietyStatus(element.id, element.isActive)
+                    "
+                  >
+                    <svg
+                      *ngIf="element.isActive"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      style="margin-right: 10px"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        fill="currentColor"
+                        d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10s10-4.5 10-10S17.5 2 12 2m0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8s8 3.59 8 8s-3.59 8-8 8m4.59-12.42L10 14.17l-2.59-2.58L6 13l4 4l8-8z"
+                      />
+                    </svg>
+                    Active
+                  </div>
+                  <div
+                    class="status-pill"
+                    [ngClass]="{ active: !element.isActive, inactive: true }"
+                    (click)="
+                      element.isActive = false;
+                      editVarietyStatus(element.id, element.isActive)
+                    "
+                  >
+                    <svg
+                      *ngIf="!element.isActive"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      style="margin-right: 10px"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        fill="currentColor"
+                        d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10s10-4.5 10-10S17.5 2 12 2m0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8s8 3.59 8 8s-3.59 8-8 8m4.59-12.42L10 14.17l-2.59-2.58L6 13l4 4l8-8z"
+                      />
+                    </svg>
+                    Inactive
+                  </div>
+                </div>
+                <!-- for delete -->
+                <svg
+                  style="color: red; cursor: pointer"
+                  (click)="
+                    deletedItemId = element.id;
+                    deletedItemType = 'eggVariety';
+                    openDeleteConfirmationDialog()
+                  "
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    fill="currentColor"
+                    d="M7 21q-.825 0-1.412-.587T5 19V6q-.425 0-.712-.288T4 5t.288-.712T5 4h4q0-.425.288-.712T10 3h4q.425 0 .713.288T15 4h4q.425 0 .713.288T20 5t-.288.713T19 6v13q0 .825-.587 1.413T17 21zM17 6H7v13h10zm-7 11q.425 0 .713-.288T11 16V9q0-.425-.288-.712T10 8t-.712.288T9 9v7q0 .425.288.713T10 17m4 0q.425 0 .713-.288T15 16V9q0-.425-.288-.712T14 8t-.712.288T13 9v7q0 .425.288.713T14 17M7 6v13z"
+                  />
+                </svg>
+              </div>
+            </td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="displayedVarietyColumns"></tr>
+          <tr
+            mat-row
+            *matRowDef="let row; columns: displayedVarietyColumns"
+          ></tr>
+        </table>
+      </div>
+      <app-data-not-found
+        *ngIf="eggVarieties.length == 0 && !eggVarietyLoading"
+      />
+      <div class="skelton" *ngIf="eggVarietyLoading">
+        <app-loading></app-loading>
+      </div>
+      <mat-paginator
+        pageSize="10"
+        [length]="eggVarieties.length"
+        aria-label="Select page of periodic elements"
+      >
+      </mat-paginator>
+    </div>
+    <!-- for potato variety -->
+    <div class="col-md-6">
+      <!-- For potato Varieties  -->
+      <span class="d-flex align-items-center justify-content-between mt-5">
+        <div class="table-heading">Potato Varieties</div>
+        <div class="d-flex align-items-center gap-5">
+          <button
+            (click)="openPotatoVarietyPopup()"
+            class="btn mt-4 mb-3"
+            style="min-width: 135px"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="25"
+              height="25"
+              viewBox="0 0 24 24"
+            >
+              <g
+                fill="none"
+                stroke="currentColor"
+                stroke-dasharray="16"
+                stroke-dashoffset="16"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+              >
+                <path d="M5 12h14">
+                  <animate
+                    fill="freeze"
+                    attributeName="stroke-dashoffset"
+                    dur="0.48s"
+                    values="16;0"
+                  />
+                </path>
+                <path d="M12 5v14">
+                  <animate
+                    fill="freeze"
+                    attributeName="stroke-dashoffset"
+                    begin="0.48s"
+                    dur="0.48s"
+                    values="16;0"
+                  />
+                </path>
+              </g>
+            </svg>
+            New Variety
+          </button>
+        </div>
+      </span>
+      <!-- For potato Variety Table -->
+      <div class="mat-elevation-z8 mt-4 rounded-table">
+        <table mat-table [dataSource]="potatoVarietyDataSource">
+          <ng-container matColumnDef="varietyNo">
+            <th
+              mat-header-cell
+              *matHeaderCellDef
+              class="table-header"
+              style="min-width: 120px !important"
+            >
+              Variety No
+            </th>
+            <td mat-cell *matCellDef="let element" class="tableText-bold">
+              {{ element.orderNumber }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef class="table-header">
+              Variety Name
+            </th>
+            <td
+              mat-cell
+              *matCellDef="let element"
+              class="tableText-bold"
+              (click)="openEditPotatoVarietyPopup(element.id)"
+            >
+              {{ element.type }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="dlt">
+            <th mat-header-cell *matHeaderCellDef class="table-header"></th>
+            <td mat-cell *matCellDef="let element">
+              <div class="d-flex gap-4 align-items-center">
+                <div class="status-toggle d-flex my-1">
+                  <div
+                    class="status-pill"
+                    [ngClass]="{ active: element.isActive }"
+                    (click)="
+                      element.isActive = true;
+                      editVarietyStatus(element.id, element.isActive)
+                    "
+                  >
+                    <svg
+                      *ngIf="element.isActive"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      style="margin-right: 10px"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        fill="currentColor"
+                        d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10s10-4.5 10-10S17.5 2 12 2m0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8s8 3.59 8 8s-3.59 8-8 8m4.59-12.42L10 14.17l-2.59-2.58L6 13l4 4l8-8z"
+                      />
+                    </svg>
+                    Active
+                  </div>
+                  <div
+                    class="status-pill"
+                    [ngClass]="{ active: !element.isActive, inactive: true }"
+                    (click)="
+                      element.isActive = false;
+                      editVarietyStatus(element.id, element.isActive)
+                    "
+                  >
+                    <svg
+                      *ngIf="!element.isActive"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      style="margin-right: 10px"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        fill="currentColor"
+                        d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10s10-4.5 10-10S17.5 2 12 2m0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8s8 3.59 8 8s-3.59 8-8 8m4.59-12.42L10 14.17l-2.59-2.58L6 13l4 4l8-8z"
+                      />
+                    </svg>
+                    Inactive
+                  </div>
+                </div>
+                <!-- for delete -->
+                <svg
+                  style="color: red; cursor: pointer"
+                  (click)="
+                    deletedItemId = element.id;
+                    deletedItemType = 'potatoVariety';
+                    openDeleteConfirmationDialog()
+                  "
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    fill="currentColor"
+                    d="M7 21q-.825 0-1.412-.587T5 19V6q-.425 0-.712-.288T4 5t.288-.712T5 4h4q0-.425.288-.712T10 3h4q.425 0 .713.288T15 4h4q.425 0 .713.288T20 5t-.288.713T19 6v13q0 .825-.587 1.413T17 21zM17 6H7v13h10zm-7 11q.425 0 .713-.288T11 16V9q0-.425-.288-.712T10 8t-.712.288T9 9v7q0 .425.288.713T10 17m4 0q.425 0 .713-.288T15 16V9q0-.425-.288-.712T14 8t-.712.288T13 9v7q0 .425.288.713T14 17M7 6v13z"
+                  />
+                </svg>
+              </div>
+            </td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="displayedVarietyColumns"></tr>
+          <tr
+            mat-row
+            *matRowDef="let row; columns: displayedVarietyColumns"
+          ></tr>
+        </table>
+      </div>
+      <app-data-not-found
+        *ngIf="potatoVarieties.length == 0 && !potatoVarietyLoading"
+      />
+      <div class="skelton" *ngIf="potatoVarietyLoading">
+        <app-loading></app-loading>
+      </div>
+      <mat-paginator
+        pageSize="10"
+        [length]="potatoVarieties.length"
+        aria-label="Select page of periodic elements"
+      >
+      </mat-paginator>
+    </div>
+    <!-- for Employee Types -->
+    <div class="col-md-6">
+      <!-- For Employee Types  -->
+      <span class="d-flex align-items-center justify-content-between mt-5">
+        <div class="table-heading">Employee Types</div>
+        <div class="d-flex align-items-center gap-5">
+          <button
+            (click)="openEmployeePopup()"
+            class="btn mt-4 mb-3"
+            style="min-width: 135px"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="25"
+              height="25"
+              viewBox="0 0 24 24"
+            >
+              <g
+                fill="none"
+                stroke="currentColor"
+                stroke-dasharray="16"
+                stroke-dashoffset="16"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+              >
+                <path d="M5 12h14">
+                  <animate
+                    fill="freeze"
+                    attributeName="stroke-dashoffset"
+                    dur="0.48s"
+                    values="16;0"
+                  />
+                </path>
+                <path d="M12 5v14">
+                  <animate
+                    fill="freeze"
+                    attributeName="stroke-dashoffset"
+                    begin="0.48s"
+                    dur="0.48s"
+                    values="16;0"
+                  />
+                </path>
+              </g>
+            </svg>
+            New Type
+          </button>
+        </div>
+      </span>
+      <!-- For Employee Types Table -->
+      <div class="mat-elevation-z8 mt-4 rounded-table">
+        <table mat-table [dataSource]="employeeTypesDataSource">
+          <ng-container matColumnDef="varietyNo">
+            <th
+              mat-header-cell
+              *matHeaderCellDef
+              class="table-header"
+              style="min-width: 140px !important"
+            >
+              Employee No
+            </th>
+            <td mat-cell *matCellDef="let element" class="tableText-bold">
+              {{ element.id }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="name">
+            <th
+              mat-header-cell
+              *matHeaderCellDef
+              class="table-header"
+              style="min-width: 152px !important"
+            >
+              Employee Name
+            </th>
+            <td
+              mat-cell
+              *matCellDef="let element"
+              class="tableText-bold"
+              (click)="openEditEmployeePopup(element.id)"
+            >
+              {{ element.type }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="dlt">
+            <th mat-header-cell *matHeaderCellDef class="table-header"></th>
+            <td mat-cell *matCellDef="let element">
+              <div class="d-flex gap-4 align-items-center">
+                <div class="status-toggle d-flex my-1">
+                  <div
+                    class="status-pill"
+                    [ngClass]="{ active: element.isActive }"
+                    (click)="
+                      element.isActive = true;
+                      editEmployeeStatus(element.id, element.isActive)
+                    "
+                  >
+                    <svg
+                      *ngIf="element.isActive"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      style="margin-right: 10px"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        fill="currentColor"
+                        d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10s10-4.5 10-10S17.5 2 12 2m0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8s8 3.59 8 8s-3.59 8-8 8m4.59-12.42L10 14.17l-2.59-2.58L6 13l4 4l8-8z"
+                      />
+                    </svg>
+                    Active
+                  </div>
+                  <div
+                    class="status-pill"
+                    [ngClass]="{ active: !element.isActive, inactive: true }"
+                    (click)="
+                      element.isActive = false;
+                      editEmployeeStatus(element.id, element.isActive)
+                    "
+                  >
+                    <svg
+                      *ngIf="!element.isActive"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      style="margin-right: 10px"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        fill="currentColor"
+                        d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10s10-4.5 10-10S17.5 2 12 2m0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8s8 3.59 8 8s-3.59 8-8 8m4.59-12.42L10 14.17l-2.59-2.58L6 13l4 4l8-8z"
+                      />
+                    </svg>
+                    Inactive
+                  </div>
+                </div>
+                <!-- for delete -->
+                <svg
+                  style="color: red; cursor: pointer"
+                  (click)="
+                    deletedItemId = element.id;
+                    deletedItemType = 'employee';
+                    openDeleteConfirmationDialog()
+                  "
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    fill="currentColor"
+                    d="M7 21q-.825 0-1.412-.587T5 19V6q-.425 0-.712-.288T4 5t.288-.712T5 4h4q0-.425.288-.712T10 3h4q.425 0 .713.288T15 4h4q.425 0 .713.288T20 5t-.288.713T19 6v13q0 .825-.587 1.413T17 21zM17 6H7v13h10zm-7 11q.425 0 .713-.288T11 16V9q0-.425-.288-.712T10 8t-.712.288T9 9v7q0 .425.288.713T10 17m4 0q.425 0 .713-.288T15 16V9q0-.425-.288-.712T14 8t-.712.288T13 9v7q0 .425.288.713T14 17M7 6v13z"
+                  />
+                </svg>
+              </div>
+            </td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="displayedEmployeeColumns"></tr>
+          <tr
+            mat-row
+            *matRowDef="let row; columns: displayedEmployeeColumns"
+          ></tr>
+        </table>
+      </div>
+      <app-data-not-found
+        *ngIf="employeeTypes.length == 0 && !employeeTypeLoading"
+      />
+      <div class="skelton" *ngIf="employeeTypeLoading">
+        <app-loading></app-loading>
+      </div>
+      <mat-paginator
+        pageSize="10"
+        [length]="employeeTypes.length"
+        aria-label="Select page of periodic elements"
+      >
+      </mat-paginator>
+    </div>
+    <!-- for Product Types -->
+    <div class="col-md-6">
+      <!-- For Product  -->
+      <span class="d-flex align-items-center justify-content-between mt-5">
+        <div class="table-heading">Products</div>
+        <div class="d-flex align-items-center gap-5">
+          <button
+            (click)="openProductPopup()"
+            class="btn mt-4 mb-3"
+            style="min-width: 135px"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="25"
+              height="25"
+              viewBox="0 0 24 24"
+            >
+              <g
+                fill="none"
+                stroke="currentColor"
+                stroke-dasharray="16"
+                stroke-dashoffset="16"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+              >
+                <path d="M5 12h14">
+                  <animate
+                    fill="freeze"
+                    attributeName="stroke-dashoffset"
+                    dur="0.48s"
+                    values="16;0"
+                  />
+                </path>
+                <path d="M12 5v14">
+                  <animate
+                    fill="freeze"
+                    attributeName="stroke-dashoffset"
+                    begin="0.48s"
+                    dur="0.48s"
+                    values="16;0"
+                  />
+                </path>
+              </g>
+            </svg>
+            New Product
+          </button>
+        </div>
+      </span>
+
+      <!-- For Product  Table -->
+      <div class="mat-elevation-z8 mt-4 rounded-table">
+        <table mat-table [dataSource]="productsDataSource">
+          <ng-container matColumnDef="productId">
+            <th
+              mat-header-cell
+              *matHeaderCellDef
+              class="table-header"
+              style="min-width: 140px !important"
+            >
+              Product Id
+            </th>
+            <td mat-cell *matCellDef="let element" class="tableText-bold">
+              {{ element.id }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="name">
+            <th
+              mat-header-cell
+              *matHeaderCellDef
+              class="table-header"
+              style="min-width: 152px !important"
+            >
+              Product Name
+            </th>
+            <td
+              mat-cell
+              *matCellDef="let element"
+              class="tableText-bold"
+              (click)="openEditEmployeePopup(element.id)"
+            >
+              {{ element.type }}
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedProductsColumns"></tr>
+          <tr
+            mat-row
+            *matRowDef="let row; columns: displayedProductsColumns"
+          ></tr>
+        </table>
+      </div>
+      <app-data-not-found
+        *ngIf="employeeTypes.length == 0 && !employeeTypeLoading"
+      />
+      <div class="skelton" *ngIf="employeeTypeLoading">
+        <app-loading></app-loading>
+      </div>
+      <mat-paginator
+        pageSize="10"
+        [length]="employeeTypes.length"
+        aria-label="Select page of periodic elements"
+      >
+      </mat-paginator>
+    </div>
+    <!-- for Category Types -->
+    <!-- <div class="col-md-6"> -->
+    <!-- For Employee Types  -->
+    <!-- <span class="d-flex align-items-center justify-content-between mt-5">
+        <div class="table-heading">Category Types</div>
+        <div class="d-flex align-items-center gap-5">
+          <button
+            (click)="openCategoryPopup()"
+            class="btn mt-4 mb-3"
+            style="min-width: 145px"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="25"
+              height="25"
+              viewBox="0 0 24 24"
+            >
+              <g
+                fill="none"
+                stroke="currentColor"
+                stroke-dasharray="16"
+                stroke-dashoffset="16"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+              >
+                <path d="M5 12h14">
+                  <animate
+                    fill="freeze"
+                    attributeName="stroke-dashoffset"
+                    dur="0.48s"
+                    values="16;0"
+                  />
+                </path>
+                <path d="M12 5v14">
+                  <animate
+                    fill="freeze"
+                    attributeName="stroke-dashoffset"
+                    begin="0.48s"
+                    dur="0.48s"
+                    values="16;0"
+                  />
+                </path>
+              </g>
+            </svg>
+            New Category
+          </button>
+        </div>
+      </span> -->
+    <!-- For Employee Types Table -->
+    <!-- <div class="mat-elevation-z8 mt-4 rounded-table">
+        <table mat-table [dataSource]="categoryDataSource">
+          <ng-container matColumnDef="varietyNo">
+            <th
+              mat-header-cell
+              *matHeaderCellDef
+              class="table-header"
+              style="min-width: 140px !important"
+            >
+              Category No
+            </th>
+            <td mat-cell *matCellDef="let element" class="tableText-bold">
+              {{ element.id }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="name">
+            <th
+              mat-header-cell
+              *matHeaderCellDef
+              class="table-header"
+              style="min-width: 152px !important"
+            >
+              Category Name
+            </th>
+            <td mat-cell *matCellDef="let element" class="tableText-bold">
+              {{ element.type }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="dlt">
+            <th mat-header-cell *matHeaderCellDef class="table-header"></th>
+            <td mat-cell *matCellDef="let element">
+              <div class="status-toggle d-flex my-1">
+                <div
+                  class="status-pill"
+                  [ngClass]="{ active: element.isActive }"
+                  (click)="element.isActive = true"
+                >
+                  <svg
+                    *ngIf="element.isActive"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    style="margin-right: 10px"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      fill="currentColor"
+                      d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10s10-4.5 10-10S17.5 2 12 2m0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8s8 3.59 8 8s-3.59 8-8 8m4.59-12.42L10 14.17l-2.59-2.58L6 13l4 4l8-8z"
+                    />
+                  </svg>
+                  Active
+                </div>
+                <div
+                  class="status-pill"
+                  [ngClass]="{ active: !element.isActive, inactive: true }"
+                  (click)="element.isActive = false"
+                >
+                  <svg
+                    *ngIf="!element.isActive"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    style="margin-right: 10px"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      fill="currentColor"
+                      d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10s10-4.5 10-10S17.5 2 12 2m0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8s8 3.59 8 8s-3.59 8-8 8m4.59-12.42L10 14.17l-2.59-2.58L6 13l4 4l8-8z"
+                    />
+                  </svg>
+                  Inactive
+                </div>
+              </div>
+            </td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="displayedEmployeeColumns"></tr>
+          <tr
+            mat-row
+            *matRowDef="let row; columns: displayedEmployeeColumns"
+          ></tr>
+        </table>
+      </div>
+      <app-data-not-found
+        *ngIf="categoryTypes.length == 0 && !categoryTypeLoading"
+      /> -->
+    <!-- <div class="skelton" *ngIf="categoryTypeLoading">
+        <app-loading></app-loading>
+      </div>
+      <mat-paginator
+        pageSize="10"
+        [length]="categoryTypes.length"
+        aria-label="Select page of periodic elements"
+      >
+      </mat-paginator> -->
+    <!-- </div> -->
+  </div>
+</div>
+<div class="flex justify-center">
+  <p-dialog
+    header="Add Rack"
+    [modal]="true"
+    [(visible)]="visible"
+    [style]="{ width: '40vw' }"
+    [draggable]="false"
+    [resizable]="false"
+  >
+    <form [formGroup]="addColdStoreShelfModel">
+      <div class="row">
+        <div class="name mt-3">
+          <span class="label"
+            >Rack Name<span class="required-icon">*</span>
+          </span>
+          <input
+            type="text"
+            formControlName="shelfName"
+            class="input-felid"
+            placeholder="Enter shelf name..."
+          />
+        </div>
+        <div class="name mt-3">
+          <span class="label">Capicity Cubic feet </span>
+          <input
+            type="number"
+            step="0.1"
+            min="0"
+            formControlName="capacityCubicFeet"
+            class="input-felid"
+            placeholder="Enter cubic feet..."
+          />
+        </div>
+        <div class="mt-3">
+          <span class="label"
+            >Business Unit<span class="required-icon">*</span></span
+          >
+          <div>
+            <p-select
+              [options]="businessUnitTypes"
+              [(ngModel)]="this._businessUnitId"
+              optionLabel="type"
+              optionValue="id"
+              placeholder="Business Unit"
+              class="p-select-disabled"
+              [disabled]="true"
+              [ngModelOptions]="{ standalone: true }"
+            />
+          </div>
+        </div>
+      </div>
+      <hr class="mt-5" />
+      <div
+        class="d-flex justify-content-end gap-4 mb-4"
+        style="margin-top: 20px"
+      >
+        <button (click)="visible = false" type="button" class="btn-discard">
+          Discard
+        </button>
+
+        <button
+          type="button"
+          (click)="
+            addColdStoreShelfModel.valid && !addLoading
+              ? addColdStoreShelf()
+              : null
+          "
+          [ngClass]="{
+            'btn-save': addColdStoreShelfModel.valid && !addLoading,
+            'btn-disable': addColdStoreShelfModel.invalid || addLoading
+          }"
+        >
+          Save &nbsp;
+          <span
+            *ngIf="addLoading"
+            class="spinner-border spinner-border-sm"
+            role="status"
+            aria-hidden="true"
+          ></span>
+        </button>
+      </div>
+    </form>
+  </p-dialog>
+</div>
+<!-- For add Room Type -->
+<div class="flex justify-center">
+  <p-dialog
+    header="Add Room"
+    [modal]="true"
+    [(visible)]="isAddRoomPopup"
+    [style]="{ width: '40vw' }"
+    [draggable]="false"
+    [resizable]="false"
+  >
+    <div class="row">
+      <div class="name mt-3">
+        <span class="label">Room Name </span>
+        <input
+          type="text"
+          [(ngModel)]="roomName"
+          class="input-felid"
+          placeholder="Enter room name..."
+        />
+      </div>
+    </div>
+    <hr class="mt-5" />
+    <div class="d-flex justify-content-end gap-4 mb-4" style="margin-top: 20px">
+      <button
+        (click)="isAddRoomPopup = false"
+        type="button"
+        class="btn-discard"
+      >
+        Discard
+      </button>
+
+      <button
+        type="button"
+        (click)="roomName && !addLoading ? addRoom() : null"
+        [ngClass]="{
+          'btn-save': roomName && !addLoading,
+          'btn-disable': !roomName || addLoading
+        }"
+      >
+        Save &nbsp;
+        <span
+          *ngIf="addLoading"
+          class="spinner-border spinner-border-sm"
+          role="status"
+          aria-hidden="true"
+        ></span>
+      </button>
+    </div>
+  </p-dialog>
+</div>
+<!-- For Add Type,Variety,Unit and Employee -->
+<div class="flex justify-center">
+  <p-dialog
+    [header]="dialogHeader"
+    [modal]="true"
+    [(visible)]="isAddTypeVarietyUnit"
+    [style]="{ width: '40vw' }"
+    [draggable]="false"
+    [resizable]="false"
+  >
+    <form [formGroup]="addTypeVarietyUnitModel">
+      <div class="row">
+        <div class="name mt-3">
+          <span class="label">{{ popupLabelTitle }} </span>
+          <input
+            [type]="inputType"
+            formControlName="value"
+            class="input-felid"
+            [placeholder]="popupPlaceholder"
+          />
+        </div>
+        <div
+          *ngIf="popupType != 'employee' && popupType != 'category'"
+          class="mt-3"
+        >
+          <span class="label">Product type</span>
+          <div>
+            <p-select
+              [options]="productTypes"
+              formControlName="productTypeId"
+              optionLabel="type"
+              optionValue="id"
+              placeholder="Select Type"
+              class="p-select-disabled"
+              readonly
+            />
+          </div>
+        </div>
+      </div>
+      <hr class="mt-5" />
+      <div
+        class="d-flex justify-content-end gap-4 mb-4"
+        style="margin-top: 20px"
+      >
+        <button
+          (click)="isAddTypeVarietyUnit = false"
+          type="button"
+          class="btn-discard"
+        >
+          Discard
+        </button>
+
+        <button
+          type="button"
+          (click)="
+            addTypeVarietyUnitModel.valid && !addLoading ? onSaveClick() : null
+          "
+          [ngClass]="{
+            'btn-save': addTypeVarietyUnitModel.valid && !addLoading,
+            'btn-disable': !addTypeVarietyUnitModel.valid || addLoading
+          }"
+        >
+          Save &nbsp;
+          <span
+            *ngIf="addLoading"
+            class="spinner-border spinner-border-sm"
+            role="status"
+            aria-hidden="true"
+          ></span>
+        </button>
+      </div>
+    </form>
+  </p-dialog>
+</div>
+
+<!-- For Edit Add Type,Variety,Unit and Employee -->
+<div class="flex justify-center">
+  <p-dialog
+    [header]="dialogHeader"
+    [modal]="true"
+    [(visible)]="isEditTypeVarietyUnitPopup"
+    [style]="{ width: '40vw' }"
+    [draggable]="false"
+    [resizable]="false"
+  >
+    <form [formGroup]="editTypeVarietyUnitModel">
+      <div class="row">
+        <div class="name mt-3">
+          <span class="label">{{ popupLabelTitle }} </span>
+          <input
+            *ngIf="!detailLoading"
+            [type]="inputType"
+            formControlName="value"
+            class="input-felid"
+            [placeholder]="popupPlaceholder"
+          />
+          <span *ngIf="detailLoading">
+            <p-skeleton height="3rem" />
+          </span>
+        </div>
+        <div *ngIf="popupType != 'editEmployee'" class="mt-3">
+          <span class="label">Product type</span>
+          <div>
+            <p-select
+              *ngIf="!detailLoading"
+              [options]="productTypes"
+              formControlName="productTypeId"
+              optionLabel="type"
+              optionValue="id"
+              placeholder="Select Type"
+              class="p-select-disabled"
+              readonly
+            />
+            <span *ngIf="detailLoading">
+              <p-skeleton height="3rem" />
+            </span>
+          </div>
+        </div>
+      </div>
+      <hr class="mt-5" />
+      <div
+        class="d-flex justify-content-end gap-4 mb-4"
+        style="margin-top: 20px"
+      >
+        <button
+          (click)="isEditTypeVarietyUnitPopup = false"
+          type="button"
+          class="btn-discard"
+        >
+          Discard
+        </button>
+
+        <button
+          type="button"
+          (click)="
+            editTypeVarietyUnitModel.valid && !addLoading ? onEditClick() : null
+          "
+          [ngClass]="{
+            'btn-save': editTypeVarietyUnitModel.valid && !addLoading,
+            'btn-disable': !editTypeVarietyUnitModel.valid || addLoading
+          }"
+        >
+          Save &nbsp;
+          <span
+            *ngIf="addLoading"
+            class="spinner-border spinner-border-sm"
+            role="status"
+            aria-hidden="true"
+          ></span>
+        </button>
+      </div>
+    </form>
+  </p-dialog>
+</div>
+<!-- For add Product -->
+<div class="flex justify-center">
+  <p-dialog
+    header="Add Product"
+    [modal]="true"
+    [(visible)]="isAddProduct"
+    [style]="{ width: '40vw' }"
+    [draggable]="false"
+    [resizable]="false"
+  >
+    <div class="row">
+      <div class="name mt-3">
+        <span class="label">Product Name </span>
+        <input
+          type="text"
+          [(ngModel)]="roomName"
+          class="input-felid"
+          placeholder="Enter Product name..."
+        />
+      </div>
+    </div>
+    <hr class="mt-5" />
+    <div class="d-flex justify-content-end gap-4 mb-4" style="margin-top: 20px">
+      <button
+        (click)="isAddRoomPopup = false"
+        type="button"
+        class="btn-discard"
+      >
+        Discard
+      </button>
+
+      <button
+        type="button"
+        (click)="roomName && !addLoading ? addProduct() : null"
+        [ngClass]="{
+          'btn-save': roomName && !addLoading,
+          'btn-disable': !roomName || addLoading
+        }"
+      >
+        Save &nbsp;
+        <span
+          *ngIf="addLoading"
+          class="spinner-border spinner-border-sm"
+          role="status"
+          aria-hidden="true"
+        ></span>
+      </button>
+    </div>
+  </p-dialog>
+</div>
+<!-- For Add Product -->
+<div class="flex justify-center">
+  <p-dialog
+    [header]="dialogHeader"
+    [modal]="true"
+    [(visible)]="isAddProduct"
+    [style]="{ width: '40vw' }"
+    [draggable]="false"
+    [resizable]="false"
+  >
+    <form [formGroup]="addProductModel">
+      <div class="row">
+        <div class="name mt-3">
+          <span class="label">{{ popupLabelTitle }} </span>
+          <input
+            [type]="inputType"
+            formControlName="value"
+            class="input-felid"
+            [placeholder]="popupPlaceholder"
+          />
+        </div>
+        <div *ngIf="popupType != 'product'" class="mt-3">
+          <!-- <span class="label">Product type</span>
+          <div>
+            <p-select
+              [options]="productTypes"
+              formControlName="productTypeId"
+              optionLabel="type"
+              optionValue="id"
+              placeholder="Select Type"
+              class="p-select-disabled"
+              readonly
+            />
+          </div> -->
+        </div>
+      </div>
+      <hr class="mt-5" />
+      <div
+        class="d-flex justify-content-end gap-4 mb-4"
+        style="margin-top: 20px"
+      >
+        <button
+          (click)="isAddProduct = false"
+          type="button"
+          class="btn-discard"
+        >
+          Discard
+        </button>
+
+        <button
+          type="button"
+          (click)="addProductModel.valid && !addLoading ? onSaveClick() : null"
+          [ngClass]="{
+            'btn-save': addProductModel?.valid && !addLoading,
+            'btn-disable': !addProductModel?.valid || addLoading
+          }"
+        >
+          Save &nbsp;
+          <span
+            *ngIf="addLoading"
+            class="spinner-border spinner-border-sm"
+            role="status"
+            aria-hidden="true"
+          ></span>
+        </button>
+      </div>
+    </form>
+  </p-dialog>
+</div>
+<p-toast />
+<app-confirmation-popup
+  [visible]="showConfirmDialog"
+  [message]="confirmationMessage"
+  (onConfirm)="editArchiveStatus()"
+  (onCancel)="handleCancelled()"
+>
+</app-confirmation-popup>
+<!-- for deletion -->
+<app-confirmation-popup
+  [visible]="showDeleteConfirmationDialog"
+  [message]="deleteConfirmationMessage"
+  (onConfirm)="deleteMasterEntity()"
+  (onCancel)="deleteMasterEntityCancelled()"
+>
+</app-confirmation-popup>
+<app-confirmation-popup
+  [visible]="roomConfirmDialog"
+  [message]="roomConfirmMessage"
+  (onConfirm)="editRoomArchiveStatus()"
+  (onCancel)="handleRoomCancelled()"
+>
+</app-confirmation-popup>

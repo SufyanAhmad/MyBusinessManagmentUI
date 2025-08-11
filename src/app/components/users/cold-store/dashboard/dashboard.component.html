@@ -1,0 +1,58 @@
+<div class="container-fluid">
+  <div>
+    <span class="breadcrumb"  [routerLink]="['/superAdmin']"  >BINISHAQ /</span>
+    <span class="breadcrumb-bold">&nbsp;{{businessUnitName}} /</span>
+    <span  class="breadcrumb-bold">&nbsp;Dashboard</span>
+  </div>
+<div class="row g-3 text-center justify-content-between mb-5">
+    <div class="col-md-3">
+      <div class="unit-card p-3 ">
+          <div class="card-text">User</div>
+        <div class="count" style="color:#E47C1C ;">{{ TotalCount.users }}</div>
+        <div class="label" style="font-weight: 600;">Total</div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="unit-card p-3 ">
+          <div class="card-text">Customer</div>
+        <div class="count" style="color: #338C8E;">{{ TotalCount.customers }}</div>
+        <div class="label" style="font-weight: 600;">Total</div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="unit-card p-3 ">
+          <div class="card-text">Supplier</div>
+        <div class="count" style="color: #0D77BC;">{{ TotalCount.suppliers }}</div>
+        <div class="label" style="font-weight: 600;">Total</div>
+      </div>
+    </div>
+  </div>
+  <div class="row justify-content-between" style="margin-top: 100px;" >
+     <div class="col-md-3">
+      <p-chart type="bar" [data]="chartData" [options]="chartOptions"></p-chart>
+     </div>
+      <div class="col-md-3">
+      <p-chart type="bar" [data]="chartData" [options]="chartOptions"></p-chart>
+     </div>
+     <div class="col-md-3">
+      <p-chart type="bar" [data]="storageUnitChartData" [options]="chartOptions"></p-chart>
+     </div>
+  </div>
+<div class="row justify-content-between mt-5" >
+<div class="col-md-3">
+  <div class="dashboard-card">
+    Cold Store
+  </div>
+</div>
+<div class="col-md-3">
+  <div [routerLink]="['/poultryFarm']" class="dashboard-card" style="cursor: pointer;">
+    Poultry Farm
+  </div>
+
+</div>
+<div class="col-md-3">
+  <div class="dashboard-card">
+    Storage Unit
+  </div>
+</div>
+</div>

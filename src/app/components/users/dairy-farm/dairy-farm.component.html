@@ -1,0 +1,81 @@
+<div class="app-container">
+  <div class="sidebar" [ngClass]="status ? 'show' : 'hide'">
+    <div
+      class="d-flex justify-content-center mt-2"
+      style="background-color: white"
+    >
+      <img
+        src="./assets/Images/isSidebarLogo.png"
+        alt="Logo"
+        [routerLink]="['/superAdmin/dashboard']"
+        width="180px"
+        height="160px"
+      />
+    </div>
+    <ul class="menu">
+      <li
+       
+        [routerLinkActive]="['active']"
+      >
+        <span>Dashboard</span>
+      </li>
+      <li
+       
+        [routerLinkActive]="['active']"
+      >
+        <span>Business Units</span>
+      </li>
+       <li
+       
+        [routerLinkActive]="['active']"
+      >
+        <span>Animal</span>
+      </li>
+      <li
+       
+        [routerLinkActive]="['active']"
+      >
+        <span>Breed</span>
+      </li>
+      <li
+       
+        [routerLinkActive]="['active']"
+      >
+        <span>Feed</span>
+      </li>
+      <li
+       
+        [routerLinkActive]="['active']"
+      >
+        <span>Milk Production</span>
+      </li>
+      <hr style="margin-top: 100px;" />
+      <li [routerLink]="['/login']">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+        >
+          <path
+            fill="currentColor"
+            d="M5 5h7V3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h7v-2H5zm16 7l-4-4v3H9v2h8v3z"
+          />
+        </svg>
+        <span>Logout</span>
+      </li>
+    </ul>
+  </div>
+  <div class="main-content">
+    <img
+      title="Menu"
+      width="50"
+      class="show-menu"
+      [ngStyle]="{ 'margin-left': chevron == 'chevron-left' ? '15rem' : '0' }"
+      (click)="clickEvent()"
+      src="./assets/Images/{{ chevron }}.png"
+    />
+
+    <router-outlet></router-outlet>
+  </div>
+</div>

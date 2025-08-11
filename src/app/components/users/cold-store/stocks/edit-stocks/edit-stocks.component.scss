@@ -1,0 +1,66 @@
+.my-custom-select{
+ width: 100% !important;
+  height: 45px !important;
+  border: 1px solid #00000080 !important;
+  // box-shadow: 0px 4px 4px 0px #00000040 !important;
+  background-color: #fff !important;
+//   padding: 0 15px !important;
+  font-family:'Montserrat', sans-serif !important;
+  font-size: 15px !important;
+  font-weight: 400 !important;
+  text-align: left !important;
+  color: #000000 !important;
+  outline: none !important;
+  border-radius: 0px !important;
+}
+.p-select-disabled{
+ width: 100% !important;
+  height: 45px !important;
+  border: 1px solid #00000080 !important;
+  // box-shadow: 0px 4px 4px 0px #00000040 !important;
+  background-color: #efeded !important;
+//   padding: 0 15px !important;
+  font-family:'Montserrat', sans-serif !important;
+  font-size: 15px !important;
+  font-weight: 400 !important;
+  text-align: left !important;
+  color: #000000 !important;
+  outline: none !important;
+  border-radius: 0px !important;
+}
+::ng-deep .p-select-label {
+  color: #000000 !important;
+  line-height: 24px  !important;
+}
+
+ .input-label{
+font-family: 'Poppins', sans-serif;
+font-weight: 500;
+font-size: 17px;
+text-transform: capitalize;
+color: #000000;
+ }
+ .label1{
+  @extend .input-label;
+  font-weight: 600;
+ }
+ .input-field{
+    border: 1px solid #00000080;
+    height: 40px;
+    font-family:'Inter', sans-serif;
+    font-weight: 400;
+    font-size: 15px;
+    border-radius: 10px;
+    outline: none;
+    color: #000000;
+    background-color: #fff !important;
+    padding: 10px;
+    width: 100%;
+  
+ }
+ ::ng-deep .p-skeleton {
+    background-color: #fb7474 !important;
+}
+::ng-deep .p-skeleton {
+ --p-skeleton-animation-background:wheat !important;
+}

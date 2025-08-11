@@ -1,0 +1,25 @@
+  //dialog tityle
+ ::ng-deep .child-dialog .p-dialog-title {
+font-family: 'Montserrat' !important;
+color: #000000 !important;
+font-size: 22px !important;
+font-weight: 600 !important;
+margin-left: 10px !important;
+
+}
+  //dialog header
+::ng-deep .child-dialog .p-dialog-header {
+  padding: 10px  !important;
+}
+//.p-dialog-content
+::ng-deep .child-dialog .p-dialog-content{
+  padding:10px  !important;
+}
+
+::ng-deep .confirmation-btn {
+  min-width: 100px !important;
+  padding: 0.5rem 1rem !important;
+  font-weight: 600 !important;
+}
+
+

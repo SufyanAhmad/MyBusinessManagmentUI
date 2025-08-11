@@ -1,0 +1,31 @@
+ .input-label{
+font-family: 'Poppins', sans-serif;
+font-weight: 500;
+font-size: 17px;
+text-transform: capitalize;
+color: #000000;
+ }
+ .label1{
+  @extend .input-label;
+  font-weight: 600;
+ }
+ .input-field{
+    border: 1px solid #00000080;
+    height: 40px;
+    font-family:'Inter', sans-serif;
+    font-weight: 400;
+    font-size: 15px;
+    border-radius: 10px;
+    outline: none;
+    color: #000000;
+    background-color: #fff !important;
+    padding: 10px;
+    width: 100%;
+  
+ }
+ ::ng-deep .p-skeleton {
+    background-color: #fb7474 !important;
+}
+::ng-deep .p-skeleton {
+ --p-skeleton-animation-background:wheat !important;
+}

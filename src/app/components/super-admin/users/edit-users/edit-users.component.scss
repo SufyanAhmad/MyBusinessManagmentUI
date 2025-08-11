@@ -1,0 +1,46 @@
+.unit-card {
+  background-color: white;
+  transition: 0.3s ease-in-out;
+  border: 1px solid #00000080;
+  box-shadow: 0px 4px 4px 0px #00000040;
+  border-radius: 16px;
+  min-height: 150px;
+
+}
+.card-text{
+font-family:'Montserrat', sans-serif;
+font-weight: 500;
+font-size: 24px;
+color: #000000;
+}
+.count{
+font-family:'Montserrat', sans-serif;
+font-weight: 800;
+font-size: 40px;
+margin: 15px 0px;
+
+
+}
+  //dialog tityle
+ ::ng-deep .p-dialog-title {
+font-family: 'Montserrat' !important;
+color: #000000 !important;
+font-size: 22px !important;
+font-weight: 600 !important;
+margin-left: 10px !important;
+
+}
+  //dialog header
+::ng-deep .p-dialog-header {
+  padding: 10px  !important;
+}
+//.p-dialog-content
+::ng-deep .p-dialog-content{
+  padding:10px  !important;
+}
+
+::ng-deep .confirmation-btn {
+  min-width: 100px !important;
+  padding: 0.5rem 1rem;
+  font-weight: 600;
+}

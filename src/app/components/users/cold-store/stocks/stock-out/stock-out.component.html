@@ -1,0 +1,153 @@
+<div class="container-fluid">
+  <div>
+    <span class="breadcrumb"  [routerLink]="['/superAdmin']"  >BINISHAQ /</span>
+    <span class="breadcrumb-bold">&nbsp;{{businessUnitName}} /</span>
+    <span  class="breadcrumb-bold">&nbsp;Stock Out</span>
+  </div>
+    <span class="d-flex flex-wrap justify-content-between">
+            <span class="d-flex flex-wrap">
+                <div class="position-relative searchinput mt-4 mb-3">
+                    <svg class="position-absolute search-icon" xmlns="http://www.w3.org/2000/svg" width="25px" height="25px" style="top: 7px; left: 10px" viewBox="0 0 24 24"><path fill="currentColor" d="m19.6 21l-6.3-6.3q-.75.6-1.725.95T9.5 16q-2.725 0-4.612-1.888T3 9.5t1.888-4.612T9.5 3t4.613 1.888T16 9.5q0 1.1-.35 2.075T14.7 13.3l6.3 6.3zM9.5 14q1.875 0 3.188-1.312T14 9.5t-1.312-3.187T9.5 5T6.313 6.313T5 9.5t1.313 3.188T9.5 14"/></svg>
+                    <input type="text" autocomplete="off" (keyup)="SearchBySearchKey($event);getStocksOutList()" (keyup.enter)="getStocksOutList()" style="padding-left: 40px"
+                        [(ngModel)]="searchKey" class="search-input" name="searchValue"
+                        placeholder="Search Ref,Batch Ref,Customer..." />
+                    <div style="position: absolute; top: 4px; right: 0">
+                      <svg class="search-cross-icon" *ngIf="searchKey != null" (click)="searchKey = null;getStocksOutList()"  style="margin-top: 6px !important;margin-right:10px !important;color:#ED5D25" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g fill="currentColor" fill-rule="evenodd" clip-rule="evenodd"><path d="M5.47 5.47a.75.75 0 0 1 1.06 0l12 12a.75.75 0 1 1-1.06 1.06l-12-12a.75.75 0 0 1 0-1.06"/><path d="M18.53 5.47a.75.75 0 0 1 0 1.06l-12 12a.75.75 0 0 1-1.06-1.06l12-12a.75.75 0 0 1 1.06 0"/></g></svg>
+                    </div>
+                </div>
+                 <span class="alarms mt-4 mb-3 mx-3">
+                    <p-select 
+                    [options]="partiesTypes" 
+                    optionLabel="type"
+                    optionValue="id"
+                    [(ngModel)]="clientId"
+                    filter="true"
+                    (onChange)="ngAfterViewInit()"
+                    placeholder="Select Customer" />
+                </span>
+                <span class="alarms mt-4 mb-3 mx-3">
+                    <p-select 
+                    [options]="productTypes" 
+                    optionLabel="type"
+                    optionValue="id"
+                    [(ngModel)]="productTypeId"
+                    filter="true"
+                     filterBy="type"
+                    (onChange)="ngAfterViewInit()" [showClear]="true"
+                    placeholder="Product Type" />
+              </span>
+               <div class="d-flex mt-4 mb-2 mx-4" style="gap: 5px; ">
+                    <span class="date-text mt-2">From</span>
+                    <input  type="date"  placeholder="To date" [(ngModel)]="fromDate" (change)="getStocksOutList()" class="date-input custom-date"
+                         />
+                </div>
+                <div class="d-flex mt-4 mb-2 mx-2" style="gap: 5px;">
+                    <span class="date-text mt-2">To</span>
+                    <input type="date" placeholder="From date" [(ngModel)]="toDate"  (change)="getStocksOutList()" class="date-input custom-date"
+                         />
+                </div>
+                 <div  class="d-flex align-items-center mx-3 gap-5" >
+                <span (click)="ResetFilter()" *ngIf="searchKey!=null||productTypeId!=null||toDate!=null||fromDate!=null||clientId!=null" class="tableText-bold mt-2" style="color: #E83838;font-weight: 700;">
+                   Reset Filter
+                </span>
+            </div>
+            </span>
+        </span>
+<div class="mat-elevation-z8 mt-4 rounded-table" >
+    <div class="table-responsive">
+  <table mat-table matSort [dataSource]="dataSource" >
+
+    <!-- Position Column -->
+
+     <ng-container matColumnDef="client">
+      <th mat-header-cell *matHeaderCellDef class="table-header"  style="min-width: 180px !important;" > Customer Name </th>
+      <td mat-cell *matCellDef="let element" class="tableText-bold"> 
+     {{element.client}}
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="ref">
+      <th mat-header-cell *matHeaderCellDef class="table-header"  style="min-width: 120px;" >Reference </th>
+      <td mat-cell *matCellDef="let element" class="tableText-bold" [routerLink]="['/coldStore/stock-out', element.stockOutId]"> 
+     {{element.reference}}
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="batch">
+      <th mat-header-cell *matHeaderCellDef class="table-header"  style="min-width: 120px;" > Batch Ref </th>
+      <td mat-cell *matCellDef="let element" class="tableText-thin"> 
+     {{element.batchReference}}
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="outQuantity">
+      <th mat-header-cell *matHeaderCellDef class="table-header"  style="min-width: 140px !important;" > Out QUANTITY  </th>
+      <td mat-cell *matCellDef="let element" class="tableText-bold"> {{element.outQuantity}} </td>
+    </ng-container>
+     <ng-container matColumnDef="rentRate">
+      <th mat-header-cell *matHeaderCellDef class="table-header"  style="min-width: 140px !important;" > RENT RATE   </th>
+      <td mat-cell *matCellDef="let element" class="tableText-bold"> {{element.rentRate}} </td>
+    </ng-container>
+     <ng-container matColumnDef="stoInDate">
+          
+      <th mat-header-cell *matHeaderCellDef class="table-header"  style="min-width: 150px !important;" >
+        STOCK In DATE
+      </th>
+      <td mat-cell *matCellDef="let element">
+          {{element.stockInDate | date:'dd/MM/yyyy'}}
+        </td>
+    </ng-container>
+    <ng-container matColumnDef="stoDate" >
+          
+      <th mat-header-cell *matHeaderCellDef class="table-header" style="min-width: 150px !important;" >
+        STOCK OUT DATE
+      </th>
+      <td mat-cell *matCellDef="let element">
+          {{element.stockOutDate | date:'dd/MM/yyyy'}}
+        </td>
+    </ng-container>
+    <ng-container matColumnDef="rentMonths">
+      <th mat-header-cell *matHeaderCellDef class="table-header"  style="min-width: 150px !important;">
+       Rent Months
+      </th>
+      <td mat-cell *matCellDef="let element" class="tableText-bold">
+          {{element.rentMonths}}
+        </td>
+    </ng-container>
+    <ng-container matColumnDef="rentDays">
+      <th mat-header-cell *matHeaderCellDef class="table-header"  style="min-width: 150px !important;">
+       Total Days
+      </th>
+      <td mat-cell *matCellDef="let element" class="tableText-bold">
+          {{element.totalDays}}
+        </td>
+    </ng-container>
+     <ng-container matColumnDef="remainStock">
+      <th mat-header-cell *matHeaderCellDef class="table-header" style="min-width: 170px !important;">
+       REMAINING STOCK
+      </th>
+      <td mat-cell *matCellDef="let element" class="tableText-bold">
+          {{element.remainingStock}}
+        </td>
+    </ng-container>
+    
+     <ng-container matColumnDef="totalRent">
+      <th mat-header-cell *matHeaderCellDef class="table-header" style="min-width: 140px;">
+       Total rent
+      </th>
+      <td mat-cell *matCellDef="let element" class="tableText-bold">
+       {{element.totalRentRate}}
+         </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+  </div>
+</div>
+<app-data-not-found *ngIf="stockOutList.length == 0 && !isLoadingResults" />
+<div class=" skelton" *ngIf="isLoadingResults">
+    <app-loading></app-loading>
+  </div>   
+  <mat-paginator pageSize="10" [length]="stockOutList.length"
+                 showFirstLastButtons
+                 aria-label="Select page of periodic elements">
+  </mat-paginator>
+</div>

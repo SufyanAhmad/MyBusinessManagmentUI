@@ -1,0 +1,107 @@
+.app-container {
+    min-height: 100vh;
+    display: flex;
+    gap: 20px;
+  }
+  .sidebar {
+    width: 262px;
+    border-right: 1px solid #ddd;
+    color: white;
+    height: 100%;
+    position: fixed;
+    overflow-y: auto;
+    z-index: 999;
+    top: 0;
+  }
+
+  .menu {
+    list-style: none;
+    background-color: #3BA3A5;
+    padding: 20px 15px;
+    border-radius: 16px 16px 0px 0px;
+    min-height: 100%;
+    margin: 0px;
+  }
+  .menu li {
+    font-family:'Montserrat', sans-serif;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    padding: 12px 15px;
+    margin: 8px 0;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.3s;;
+    font-size:16px;
+    font-weight: 500;
+    color: #FFFFFFB2;
+    text-align:center;
+  }
+  
+  .menu li:hover {
+    background-color: #12313233;
+  }
+   .menu li.no-hover:hover {
+  background: none !important;
+  color: inherit !important;
+  /* Add any other properties you want to reset */
+}
+  .menu .active {
+    background-color: #12313233;
+    color: #FFFFFF;
+  }
+  
+  /* Hide scrollbar for Chrome, Safari and Opera */
+  .sidebar::-webkit-scrollbar {
+    width: 0px;
+    background: #d7aaff;
+  }
+  //navbar style
+
+  
+  .main-content {
+    // Add margin to prevent content from overlapping the fixed navbar
+    margin-left: 262px; /* Leave space for the sidebar */
+    width: calc(100% - 262px); /* Remaining width after the sidebar */
+    // padding: 20px; /* Optional: Padding for the main content */
+    overflow-y: auto; /* Optional: Scroll if content is too long */
+    overflow-x: hidden;
+    background-color: white;
+  }
+ 
+
+//   @media (min-width: 1280px) {
+//   .main-content{
+//     margin-left: 18%;
+//   }
+
+//   .show {
+//     margin-left: 0 !important;
+//   }
+
+//   .hide {
+//     margin-left: 0rem !important;
+//   }
+// }
+
+// @media (max-width: 1280px) {
+//   .show {
+//     margin-left: -16rem !important;
+//   }
+
+//   .hide {
+//     margin-left: -0 !important;
+//   }
+
+//   .show-menu {
+//     display: block;
+//     z-index: 1;
+//     position: fixed;
+//   }
+// }
+
+// @media (min-width: 1280px) and (max-width: 2767px) {
+//   .show-menu {
+//     display: none;
+//   }
+// }

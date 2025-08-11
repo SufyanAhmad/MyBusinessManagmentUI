@@ -1,0 +1,69 @@
+<div class="container py-4">
+  <!-- User Header -->
+  <div class="header-card d-flex align-items-center justify-content-between mb-4" >
+    <div *ngIf="!loading" class="heading mb-0" style="color: #03192C;">
+    {{ inventoryItemDetail.reference}}
+    </div>
+    <p-skeleton *ngIf="loading" height="35px" width="150px" />
+    </div>
+  <!-- Customer Details -->
+ <div class="d-flex justify-content-between align-items-center" style="margin-top: 70px;">
+    <span class="heading">
+    Inventory Item Detail
+    </span>
+   
+   </div>
+  <form  >
+  <div class="row g-3 align-items-end mt-4">
+    
+    <div class="col-md-4 mb-4">
+      <div class="label1">Reference</div>
+      <input *ngIf="!loading" type="text" value="{{inventoryItemDetail.reference}}" class="input-field" style="pointer-events: none;border: none;" />
+      <p-skeleton *ngIf="loading" height="30px" />
+    </div>
+    <div class="col-md-4 mb-4">
+     <div class="label1">SUPPLIER</div>
+      <input *ngIf="!loading"  type="text" value="{{inventoryItemDetail.supplier}}" class="input-field" style="pointer-events: none;border: none;" />
+      <p-skeleton *ngIf="loading" height="30px" />
+    </div> 
+    <div class="col-md-4 mb-4">
+     <div class="label1">EGG TYPE</div>
+      <input *ngIf="!loading" type="text" value="{{inventoryItemDetail.type}}" class="input-field" style="pointer-events: none;border: none;" />
+      <p-skeleton *ngIf="loading" height="30px" />
+    </div>
+    <div class="col-md-4 mb-4">
+     <div class="label1">EGG VARITY</div>
+      <input *ngIf="!loading" type="text" value="{{inventoryItemDetail.variety}}" class="input-field" style="pointer-events: none;border: none;" />
+      <p-skeleton *ngIf="loading" height="30px" />
+    </div>
+    <div class="col-md-4 mb-4">
+      <div class="label1">PRICE</div>
+      <input *ngIf="!loading" type="number" value="{{inventoryItemDetail.price}}" class="input-field" style="pointer-events: none;border: none;" />
+      <p-skeleton *ngIf="loading" height="30px" />
+    </div>
+    <div class="col-md-4 mb-4">
+    <div class="label1">quantity</div>
+      <input *ngIf="!loading" type="number" value="{{inventoryItemDetail.quantity}}" class="input-field" style="pointer-events: none;border: none;" />
+      <p-skeleton *ngIf="loading" height="30px" />
+    </div> 
+    <div class="col-md-4 mb-4">
+      <div class="label1">DatE</div>
+        <input *ngIf="!loading" type="date" value="{{inventoryItemDetail.date}}" class="input-field" style="pointer-events: none;border: none;" />
+      <p-skeleton *ngIf="loading" height="30px" />
+    </div>
+    <div class="col-md-4 mb-4">
+      <div class="label1">EXPIRY DATE</div>
+        <input *ngIf="!loading"  type="date" value="{{inventoryItemDetail.expiryDate}}" class="input-field" style="pointer-events: none;border: none;" />
+      <p-skeleton *ngIf="loading" height="30px" />
+    </div>
+      <div class="col-md-12 mb-4">
+        <div class="label1">Note</div>
+        <div *ngIf="!loading" class="input-field" style="border: 1px solid white;" >
+          {{inventoryItemDetail.note}}
+        </div>
+        <p-skeleton *ngIf="loading" height="30px" />
+      </div>
+  </div>
+  </form>
+</div>
+<p-toast />
