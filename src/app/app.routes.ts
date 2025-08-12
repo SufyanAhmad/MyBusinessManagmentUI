@@ -5,16 +5,16 @@ import { IsloginComponent } from './components/islogin/islogin.component';
 export const routes: Routes = [
      {
         path: '',
-        redirectTo: 'login',
+        redirectTo: 'isLogin',
         pathMatch: 'full',
+    },
+     {
+        path:'isLogin',
+        component:IsloginComponent
     },
     {
         path:'login',
         component:LoginComponent
-    },
-    {
-        path:'isLogin',
-        component:IsloginComponent
     },
     { path: 'superAdmin', loadChildren: () => import('./components/super-admin/super-admin-routing.module').then((m) => m.SuperAdminRoutingModule) },
     { path: 'dairyFarm', loadChildren: () => import('./components/users/dairy-farm/dairy-farm-routing.module').then(m => m.DairyFarmRoutingModule) },

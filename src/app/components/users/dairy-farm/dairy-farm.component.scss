@@ -39,7 +39,8 @@
   }
   
   .menu li:hover {
-    background-color: #12313233;
+   background-color: #DCE7F6;
+    color: #4079B0;
   }
    .menu li.no-hover:hover {
   background: none !important;
@@ -66,7 +67,7 @@
     // padding: 20px; /* Optional: Padding for the main content */
     overflow-y: auto; /* Optional: Scroll if content is too long */
     overflow-x: hidden;
-    background-color: white;
+    background-color: #DCE7F6;
   }
  
 .chevron-icon{
