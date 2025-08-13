@@ -5,6 +5,8 @@ import { DairyFarmBusinessComponent } from './dairy-farm-business/dairy-farm-bus
 import { AnimalComponent } from './animal/animal.component';
 import { BreedComponent } from './breed/breed.component';
 import { FeedComponent } from './feed/feed.component';
+import { MilkProductionComponent } from './milk-production/milk-production.component';
+import { PregnancyRecordComponent } from './pregnancy-record/pregnancy-record.component';
 
 const routes: Routes = [
    {
@@ -31,6 +33,14 @@ const routes: Routes = [
           {
             path: 'feed',
             component:FeedComponent,
+          },
+           {
+            path: 'milk-production',
+            component:MilkProductionComponent,
+          },
+           {
+            path: 'pregnancy-record',
+            component:PregnancyRecordComponent,
           }
         ]
    }

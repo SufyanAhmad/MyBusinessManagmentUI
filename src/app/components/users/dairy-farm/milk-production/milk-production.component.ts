@@ -20,13 +20,13 @@ import { LoadingComponent } from '../../../loading/loading.component';
 import { DataNotFoundComponent } from '../../../data-not-found/data-not-found.component';
 
 @Component({
-  selector: 'app-breed',
+  selector: 'app-milk-production',
   imports: [MatPaginatorModule, MatSortModule, MatTableModule, FormsModule, ReactiveFormsModule, DialogModule, CommonModule, SelectModule,SkeletonModule, ToastModule, LoadingComponent, DataNotFoundComponent,RouterLink],
-  templateUrl: './breed.component.html',
-  styleUrl: './breed.component.scss',
+  templateUrl: './milk-production.component.html',
+  styleUrl: './milk-production.component.scss',
   providers: [MessageService]
 })
-export class BreedComponent {
+export class MilkProductionComponent {
    @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   dataSource!: MatTableDataSource<StockOutModel>;
@@ -46,7 +46,7 @@ export class BreedComponent {
   addLoading: boolean = false;
   visible:boolean=false;
   addAnimalModel!: FormGroup;
- displayedColumns: string[] = [ 'breedId','type','breedName','origin','note'];
+ displayedColumns: string[] = [ 'recordId','animalId','date','morningL','eveningL','totalL'];
   constructor(private route: ActivatedRoute,private coldStoreService:ColdStoreServiceService,private masterService:MasterService,
     private accountService:AccountService,private router:Router) {
    
@@ -118,7 +118,7 @@ export class BreedComponent {
       .subscribe(
         (data) => {
           this.stockOutList = [];
-           // data.list.length
+          // data.list.length
           for (let a = 0; a < 5; a++) {
             let stockOut: StockOutModel = {
             // batchReference:data.list[a].batchReference,

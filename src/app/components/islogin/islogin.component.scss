@@ -1,6 +1,6 @@
 .login-container {
   display: flex;
-  min-height: 100vh;
+  height: 100vh;
   background-color: #eaf0f6;
   overflow: hidden;
 }
@@ -34,23 +34,20 @@
 
 form {
   width: 100%;
-  max-width: 400px;
+  max-width: 400px
 }
 
 /* Responsive for small screens */
 @media (max-width: 768px) {
   .login-container {
     flex-direction: column;
+    min-height: 100vh;
+    overflow: auto;
   }
 
   .login-image {
-    height: 200px;
+    display: none;
   }
-
-  .login-image img {
-    height: 100%;
-  }
-
   .login-form {
     padding: 1rem;
   }
@@ -120,9 +117,9 @@ form {
       border: none;
       outline: none;
     }
-    .btn-sign:hover{
-      background: #155fc0 !important;
-    }
+    // .btn-sign:hover{
+    //   background: #155fc0 !important;
+    // }
 
     // @media (max-width: 500px) {
     //   .auth-card {

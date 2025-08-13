@@ -1,7 +1,7 @@
 <div class="container-fluid">
   <div>
-    <span class="breadcrumb"   >Dashboard /</span>
-    <span  class="breadcrumb-bold">&nbsp;Breed</span>
+    <span class="breadcrumb"    >Dashboard /</span>
+    <span  class="breadcrumb-bold">&nbsp;Milk Production</span>
   </div>
     <span class="d-flex flex-wrap justify-content-between">
             <span class="d-flex flex-wrap">
@@ -74,45 +74,54 @@
                         </path>
                     </g>
                     </svg>
-                    New Breed
+                    New Milk Production
                 </button>
             </div>
         </span>
 <div class="mat-elevation-z8 mt-4 rounded-table" >
     <div class="table-responsive">
   <table mat-table matSort [dataSource]="dataSource" >
-    <ng-container matColumnDef="breedId">
-      <th mat-header-cell *matHeaderCellDef class="table-header"  style="min-width: 120px;" > Breed id </th>
+    <ng-container matColumnDef="recordId">
+      <th mat-header-cell *matHeaderCellDef class="table-header"  style="min-width: 120px;" > Record </th>
       <td mat-cell *matCellDef="let element" class="tableText-thin"> 
-     BR-001
+     CF-001
       </td>
     </ng-container>
-     <ng-container matColumnDef="type">
-      <th mat-header-cell *matHeaderCellDef class="table-header"  style="min-width: 100px !important;" >TYPE </th>
-      <td mat-cell *matCellDef="let element" > 
-        <div class="mat_table_btn"  [style.background-color]="bgColor" >Cow</div>
+    <ng-container matColumnDef="animalId">
+      <th mat-header-cell *matHeaderCellDef class="table-header"  style="min-width: 120px;" > Animal ID </th>
+      <td mat-cell *matCellDef="let element" class="tableText-thin"> 
+     COW-001
       </td>
     </ng-container>
-    <ng-container matColumnDef="breedName">
-      <th mat-header-cell *matHeaderCellDef class="table-header"  style="min-width: 140px !important;" > Breed Name  </th>
-      <td mat-cell *matCellDef="let element" class="tableText-thin"> Sahiwal </td>
+    <ng-container matColumnDef="date">
+      <th mat-header-cell *matHeaderCellDef class="table-header"  style="min-width: 140px !important;" >Date  </th>
+      <td mat-cell *matCellDef="let element" class="tableText-thin"> 10/07/25 </td>
     </ng-container>
-     <ng-container matColumnDef="origin">
+     <ng-container matColumnDef="morningL">
           
       <th mat-header-cell *matHeaderCellDef class="table-header"  style="min-width: 150px !important;" >
-        Origin
+        Morning (L)
       </th>
       <td mat-cell *matCellDef="let element" class="tableText-thin">
-         Pakistan
+        7
         
         </td>
     </ng-container>
-     <ng-container matColumnDef="note">
-      <th mat-header-cell *matHeaderCellDef class="table-header" style="min-width: 170px !important;">
-      Note
+    <ng-container matColumnDef="eveningL">
+          
+      <th mat-header-cell *matHeaderCellDef class="table-header"  style="min-width: 150px !important;" >
+        Evening (L)
       </th>
       <td mat-cell *matCellDef="let element" class="tableText-thin">
-         High milk yield
+         6
+        </td>
+    </ng-container>
+     <ng-container matColumnDef="totalL">
+      <th mat-header-cell *matHeaderCellDef class="table-header" style="min-width: 170px !important;">
+      Total (L)
+      </th>
+      <td mat-cell *matCellDef="let element" class="tableText-thin">
+        13
         </td>
     </ng-container>
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
@@ -131,7 +140,7 @@
 </div>
 <!-- Add Dairy Business -->
 
-<p-dialog     header="Add Breed" 
+<p-dialog     header="Add Milk Production" 
     [modal]="true"
   [(visible)]="visible" 
    [style]="{ width: '60vw' }" [draggable]="false" [resizable]="false"
@@ -139,26 +148,31 @@
  <form >
     <div class="row " style="row-gap:20px">
       <div class="col-6">
-        <span class="label">Breed ID<span class="required-icon">*</span> </span>
+        <span class="label">Record ID<span class="required-icon">*</span> </span>
+        <input type="text"   class="input-felid" placeholder="Enter name...">
+
+      </div>
+       <div class="col-6">
+        <span class="label">Animal ID<span class="required-icon">*</span> </span>
         <input type="text"   class="input-felid" placeholder="Enter name...">
 
       </div>
       <div class="col-6">
-        <span class="label">Type<span class="required-icon">*</span></span>
+        <span class="label">Date<span class="required-icon">*</span> </span>
+        <input type="text"   class="input-felid" placeholder="Enter name...">
+
+      </div>
+      <div class="col-6">
+        <span class="label">Morning (L)<span class="required-icon">*</span></span>
         <input type="text"   class="input-felid" placeholder="Enter location...">
       </div>
       <div class="col-6">
-        <span class="label">Breed Name<span class="required-icon">*</span> </span>
-        <input type="text"   class="input-felid" placeholder="Enter name...">
-
-      </div>
-      <div class="col-6">
-        <span class="label">Origin<span class="required-icon">*</span></span>
+        <span class="label">Evening (L)<span class="required-icon">*</span></span>
         <input type="text"   class="input-felid" placeholder="Enter location...">
       </div>
      
-      <div class="col-12">
-        <span class="label">Note<span class="required-icon">*</span></span>
+      <div class="col-6">
+        <span class="label">Evening (L)<span class="required-icon">*</span></span>
         <input type="text"   class="input-felid"  placeholder="Enter location...">
       </div>
      

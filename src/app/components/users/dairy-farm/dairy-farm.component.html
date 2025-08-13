@@ -44,13 +44,21 @@
         <span>Feed</span>
       </li>
       <li
+        [routerLink]="['/dairyFarm/milk-production']"
        
         [routerLinkActive]="['active']"
       >
         <span>Milk Production</span>
       </li>
+      <li
+        [routerLink]="['/dairyFarm/pregnancy-record']"
+       
+        [routerLinkActive]="['active']"
+      >
+        <span>Pregnancy Record</span>
+      </li>
       <hr style="margin-top: 100px;" />
-      <li [routerLink]="['/isLogin']">
+      <li (click)="logout()">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="24"

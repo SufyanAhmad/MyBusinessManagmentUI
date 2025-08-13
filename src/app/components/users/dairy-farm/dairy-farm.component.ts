@@ -21,4 +21,7 @@ export class DairyFarmComponent {
     this.status = !this.status;
     this.chevron = this.chevron == 'chevron-right' ? 'chevron-left' : 'chevron-right';
   }
+  logout(){
+    this.accountService.doLogout();
+  }
 }

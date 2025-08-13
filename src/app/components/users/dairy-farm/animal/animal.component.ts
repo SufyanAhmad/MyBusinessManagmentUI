@@ -120,24 +120,39 @@ export class AnimalComponent {
       .subscribe(
         (data) => {
           this.stockOutList = [];
-          for (let a = 0; a < data.list.length; a++) {
+           // data.list.length
+          for (let a = 0; a < 5; a++) {
             let stockOut: StockOutModel = {
-            batchReference:data.list[a].batchReference,
-            reference:data.list[a].reference,
-            stockOutId: data.list[a].stockOutId,
-            stockId: data.list[a].stockId,
-            outQuantity: data.list[a].outQuantity,
-            stockOutDate: data.list[a].stockOutDate,
-            rentMonths : data.list[a].rentMonths,
-            totalDays: data.list[a].totalDays,
-            clientId: data.list[a].clientId,
-            client: data.list[a].client,
-            stockInDate: data.list[a].stockInDate,
-            rentRate: data.list[a].rentRate,
-            note:data.list[a].note,
-            remainingStock:data.list[a].remainingStock,
-            totalRentRate: data.list[a].totalRentRate,
-           
+            // batchReference:data.list[a].batchReference,
+            // reference:data.list[a].reference,
+            // stockOutId: data.list[a].stockOutId,
+            // stockId: data.list[a].stockId,
+            // outQuantity: data.list[a].outQuantity,
+            // stockOutDate: data.list[a].stockOutDate,
+            // rentMonths : data.list[a].rentMonths,
+            // totalDays: data.list[a].totalDays,
+            // clientId: data.list[a].clientId,
+            // client: data.list[a].client,
+            // stockInDate: data.list[a].stockInDate,
+            // rentRate: data.list[a].rentRate,
+            // note:data.list[a].note,
+            // remainingStock:data.list[a].remainingStock,
+            // totalRentRate: data.list[a].totalRentRate,
+              batchReference: 'testing',
+              reference: 'testing',
+              stockOutId: 'testing',
+              stockId: 'testing',
+              outQuantity: 0,
+              stockOutDate: 'testing',
+              rentMonths: 0,
+              totalDays: 'testing',
+              clientId: 'testing',
+              client: 'testing',
+              stockInDate: 'testing',
+              rentRate: 0,
+              note: 'testing',
+              remainingStock: 0,
+              totalRentRate: 0
           };
           this.stockOutList.push(stockOut);
           }
