@@ -1,3 +1,4 @@
+
 import { CommonModule } from '@angular/common';
 import {Component, ViewChild } from '@angular/core';
 import {FormGroup, FormsModule, ReactiveFormsModule} from '@angular/forms';
@@ -20,13 +21,13 @@ import { LoadingComponent } from '../../../loading/loading.component';
 import { DataNotFoundComponent } from '../../../data-not-found/data-not-found.component';
 
 @Component({
-  selector: 'app-breed',
+  selector: 'app-health-record',
   imports: [MatPaginatorModule, MatSortModule, MatTableModule, FormsModule, ReactiveFormsModule, DialogModule, CommonModule, SelectModule,SkeletonModule, ToastModule, LoadingComponent, DataNotFoundComponent],
-  templateUrl: './breed.component.html',
-  styleUrl: './breed.component.scss',
+  templateUrl: './health-record.component.html',
+  styleUrl: './health-record.component.scss',
   providers: [MessageService]
 })
-export class BreedComponent {
+export class HealthRecordComponent {
    @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   dataSource!: MatTableDataSource<StockOutModel>;
@@ -46,7 +47,7 @@ export class BreedComponent {
   addLoading: boolean = false;
   visible:boolean=false;
   addAnimalModel!: FormGroup;
- displayedColumns: string[] = [ 'breedId','type','breedName','origin','note'];
+ displayedColumns: string[] = [ 'recordId','animalId','date','vacName','pur','nextDueDate'];
   constructor(private route: ActivatedRoute,private coldStoreService:ColdStoreServiceService,private masterService:MasterService,
     private accountService:AccountService,private router:Router) {
    
@@ -118,7 +119,7 @@ export class BreedComponent {
       .subscribe(
         (data) => {
           this.stockOutList = [];
-           // data.list.length
+          // data.list.length
           for (let a = 0; a < 5; a++) {
             let stockOut: StockOutModel = {
             // batchReference:data.list[a].batchReference,

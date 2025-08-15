@@ -21,7 +21,7 @@ import { DataNotFoundComponent } from '../../../data-not-found/data-not-found.co
 
 @Component({
   selector: 'app-milk-production',
-  imports: [MatPaginatorModule, MatSortModule, MatTableModule, FormsModule, ReactiveFormsModule, DialogModule, CommonModule, SelectModule,SkeletonModule, ToastModule, LoadingComponent, DataNotFoundComponent,RouterLink],
+  imports: [MatPaginatorModule, MatSortModule, MatTableModule, FormsModule, ReactiveFormsModule, DialogModule, CommonModule, SelectModule,SkeletonModule, ToastModule, LoadingComponent, DataNotFoundComponent],
   templateUrl: './milk-production.component.html',
   styleUrl: './milk-production.component.scss',
   providers: [MessageService]

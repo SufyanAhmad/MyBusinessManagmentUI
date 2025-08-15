@@ -273,7 +273,7 @@
 //dialog header
 .p-dialog-title {
   font-family: "Montserrat" !important;
-  color: white !important;
+  color: #4079B0 !important;
   font-size: 25px !important;
   font-weight: 600;
 }
@@ -295,23 +295,27 @@
   border-top-left-radius: 20px !important;
   border-top-right-radius: 20px !important;
   border: 1px solid #4079B0!important;
+  min-height: 500px !important;
 
 }
 //dialog header
 .p-dialog-header {
-  padding: 10px 25px !important;
- background: linear-gradient(90deg, #4079B0 0%, #1B334A 100%);
+  padding: 25px 25px !important;
+//  background: linear-gradient(90deg, #4079B0 0%, #1B334A 100%);
+  background-color:#DCE7F6 ;
  border-top-left-radius: 18px;
  border-top-right-radius: 18px;
- color: white !important;
-  border: 1px solid #4079B0!important;
+ color: #4079B0 !important;
+  // border: 1px solid #4079B0!important;
 
 
 }
 //.p-dialog-content
 .p-dialog-content {
   padding: 10px 25px !important;
-  background-color: #DCE7F6;
+  background-color: #DCE7F6!important;
+  border-bottom-left-radius: 18px!important;
+ border-bottom-right-radius: 18px!important;
 }
 .btn-save {
  background: linear-gradient(90deg, rgba(64, 121, 176, 0.78) 19.23%, rgba(22, 16, 98, 0.78) 75.48%);
@@ -354,6 +358,11 @@
   background-color: white;
   height: 40px;
   border-radius: 8px;
+}
+.margin-btn{
+margin-top: 50px;
+margin-bottom: 20px;
+
 }
 .table-btn {
   font-family: "Montserrat", sans-serif;
@@ -464,8 +473,8 @@
   border-radius: 0px !important;
 }
 .custom-date::-webkit-calendar-picker-indicator {
-  filter: invert(48%) sepia(92%) saturate(386%) hue-rotate(344deg)
-    brightness(92%) contrast(91%);
+  filter: invert(37%) sepia(91%) saturate(373%) hue-rotate(162deg)
+    brightness(91%) contrast(92%);
   cursor: pointer;
 }
 .date-text {

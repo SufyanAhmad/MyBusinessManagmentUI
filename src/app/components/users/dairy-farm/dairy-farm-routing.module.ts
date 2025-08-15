@@ -7,6 +7,7 @@ import { BreedComponent } from './breed/breed.component';
 import { FeedComponent } from './feed/feed.component';
 import { MilkProductionComponent } from './milk-production/milk-production.component';
 import { PregnancyRecordComponent } from './pregnancy-record/pregnancy-record.component';
+import { HealthRecordComponent } from './health-record/health-record.component';
 
 const routes: Routes = [
    {
@@ -41,6 +42,11 @@ const routes: Routes = [
            {
             path: 'pregnancy-record',
             component:PregnancyRecordComponent,
+          }
+          ,
+           {
+            path: 'health-record',
+            component:HealthRecordComponent,
           }
         ]
    }

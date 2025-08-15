@@ -21,7 +21,7 @@ import { DataNotFoundComponent } from '../../../data-not-found/data-not-found.co
 
 @Component({
   selector: 'app-pregnancy-record',
-  imports: [MatPaginatorModule, MatSortModule, MatTableModule, FormsModule, ReactiveFormsModule, DialogModule, CommonModule, SelectModule,SkeletonModule, ToastModule, LoadingComponent, DataNotFoundComponent,RouterLink],
+  imports: [MatPaginatorModule, MatSortModule, MatTableModule, FormsModule, ReactiveFormsModule, DialogModule, CommonModule, SelectModule,SkeletonModule, ToastModule, LoadingComponent, DataNotFoundComponent],
   templateUrl: './pregnancy-record.component.html',
   styleUrl: './pregnancy-record.component.scss',
   providers: [MessageService]

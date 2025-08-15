@@ -5,3 +5,7 @@ font-size: 13px;
 color: #000000;
 text-transform: capitalize;
 }
+::ng-deep.p-dialog {
+  min-height: 250px !important;
+
+}

@@ -21,7 +21,7 @@ import { DataNotFoundComponent } from '../../../data-not-found/data-not-found.co
 
 @Component({
   selector: 'app-feed',
-  imports: [MatPaginatorModule, MatSortModule, MatTableModule, FormsModule, ReactiveFormsModule, DialogModule, CommonModule, SelectModule,SkeletonModule, ToastModule, LoadingComponent, DataNotFoundComponent,RouterLink],
+  imports: [MatPaginatorModule, MatSortModule, MatTableModule, FormsModule, ReactiveFormsModule, DialogModule, CommonModule, SelectModule,SkeletonModule, ToastModule, LoadingComponent, DataNotFoundComponent],
   templateUrl: './feed.component.html',
   styleUrl: './feed.component.scss',
   providers: [MessageService]
