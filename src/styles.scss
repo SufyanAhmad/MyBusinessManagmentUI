@@ -167,7 +167,7 @@
     font-weight: 500;
     font-size: 16px;
     text-transform:capitalize ;
-    color: #1D364F;
+    color: #4079B0;
     }
 //p-select dropdown style
 .p-select {
@@ -336,8 +336,8 @@
   font-family: "Montserrat", sans-serif;
   font-weight: 600;
   font-size: 16px;
-  color: #7e7171;
-  background: white;
+  color: #4079B0;
+  background: #DCE7F6;
   outline: none;
   border: none;
 }
@@ -514,6 +514,7 @@ margin-bottom: 20px;
     text-overflow: ellipsis;
 }
 .label1{
+  @extend .label;
   text-transform: uppercase !important;
 }
 // .mat-mdc-paginator-container {

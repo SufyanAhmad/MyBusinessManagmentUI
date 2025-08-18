@@ -8,6 +8,8 @@ import { FeedComponent } from './feed/feed.component';
 import { MilkProductionComponent } from './milk-production/milk-production.component';
 import { PregnancyRecordComponent } from './pregnancy-record/pregnancy-record.component';
 import { HealthRecordComponent } from './health-record/health-record.component';
+import { EditAnimalComponent } from './animal/edit-animal/edit-animal.component';
+import { EditBreedComponent } from './breed/edit-breed/edit-breed.component';
 
 const routes: Routes = [
    {
@@ -28,8 +30,16 @@ const routes: Routes = [
             component:AnimalComponent,
           },
           {
+            path: 'animal/:id',
+            component:EditAnimalComponent,
+          },
+          {
             path: 'breed',
             component:BreedComponent,
+          },
+          {
+            path: 'breed/:id',
+            component:EditBreedComponent,
           },
           {
             path: 'feed',
