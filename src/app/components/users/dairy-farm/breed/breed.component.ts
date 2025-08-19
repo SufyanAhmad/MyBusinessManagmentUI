@@ -21,7 +21,7 @@ import { DataNotFoundComponent } from '../../../data-not-found/data-not-found.co
 
 @Component({
   selector: 'app-breed',
-  imports: [MatPaginatorModule, MatSortModule, MatTableModule, FormsModule, ReactiveFormsModule, DialogModule, CommonModule, SelectModule,SkeletonModule, ToastModule, LoadingComponent, DataNotFoundComponent],
+  imports: [MatPaginatorModule, MatSortModule, MatTableModule, FormsModule, ReactiveFormsModule, DialogModule, CommonModule, SelectModule,SkeletonModule, ToastModule, LoadingComponent, DataNotFoundComponent,RouterLink],
   templateUrl: './breed.component.html',
   styleUrl: './breed.component.scss',
   providers: [MessageService]
@@ -46,7 +46,7 @@ export class BreedComponent {
   addLoading: boolean = false;
   visible:boolean=false;
   addAnimalModel!: FormGroup;
- displayedColumns: string[] = [ 'breedId','type','breedName','origin','note'];
+ displayedColumns: string[] = [ 'breedName','type','origin','note'];
   constructor(private route: ActivatedRoute,private coldStoreService:ColdStoreServiceService,private masterService:MasterService,
     private accountService:AccountService,private router:Router) {
    

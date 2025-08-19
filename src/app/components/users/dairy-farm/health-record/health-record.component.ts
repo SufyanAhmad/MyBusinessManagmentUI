@@ -22,7 +22,7 @@ import { DataNotFoundComponent } from '../../../data-not-found/data-not-found.co
 
 @Component({
   selector: 'app-health-record',
-  imports: [MatPaginatorModule, MatSortModule, MatTableModule, FormsModule, ReactiveFormsModule, DialogModule, CommonModule, SelectModule,SkeletonModule, ToastModule, LoadingComponent, DataNotFoundComponent],
+  imports: [MatPaginatorModule, MatSortModule, MatTableModule, FormsModule, ReactiveFormsModule, DialogModule, CommonModule, SelectModule,SkeletonModule, ToastModule, LoadingComponent, DataNotFoundComponent,RouterLink],
   templateUrl: './health-record.component.html',
   styleUrl: './health-record.component.scss',
   providers: [MessageService]

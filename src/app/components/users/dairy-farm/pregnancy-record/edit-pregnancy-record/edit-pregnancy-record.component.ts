@@ -2,7 +2,7 @@ import { CommonModule,Location } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute} from '@angular/router';
 import { ToastModule } from 'primeng/toast';
 import { SelectModule } from 'primeng/select';
 import { AccountService } from '../../../../../services/account-service/account.service';
@@ -13,14 +13,14 @@ import { PoultryFarmService } from '../../../../../services/poultry-farm-service
 import { LiveStockModel } from '../../../../../models/poultry-farm-model/poultry-farm-model';
 
 @Component({
-  selector: 'app-edit-animal',
+  selector: 'app-edit-pregnancy-record',
   imports: [CommonModule,ReactiveFormsModule,FormsModule,ToastModule,SelectModule],
-  templateUrl: './edit-animal.component.html',
-  styleUrl: './edit-animal.component.scss',
+  templateUrl: './edit-pregnancy-record.component.html',
+  styleUrl: './edit-pregnancy-record.component.scss',
   providers: [MessageService]
 
 })
-export class EditAnimalComponent {
+export class EditPregnancyRecordComponent {
 isReadOnly:boolean=true;
 isActive:boolean=false;
 loading:boolean = false;

@@ -10,6 +10,10 @@ import { PregnancyRecordComponent } from './pregnancy-record/pregnancy-record.co
 import { HealthRecordComponent } from './health-record/health-record.component';
 import { EditAnimalComponent } from './animal/edit-animal/edit-animal.component';
 import { EditBreedComponent } from './breed/edit-breed/edit-breed.component';
+import { EditFeedComponent } from './feed/edit-feed/edit-feed.component';
+import { EditMilkProductionComponent } from './milk-production/edit-milk-production/edit-milk-production.component';
+import { EditPregnancyRecordComponent } from './pregnancy-record/edit-pregnancy-record/edit-pregnancy-record.component';
+import { EditHealthRecordComponent } from './health-record/edit-health-record/edit-health-record.component';
 
 const routes: Routes = [
    {
@@ -45,18 +49,35 @@ const routes: Routes = [
             path: 'feed',
             component:FeedComponent,
           },
+          {
+            path: 'feed/:id',
+            component:EditFeedComponent,
+          },
            {
             path: 'milk-production',
             component:MilkProductionComponent,
+          }
+          ,
+           {
+            path: 'milk-production/:id',
+            component:EditMilkProductionComponent,
           },
            {
             path: 'pregnancy-record',
             component:PregnancyRecordComponent,
+          },
+           {
+            path: 'pregnancy-record/:id',
+            component:EditPregnancyRecordComponent,
           }
           ,
            {
             path: 'health-record',
             component:HealthRecordComponent,
+          },
+           {
+            path: 'health-record/:id',
+            component:EditHealthRecordComponent,
           }
         ]
    }
