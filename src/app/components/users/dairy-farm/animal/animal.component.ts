@@ -11,13 +11,13 @@ import { catchError, map, merge, startWith, switchMap ,tap} from 'rxjs';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { SkeletonModule } from 'primeng/skeleton';
-import { StockOutModel } from '../../../../models/cold-store-model/cold-store-model';
 import { masterModal } from '../../../../models/master-model/master-model';
 import { ColdStoreServiceService } from '../../../../services/cold-store-service/cold-store-service.service';
 import { MasterService } from '../../../../services/master-service/master.service';
 import { AccountService } from '../../../../services/account-service/account.service';
 import { LoadingComponent } from '../../../loading/loading.component';
 import { DataNotFoundComponent } from '../../../data-not-found/data-not-found.component';
+import { StockOutModel } from '../../../../models/dairy-farm-model/dairy-farm-model';
 
 @Component({
   selector: 'app-animal',

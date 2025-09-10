@@ -1,13 +1,14 @@
+<div class="login-container">
+  <div class="login-image">
+    <img src="./assets/Images/isLoginLogo.png" alt="Farm with cows" />
+  </div>
 
-  <!-- Auth card -->
-   <div class="main-section">
-  <div class="d-flex justify-content-center align-items-center" style="min-height: 100vh;">
-  <div class="auth-card my-3">
-
-    <div class="avatar">
-          <img src="./assets/Images/loginLogo.png" style="width: 200px;" />
+  <div class="login-form">
+    <div class="logo">
+      <img src="./assets/Images/isSidebarLogo.png" alt="Cow Logo" />
     </div>
     <div class="heading">Welcome back!</div>
+
     <form [formGroup]="loginForm" (ngSubmit)="onSubmitLogin()" >
       <div class="lable mb-1">Email</div>
       <div class="position-relative">
@@ -60,7 +61,7 @@
                 Password is required.
               </span>
         </div>
-      <button *ngIf="loginForm.valid&&!loginLoading"  type="submit"    class="btn btn-sign text-white py-2" style="background: #ED5D25;margin-top: 50px;">Login In
+      <button *ngIf="loginForm.valid&&!loginLoading"  type="submit"    class="btn btn-sign text-white py-2" style="background:#4079B0;margin-top: 50px;">Login In
        
       </button>
       <button *ngIf="!loginForm.valid||loginLoading" type="button"    class="btn btn-sign text-white py-2" style="background: lightgray;margin-top: 50px; cursor: not-allowed;border: none;">Login In
@@ -71,5 +72,4 @@
     </form>
   </div>
 </div>
-</div>
-<p-toast />
+<p-toast></p-toast>

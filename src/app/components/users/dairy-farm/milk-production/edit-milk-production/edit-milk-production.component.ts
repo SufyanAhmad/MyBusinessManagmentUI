@@ -10,7 +10,7 @@ import { MasterService } from '../../../../../services/master-service/master.ser
 import { masterModal } from '../../../../../models/master-model/master-model';
 import { ColdStoreServiceService } from '../../../../../services/cold-store-service/cold-store-service.service';
 import { PoultryFarmService } from '../../../../../services/poultry-farm-service/poultry-farm.service';
-import { LiveStockModel } from '../../../../../models/poultry-farm-model/poultry-farm-model';
+import { LiveStockModel } from '../../../../../models/dairy-farm-model/dairy-farm-model';
 
 @Component({
   selector: 'app-edit-milk-production',
