@@ -20,7 +20,7 @@ import { DataNotFoundComponent } from '../../../data-not-found/data-not-found.co
 import { StockOutModel } from '../../../../models/dairy-farm-model/dairy-farm-model';
 
 @Component({
-  selector: 'app-milk-production',
+  selector: 'app-vaccination',
   imports: [
     MatPaginatorModule,
     MatSortModule,
@@ -36,11 +36,11 @@ import { StockOutModel } from '../../../../models/dairy-farm-model/dairy-farm-mo
     DataNotFoundComponent,
     RouterLink,
   ],
-  templateUrl: './milk-production.component.html',
-  styleUrl: './milk-production.component.scss',
+  templateUrl: './vaccination.component.html',
+  styleUrl: './vaccination.component.scss',
   providers: [MessageService],
 })
-export class MilkProductionComponent {
+export class VaccinationComponent {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   dataSource!: MatTableDataSource<StockOutModel>;
@@ -61,15 +61,12 @@ export class MilkProductionComponent {
   visible: boolean = false;
   addAnimalModel!: FormGroup;
   displayedColumns: string[] = [
-    'recordId',
     'animalId',
     'animalName',
-    'date',
-    'morningL',
-    'eveningL',
-    'totalL',
-    'fat',
-    'snf',
+    'breedId',
+    'praDate',
+    'expDate',
+    'actDate',
     'status',
   ];
   constructor(

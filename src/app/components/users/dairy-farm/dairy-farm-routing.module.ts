@@ -14,77 +14,85 @@ import { EditFeedComponent } from './feed/edit-feed/edit-feed.component';
 import { EditMilkProductionComponent } from './milk-production/edit-milk-production/edit-milk-production.component';
 import { EditPregnancyRecordComponent } from './pregnancy-record/edit-pregnancy-record/edit-pregnancy-record.component';
 import { EditHealthRecordComponent } from './health-record/edit-health-record/edit-health-record.component';
+import { VaccinationComponent } from './vaccination/vaccination.component';
+import { EditVaccinationComponent } from './vaccination/edit-vaccination/edit-vaccination.component';
 
 const routes: Routes = [
-   {
+  {
     path: '',
     component: DairyFarmComponent,
-     children: [
-          {
-            path: '',
-            redirectTo: 'businessUnit',
-            pathMatch: 'full',
-          },
-          {
-            path: 'businessUnit',
-            component: DairyFarmBusinessComponent,
-          },
-          {
-            path: 'animal',
-            component:AnimalComponent,
-          },
-          {
-            path: 'animal/:id',
-            component:EditAnimalComponent,
-          },
-          {
-            path: 'breed',
-            component:BreedComponent,
-          },
-          {
-            path: 'breed/:id',
-            component:EditBreedComponent,
-          },
-          {
-            path: 'feed',
-            component:FeedComponent,
-          },
-          {
-            path: 'feed/:id',
-            component:EditFeedComponent,
-          },
-           {
-            path: 'milk-production',
-            component:MilkProductionComponent,
-          }
-          ,
-           {
-            path: 'milk-production/:id',
-            component:EditMilkProductionComponent,
-          },
-           {
-            path: 'pregnancy-record',
-            component:PregnancyRecordComponent,
-          },
-           {
-            path: 'pregnancy-record/:id',
-            component:EditPregnancyRecordComponent,
-          }
-          ,
-           {
-            path: 'health-record',
-            component:HealthRecordComponent,
-          },
-           {
-            path: 'health-record/:id',
-            component:EditHealthRecordComponent,
-          }
-        ]
-   }
+    children: [
+      {
+        path: '',
+        redirectTo: 'businessUnit',
+        pathMatch: 'full',
+      },
+      {
+        path: 'businessUnit',
+        component: DairyFarmBusinessComponent,
+      },
+      {
+        path: 'animal',
+        component: AnimalComponent,
+      },
+      {
+        path: 'animal/:id',
+        component: EditAnimalComponent,
+      },
+      {
+        path: 'breed',
+        component: BreedComponent,
+      },
+      {
+        path: 'breed/:id',
+        component: EditBreedComponent,
+      },
+      {
+        path: 'feed',
+        component: FeedComponent,
+      },
+      {
+        path: 'feed/:id',
+        component: EditFeedComponent,
+      },
+      {
+        path: 'milk-production',
+        component: MilkProductionComponent,
+      },
+      {
+        path: 'milk-production/:id',
+        component: EditMilkProductionComponent,
+      },
+      {
+        path: 'pregnancy-record',
+        component: PregnancyRecordComponent,
+      },
+      {
+        path: 'pregnancy-record/:id',
+        component: EditPregnancyRecordComponent,
+      },
+      {
+        path: 'health-record',
+        component: HealthRecordComponent,
+      },
+      {
+        path: 'health-record/:id',
+        component: EditHealthRecordComponent,
+      },
+      {
+        path: 'vaccination',
+        component: VaccinationComponent,
+      },
+      {
+        path: 'edit-vaccination/:id',
+        component: EditVaccinationComponent,
+      },
+    ],
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class DairyFarmRoutingModule { }
+export class DairyFarmRoutingModule {}

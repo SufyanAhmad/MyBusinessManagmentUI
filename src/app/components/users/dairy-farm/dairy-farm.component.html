@@ -13,58 +13,49 @@
       />
     </div>
     <ul class="menu">
-      <li
-       
-        [routerLinkActive]="['active']"
-      >
+      <li [routerLinkActive]="['active']">
         <span>Dashboard</span>
       </li>
       <li
-      [routerLink]="['/dairyFarm/businessUnit']"
-      [routerLinkActive]="['active']"
+        [routerLink]="['/dairyFarm/businessUnit']"
+        [routerLinkActive]="['active']"
       >
         <span>Business Units</span>
       </li>
-       <li
-        [routerLink]="['/dairyFarm/animal']"
-        [routerLinkActive]="['active']"
-      >
+      <li [routerLink]="['/dairyFarm/animal']" [routerLinkActive]="['active']">
         <span>Animal</span>
       </li>
-      <li
-        [routerLink]="['/dairyFarm/breed']"
-        [routerLinkActive]="['active']"
-      >
+      <li [routerLink]="['/dairyFarm/breed']" [routerLinkActive]="['active']">
         <span>Breed</span>
       </li>
-      <li
-        [routerLink]="['/dairyFarm/feed']"
-        [routerLinkActive]="['active']"
-      >
+      <li [routerLink]="['/dairyFarm/feed']" [routerLinkActive]="['active']">
         <span>Feed</span>
       </li>
       <li
         [routerLink]="['/dairyFarm/milk-production']"
-       
         [routerLinkActive]="['active']"
       >
         <span>Milk Production</span>
       </li>
       <li
         [routerLink]="['/dairyFarm/pregnancy-record']"
-       
         [routerLinkActive]="['active']"
       >
         <span>Pregnancy Record</span>
       </li>
       <li
         [routerLink]="['/dairyFarm/health-record']"
-       
         [routerLinkActive]="['active']"
       >
         <span>Health Record</span>
       </li>
-      <hr style="margin-top: 100px;" />
+      <li
+        [routerLink]="['/dairyFarm/vaccination']"
+        [routerLinkActive]="['active']"
+      >
+        <span>Vaccination</span>
+      </li>
+      <hr style="margin-top: 100px" />
       <li (click)="logout()">
         <svg
           xmlns="http://www.w3.org/2000/svg"
