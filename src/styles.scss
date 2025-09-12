@@ -8,18 +8,18 @@
   line-height: 40px;
   letter-spacing: -0.011em;
   text-align: left;
-  color: #4079B0;
+  color: #4079b0;
   cursor: default;
   font-family: "Inter", sans-serif;
 }
 .breadcrumb {
   letter-spacing: -0.011em;
   // color: #52015a !important;
-  color: #4079B0 !important;
+  color: #4079b0 !important;
   background-image: linear-gradient(
     to right,
-    #4079B0,
-    #4079B0 50%,
+    #4079b0,
+    #4079b0 50%,
     #6a6a6a 50%
   );
   background-size: 200% 100%;
@@ -40,7 +40,7 @@
 }
 .breadcrumb:before {
   content: "";
-  background: #4079B0;
+  background: #4079b0;
   display: block;
   position: absolute;
   bottom: -3px;
@@ -70,7 +70,7 @@
   font-size: 13px;
   font-weight: 600;
   text-align: center;
-  background: #4079B0;
+  background: #4079b0;
   color: #fff;
   height: 40px;
   min-width: 120px;
@@ -82,9 +82,9 @@
   cursor: not-allowed !important;
 }
 .btn:hover {
-  border: 1px solid #4079B0;
+  border: 1px solid #4079b0;
   background: #fff;
-  color: #4079B0;
+  color: #4079b0;
 }
 .table-responsive {
   overflow-x: auto !important;
@@ -103,7 +103,7 @@
 }
 //table header bg color
 .mat-mdc-table thead {
-  background-color: #4079B0 !important;
+  background-color: #4079b0 !important;
 }
 .table-header {
   font-family: "Montserrat", sans-serif;
@@ -163,12 +163,12 @@
   color: red;
 }
 .label {
-    font-family: "Montserrat", sans-serif;
-    font-weight: 500;
-    font-size: 16px;
-    text-transform:capitalize ;
-    color: #4079B0;
-    }
+  font-family: "Montserrat", sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+  text-transform: capitalize;
+  color: #4079b0;
+}
 //p-select dropdown style
 .p-select {
   font-family: "Montserrat", sans-serif !important;
@@ -211,7 +211,7 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #4079B0; /* color of the scrollbar thumb */
+  background: #4079b0; /* color of the scrollbar thumb */
   border-radius: 10px;
 }
 //hide sidebar scroll
@@ -236,23 +236,23 @@
 }
 
 .mat-table::-webkit-scrollbar-thumb {
-  background: #4079B0 !important;
+  background: #4079b0 !important;
   border-radius: 10px;
 }
 // input field style
 .input-felid {
-      width: 100%;
-    height: 45px;
-    background-color: #fff;
-    padding: 0 15px;
-    font-family: "Montserrat", sans-serif;
-    font-size: 15px;
-    font-weight: 400;
-    text-align: left;
-    color: #4079B0;
-    outline: none;
-    border: 1px solid #4079B080;
-    border-radius: 10px;
+  width: 100%;
+  height: 45px;
+  background-color: #fff;
+  padding: 0 15px;
+  font-family: "Montserrat", sans-serif;
+  font-size: 15px;
+  font-weight: 400;
+  text-align: left;
+  color: #4079b0;
+  outline: none;
+  border: 1px solid #4079b080;
+  border-radius: 10px;
 }
 .input-disable {
   background-color: #efeded !important;
@@ -273,7 +273,7 @@
 //dialog header
 .p-dialog-title {
   font-family: "Montserrat" !important;
-  color: #4079B0 !important;
+  color: #4079b0 !important;
   font-size: 25px !important;
   font-weight: 600;
 }
@@ -294,31 +294,32 @@
   background-color: #fff !important;
   border-top-left-radius: 20px !important;
   border-top-right-radius: 20px !important;
-  border: 1px solid #4079B0!important;
+  border: 1px solid #4079b0 !important;
   min-height: 500px !important;
-
 }
 //dialog header
 .p-dialog-header {
   padding: 25px 25px !important;
-//  background: linear-gradient(90deg, #4079B0 0%, #1B334A 100%);
-  background-color:#DCE7F6 ;
- border-top-left-radius: 18px;
- border-top-right-radius: 18px;
- color: #4079B0 !important;
+  //  background: linear-gradient(90deg, #4079B0 0%, #1B334A 100%);
+  background-color: #dce7f6;
+  border-top-left-radius: 18px;
+  border-top-right-radius: 18px;
+  color: #4079b0 !important;
   // border: 1px solid #4079B0!important;
-
-
 }
 //.p-dialog-content
 .p-dialog-content {
   padding: 10px 25px !important;
-  background-color: #DCE7F6!important;
-  border-bottom-left-radius: 18px!important;
- border-bottom-right-radius: 18px!important;
+  background-color: #dce7f6 !important;
+  border-bottom-left-radius: 18px !important;
+  border-bottom-right-radius: 18px !important;
 }
 .btn-save {
- background: linear-gradient(90deg, rgba(64, 121, 176, 0.78) 19.23%, rgba(22, 16, 98, 0.78) 75.48%);
+  background: linear-gradient(
+    90deg,
+    rgba(64, 121, 176, 0.78) 19.23%,
+    rgba(22, 16, 98, 0.78) 75.48%
+  );
 
   min-width: 110px;
   height: 40px;
@@ -336,8 +337,8 @@
   font-family: "Montserrat", sans-serif;
   font-weight: 600;
   font-size: 16px;
-  color: #4079B0;
-  background: #DCE7F6;
+  color: #4079b0;
+  background: #dce7f6;
   outline: none;
   border: none;
 }
@@ -359,10 +360,9 @@
   height: 40px;
   border-radius: 8px;
 }
-.margin-btn{
-margin-top: 50px;
-margin-bottom: 20px;
-
+.margin-btn {
+  margin-top: 50px;
+  margin-bottom: 20px;
 }
 .table-btn {
   font-family: "Montserrat", sans-serif;
@@ -423,7 +423,7 @@ margin-bottom: 20px;
   color: #fff !important;
 }
 .required-icon {
-  color: #4079B0;
+  color: #4079b0;
 }
 .action {
   width: 50px;
@@ -496,24 +496,24 @@ margin-bottom: 20px;
   background-color: #fff;
   outline: none;
 }
-.mat_table_btn{
-    font-family: "Poppins", sans-serif;
-    font-weight: 450;
-    font-size: 13px;
-    display: inline-block;
-    padding: 5px;
-    background-color: var(--btn-bg, #ffc107);
-    color: #03192C;
-    border-radius: 999px;
-    text-align: center;
-    min-width: 100px;
-    max-width: 150px;
-    height: 30px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+.mat_table_btn {
+  font-family: "Poppins", sans-serif;
+  font-weight: 450;
+  font-size: 13px;
+  display: inline-block;
+  padding: 5px;
+  background-color: var(--btn-bg, #ffc107);
+  color: #03192c;
+  border-radius: 999px;
+  text-align: center;
+  min-width: 100px;
+  max-width: 150px;
+  height: 30px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
-.label1{
+.label1 {
   @extend .label;
   text-transform: uppercase !important;
 }
@@ -529,16 +529,16 @@ margin-bottom: 20px;
   border: 1px solid #00000033;
   border-radius: 10px;
   padding: 0.75rem 1rem;
-  background: #FFFFFF;
-   font-family: 'Poppins', sans-serif;
- font-weight: 400;
- font-size: 24px;
- color: #000000;
- background-color: #3BA3A5;
- color: white;
+  background: #ffffff;
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  font-size: 24px;
+  color: #000000;
+  background-color: #3ba3a5;
+  color: white;
 }
 .custom-card {
-  background-color: #FFFFFF;
+  background-color: #ffffff;
   border: 1px solid #00000033;
   border-radius: 16px;
   height: 100%;
@@ -560,37 +560,71 @@ input[type="radio"].form-check-input:checked {
   }
 }
 @media (max-width: 768px) {
-.p-dialog-content {
-  padding: 10px 30px !important;
-}
-.p-dialog-header {
-  padding: 10px 30px !important;
-}
-// margin will be apply when popup will be open
-.ng-trigger{
-  margin: 20px !important;
+  .p-dialog-content {
+    padding: 10px 30px !important;
+  }
+  .p-dialog-header {
+    padding: 10px 30px !important;
+  }
+  // margin will be apply when popup will be open
+  .ng-trigger {
+    margin: 20px !important;
   }
 }
-.main-content{
+.main-content {
   padding: 25px !important;
 }
- @media (max-width: 425px) {
-     .main-content{
-      padding: 0px !important;
-    }
-    .btn-save{
-      min-width: 80px;
-    }
-    .btn-discard{
-      min-width: 80px;
-    }
-    .edit-btn{
-       min-width: 80px;
-    }
-    .heading{
-      font-size: 18px !important;
-    }
-    .p-dialog-title {
-       font-size: 18px !important;
-    }
+@media (max-width: 425px) {
+  .main-content {
+    padding: 0px !important;
   }
+  .btn-save {
+    min-width: 80px;
+  }
+  .btn-discard {
+    min-width: 80px;
+  }
+  .edit-btn {
+    min-width: 80px;
+  }
+  .heading {
+    font-size: 18px !important;
+  }
+  .p-dialog-title {
+    font-size: 18px !important;
+  }
+}
+/* 🎨 New style for second dropdown */
+.alt-dropdown {
+  .p-select {
+    border: 1px solid #4079b080 !important;
+    border-radius: 10px !important;
+    color: #4079b0 !important;
+    width: 100%;
+    height: 45px !important;
+    align-items: center !important;
+    border-radius: 10px;
+    background-color: #fff !important;
+  }
+  /* disabled (when wrapper has .input-disable) */
+  &.input-disable .p-select {
+    background-color: #efeded !important;
+    border-color: 1px solid #4079b080 !important;
+    color: #fff !important;
+  }
+  .p-select-label {
+    color: #4079b0 !important;
+    font-family: "Montserrat", sans-serif;
+    font-size: 15px;
+    font-weight: 400;
+  }
+
+  .p-select-overlay {
+    border: 1px solid #4079b0 !important;
+    background-color: #fff !important;
+  }
+
+  .p-select-option {
+    color: #4079b0 !important;
+  }
+}

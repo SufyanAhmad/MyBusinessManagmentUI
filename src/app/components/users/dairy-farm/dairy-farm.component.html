@@ -49,11 +49,20 @@
       >
         <span>Health Record</span>
       </li>
+      <li [routerLink]="['/dairyFarm/vaccine']" [routerLinkActive]="['active']">
+        <span>Vaccine</span>
+      </li>
       <li
         [routerLink]="['/dairyFarm/vaccination']"
         [routerLinkActive]="['active']"
       >
         <span>Vaccination</span>
+      </li>
+      <li
+        [routerLink]="['/dairyFarm/finance-report']"
+        [routerLinkActive]="['active']"
+      >
+        <span>Finance & Report</span>
       </li>
       <hr style="margin-top: 100px" />
       <li (click)="logout()">

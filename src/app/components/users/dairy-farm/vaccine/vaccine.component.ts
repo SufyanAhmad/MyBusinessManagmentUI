@@ -18,9 +18,8 @@ import { AccountService } from '../../../../services/account-service/account.ser
 import { LoadingComponent } from '../../../loading/loading.component';
 import { DataNotFoundComponent } from '../../../data-not-found/data-not-found.component';
 import { StockOutModel } from '../../../../models/dairy-farm-model/dairy-farm-model';
-
 @Component({
-  selector: 'app-vaccination',
+  selector: 'app-vaccine',
   imports: [
     MatPaginatorModule,
     MatSortModule,
@@ -36,11 +35,11 @@ import { StockOutModel } from '../../../../models/dairy-farm-model/dairy-farm-mo
     DataNotFoundComponent,
     RouterLink,
   ],
-  templateUrl: './vaccination.component.html',
-  styleUrl: './vaccination.component.scss',
+  templateUrl: './vaccine.component.html',
+  styleUrl: './vaccine.component.scss',
   providers: [MessageService],
 })
-export class VaccinationComponent {
+export class VaccineComponent {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   dataSource!: MatTableDataSource<StockOutModel>;
@@ -61,13 +60,14 @@ export class VaccinationComponent {
   visible: boolean = false;
   addAnimalModel!: FormGroup;
   displayedColumns: string[] = [
-    'animalId',
-    'animalName',
-    'breedId',
-    'praDate',
-    'expDate',
-    'actDate',
-    'status',
+    'col1',
+    'col2',
+    'col3',
+    'col4',
+    'col5',
+    'col6',
+    'col7',
+    'col8',
   ];
   constructor(
     private route: ActivatedRoute,

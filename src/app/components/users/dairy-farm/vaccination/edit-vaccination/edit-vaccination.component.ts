@@ -73,7 +73,7 @@ export class EditVaccinationComponent {
   ) {}
   ngOnInit() {
     this.liveStockId = this.route.snapshot.params['id'];
-    this.businessUnitName = localStorage.getItem('BS_businessUnit_Name');
+    this.businessUnitName = localStorage.getItem('DF_businessUnit_Name');
     this.loadBusinessUnitTypes();
     this.initForm();
     //  this.getLiveStockDetails();

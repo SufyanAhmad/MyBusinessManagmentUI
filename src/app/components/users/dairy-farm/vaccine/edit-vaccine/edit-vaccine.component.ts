@@ -1,5 +1,5 @@
-import { CommonModule, Location } from '@angular/common';
 import { Component } from '@angular/core';
+import { CommonModule, Location } from '@angular/common';
 import {
   FormBuilder,
   FormGroup,
@@ -17,9 +17,8 @@ import { masterModal } from '../../../../../models/master-model/master-model';
 import { ColdStoreServiceService } from '../../../../../services/cold-store-service/cold-store-service.service';
 import { PoultryFarmService } from '../../../../../services/poultry-farm-service/poultry-farm.service';
 import { LiveStockModel } from '../../../../../models/dairy-farm-model/dairy-farm-model';
-
 @Component({
-  selector: 'app-edit-feed',
+  selector: 'app-edit-vaccine',
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -27,11 +26,11 @@ import { LiveStockModel } from '../../../../../models/dairy-farm-model/dairy-far
     ToastModule,
     SelectModule,
   ],
-  templateUrl: './edit-feed.component.html',
-  styleUrl: './edit-feed.component.scss',
+  templateUrl: './edit-vaccine.component.html',
+  styleUrl: './edit-vaccine.component.scss',
   providers: [MessageService],
 })
-export class EditFeedComponent {
+export class EditVaccineComponent {
   isReadOnly: boolean = true;
   isActive: boolean = false;
   loading: boolean = false;
@@ -40,6 +39,7 @@ export class EditFeedComponent {
   businessUnitName: any = '';
   isArchived: boolean = false;
   businessUnitTypes: masterModal[] = [];
+  businessUnitId: any = null;
 
   editLiveStockModel!: FormGroup;
   liveStockDetail: LiveStockModel = {
@@ -73,10 +73,11 @@ export class EditFeedComponent {
   ngOnInit() {
     this.liveStockId = this.route.snapshot.params['id'];
     this.businessUnitName = localStorage.getItem('DF_businessUnit_Name');
-
+    this.loadBusinessUnitTypes();
     this.initForm();
     //  this.getLiveStockDetails();
   }
+  ngAfterViewInit() {}
   getLiveStockDetails() {
     this.loading = true;
     this.poultryFarmService.GetLiveStockDetail(this.liveStockId).subscribe(
@@ -234,6 +235,7 @@ export class EditFeedComponent {
       }
     );
   }
+
   preventDecimal(event: KeyboardEvent) {
     if (event.key === '.' || event.key === ',') {
       event.preventDefault();

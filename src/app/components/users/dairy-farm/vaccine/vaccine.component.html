@@ -1,7 +1,7 @@
 <div class="container-fluid">
   <div>
     <span class="breadcrumb">Dashboard /</span>
-    <span class="breadcrumb-bold">&nbsp;Vaccination Record</span>
+    <span class="breadcrumb-bold">&nbsp;Vaccines Record</span>
   </div>
   <span class="d-flex flex-wrap justify-content-between">
     <span class="d-flex flex-wrap">
@@ -56,17 +56,6 @@
           </svg>
         </div>
       </div>
-      <span class="alarms mt-4 mb-3 mx-3">
-        <p-select
-          [options]="BusinessUnits"
-          [(ngModel)]="businessUnitId"
-          optionLabel="type"
-          optionValue="id"
-          (onChange)="ngAfterViewInit()"
-          [showClear]="true"
-          placeholder="Animal "
-        />
-      </span>
     </span>
     <div class="d-flex align-items-center gap-5">
       <span
@@ -116,112 +105,127 @@
             </path>
           </g>
         </svg>
-        New Vaccination
+        New Vaccine
       </button>
     </div>
   </span>
   <div class="mat-elevation-z8 mt-4 rounded-table">
     <div class="table-responsive">
       <table mat-table matSort [dataSource]="dataSource">
-        <ng-container matColumnDef="animalId">
+        <ng-container matColumnDef="col1">
           <th
             mat-header-cell
             *matHeaderCellDef
             class="table-header"
             style="min-width: 120px"
           >
-            Animal ID
+            Vaccine ID
           </th>
           <td
             mat-cell
             *matCellDef="let element"
             class="tableText-bold"
-            [routerLink]="['/dairyFarm/vaccination/', element.stockOutId]"
+            [routerLink]="['/dairyFarm/vaccine/', element.stockOutId]"
           >
-            COW-001
+            VC-001
           </td>
         </ng-container>
-        <ng-container matColumnDef="animalName">
+        <ng-container matColumnDef="col2">
           <th
             mat-header-cell
             *matHeaderCellDef
             class="table-header"
-            style="min-width: 120px"
-          >
-            Animal Name
-          </th>
-          <td mat-cell *matCellDef="let element" class="tableText-thin">
-            Daisy
-          </td>
-        </ng-container>
-        <ng-container matColumnDef="breedId">
-          <th
-            mat-header-cell
-            *matHeaderCellDef
-            class="table-header"
-            style="min-width: 120px"
+            style="min-width: 230px"
           >
             Vaccine Name
           </th>
-          <td mat-cell *matCellDef="let element" class="tableText-thin">
-            Rables
+          <td
+            mat-cell
+            *matCellDef="let element"
+            class="tableText-bold"
+            [routerLink]="['/dairyFarm/vaccine/', element.stockOutId]"
+          >
+            Brucellosis Vaccine (S19)
           </td>
         </ng-container>
-        <ng-container matColumnDef="praDate">
+        <ng-container matColumnDef="col3">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            class="table-header"
+            style="min-width: 230px"
+          >
+            Disease Prevented
+          </th>
+          <td mat-cell *matCellDef="let element" class="tableText-thin">
+            Foot & Mouth Disease
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="col4">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            class="table-header"
+            style="min-width: 150px"
+          >
+            Age/Timing
+          </th>
+          <td mat-cell *matCellDef="let element" class="tableText-thin">
+            4 months+
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="col5">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            class="table-header"
+            style="min-width: 210px !important"
+          >
+            Dosage & Route
+          </th>
+          <td mat-cell *matCellDef="let element" class="tableText-thin">
+            2 ml, subcutaneous
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="col6">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            class="table-header"
+            style="min-width: 180px !important"
+          >
+            Booster / Schedule
+          </th>
+          <td mat-cell *matCellDef="let element" class="tableText-thin">
+            Every 6 months
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="col7">
           <th
             mat-header-cell
             *matHeaderCellDef
             class="table-header"
             style="min-width: 140px !important"
           >
-            Date Given
+            Storage
           </th>
           <td mat-cell *matCellDef="let element" class="tableText-thin">
-            10/07/25
+            2–8 °C
           </td>
         </ng-container>
-        <ng-container matColumnDef="expDate">
+        <ng-container matColumnDef="col8">
           <th
             mat-header-cell
             *matHeaderCellDef
             class="table-header"
             style="min-width: 140px !important"
           >
-            Next Due
+            Precautions
           </th>
           <td mat-cell *matCellDef="let element" class="tableText-thin">
-            15/10/25
+            Avoid during stress/fever
           </td>
         </ng-container>
-        <ng-container matColumnDef="actDate">
-          <th
-            mat-header-cell
-            *matHeaderCellDef
-            class="table-header"
-            style="min-width: 140px !important"
-          >
-            Notes
-          </th>
-          <td mat-cell *matCellDef="let element" class="tableText-thin">
-            Healthy
-          </td>
-        </ng-container>
-        <ng-container matColumnDef="status">
-          <th
-            mat-header-cell
-            *matHeaderCellDef
-            class="table-header"
-            style="min-width: 150px !important"
-          >
-            Status
-          </th>
-          <td mat-cell *matCellDef="let element" class="tableText-thin">
-            <div class="mat_table_btn" [style.background-color]="bgColor">
-              Pending
-            </div>
-          </td>
-        </ng-container>
-
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
       </table>
@@ -242,7 +246,7 @@
 <!-- Add Dairy Business -->
 
 <p-dialog
-  header="Add Vaccination"
+  header="Add Vaccine"
   [modal]="true"
   [(visible)]="visible"
   [style]="{ width: '60vw' }"
@@ -251,31 +255,6 @@
 >
   <form>
     <div class="row" style="row-gap: 20px">
-      <div class="col-6">
-        <span class="label"
-          >Animal ID<span class="required-icon">*</span>
-        </span>
-        <div class="alt-dropdown">
-          <p-select
-            [options]="BusinessUnits"
-            [(ngModel)]="businessUnitId"
-            name="businessUnitId"
-            optionLabel="type"
-            optionValue="id"
-            (onChange)="ngAfterViewInit()"
-            [showClear]="true"
-            placeholder="Animal "
-          />
-        </div>
-        <!-- <span class="label"
-          >Animal ID<span class="required-icon">*</span>
-        </span>
-        <input
-          type="text"
-          class="input-felid"
-          placeholder="Enter animal id..."
-        /> -->
-      </div>
       <div class="col-6">
         <span class="label"
           >Vaccine Name<span class="required-icon">*</span>
@@ -288,27 +267,57 @@
       </div>
       <div class="col-6">
         <span class="label"
-          >Date Given<span class="required-icon">*</span>
+          >Disease Prevented<span class="required-icon">*</span>
         </span>
         <input
           type="text"
           class="input-felid"
-          placeholder="Enter date given..."
+          placeholder="Enter disease prevented..."
         />
       </div>
       <div class="col-6">
         <span class="label"
-          >Next Due Date<span class="required-icon">*</span>
+          >Age / Timing<span class="required-icon">*</span>
         </span>
         <input
           type="text"
           class="input-felid"
-          placeholder="Enter next due date..."
+          placeholder="Enter age / timing..."
         />
       </div>
       <div class="col-6">
-        <span class="label">Note<span class="required-icon">*</span> </span>
-        <input type="text" class="input-felid" placeholder="Enter note..." />
+        <span class="label"
+          >Dosage & Route<span class="required-icon">*</span>
+        </span>
+        <input
+          type="text"
+          class="input-felid"
+          placeholder="Enter dosage & route..."
+        />
+      </div>
+      <div class="col-6">
+        <span class="label"
+          >Booster / Schedule<span class="required-icon">*</span>
+        </span>
+        <input
+          type="text"
+          class="input-felid"
+          placeholder="Enter booster / schedule..."
+        />
+      </div>
+      <div class="col-6">
+        <span class="label">Storage<span class="required-icon">*</span> </span>
+        <input type="text" class="input-felid" placeholder="Enter storage..." />
+      </div>
+      <div class="col-6">
+        <span class="label"
+          >Precautions<span class="required-icon">*</span>
+        </span>
+        <input
+          type="text"
+          class="input-felid"
+          placeholder="Enter precautions..."
+        />
       </div>
     </div>
     <div class="d-flex justify-content-end gap-4 margin-btn">

@@ -3,14 +3,14 @@
     <span class="breadcrumb" style="text-transform: uppercase"
       >Dashboard /
     </span>
-    <span class="breadcrumb-bold">&nbsp;Animal Vaccination Detail</span>
+    <span class="breadcrumb-bold">&nbsp;Vaccine Detail</span>
   </div>
   <!-- User Header -->
   <div
     class="header-card d-flex align-items-center justify-content-between mb-4"
   >
     <div class="heading mb-0" style="color: #4079b0 !important">
-      DAIRY FARM VACCINATION
+      DAIRY FARM VACCINE
     </div>
   </div>
   <!-- Customer Details -->
@@ -19,7 +19,7 @@
     style="margin-top: 70px"
   >
     <span class="heading" style="color: #4079b0 !important">
-      Vaccination Record Detail
+      Vaccine Record Detail
     </span>
     <span *ngIf="isReadOnly" (click)="isReadOnly = false">
       <button class="edit-btn">EDIT</button>
@@ -53,55 +53,70 @@
   <form>
     <div class="row g-3 align-items-end mt-4">
       <div class="col-md-4 mb-4 position-relative">
-        <span class="label1">ANIMAL ID</span>
-        <div class="alt-dropdown" [ngClass]="{ 'input-disable': isReadOnly }">
-          <p-select
-            [options]="businessUnitTypes"
-            [(ngModel)]="businessUnitId"
-            name="businessUnitId"
-            optionLabel="type"
-            optionValue="id"
-            (onChange)="ngAfterViewInit()"
-            [showClear]="true"
-            placeholder="Animal "
-          />
-        </div>
-      </div>
-      <div class="col-md-4 mb-4 position-relative">
-        <span class="label1">VACCINE NAME</span>
+        <span class="label1">Vaccine Name</span>
         <input
           type="text"
-          value="COW"
+          value="FMD Vaccine"
+          class="input-felid"
+          [ngClass]="{ 'input-disable': isReadOnly }"
+          placeholder="Enter vaccine name..."
+        />
+      </div>
+      <div class="col-md-4 mb-4 position-relative">
+        <span class="label1">Disease Prevented</span>
+        <input
+          type="text"
+          value="Foot & Mouth Disease"
           class="input-felid"
           [ngClass]="{ 'input-disable': isReadOnly }"
           placeholder="Enter vaccine name..."
         />
       </div>
       <div class="col-md-4 mb-4">
-        <span class="label1">DATE GIVEN</span>
+        <span class="label1">Age/Timing</span>
         <input
-          type="date"
-          value="NILI-RAVI"
+          type="text"
+          value="6 months+ (before monsoon)"
           class="input-felid custom-date"
           [ngClass]="{ 'input-disable': isReadOnly }"
           placeholder="Enter date given..."
         />
       </div>
       <div class="col-md-4 mb-4">
-        <span class="label1">NEXT DUE DATE</span>
+        <span class="label1">Dosage & Route</span>
         <input
-          type="date"
-          value="NILI-RAVI"
+          type="text"
+          value="2 ml, subcutaneous"
           class="input-felid custom-date"
           [ngClass]="{ 'input-disable': isReadOnly }"
           placeholder="Enter next due date..."
         />
       </div>
       <div class="col-md-4 mb-4">
-        <span class="label1">NOTE</span>
+        <span class="label1">Booster / Schedule</span>
         <input
           type="text"
-          value="NILI-RAVI"
+          value="Once in lifetime"
+          class="input-felid custom-date"
+          [ngClass]="{ 'input-disable': isReadOnly }"
+          placeholder="Enter note..."
+        />
+      </div>
+      <div class="col-md-4 mb-4">
+        <span class="label1">Storage</span>
+        <input
+          type="text"
+          value="2–8 °C"
+          class="input-felid custom-date"
+          [ngClass]="{ 'input-disable': isReadOnly }"
+          placeholder="Enter note..."
+        />
+      </div>
+      <div class="col-md-4 mb-4">
+        <span class="label1">Precautions</span>
+        <input
+          type="text"
+          value="Do not vaccinate sick cows"
           class="input-felid custom-date"
           [ngClass]="{ 'input-disable': isReadOnly }"
           placeholder="Enter note..."

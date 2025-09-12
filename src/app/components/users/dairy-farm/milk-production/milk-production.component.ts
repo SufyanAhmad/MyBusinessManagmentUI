@@ -80,8 +80,8 @@ export class MilkProductionComponent {
     private router: Router
   ) {}
   ngOnInit() {
-    this.busUnitId = localStorage.getItem('BS_businessUnitId');
-    this.businessUnitName = localStorage.getItem('BS_businessUnit_Name');
+    this.busUnitId = localStorage.getItem('DF_businessUnitId');
+    this.businessUnitName = localStorage.getItem('DF_businessUnit_Name');
     this.loadBusinessUnits();
   }
   ngAfterViewInit() {

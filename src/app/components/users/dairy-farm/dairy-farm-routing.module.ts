@@ -16,6 +16,9 @@ import { EditPregnancyRecordComponent } from './pregnancy-record/edit-pregnancy-
 import { EditHealthRecordComponent } from './health-record/edit-health-record/edit-health-record.component';
 import { VaccinationComponent } from './vaccination/vaccination.component';
 import { EditVaccinationComponent } from './vaccination/edit-vaccination/edit-vaccination.component';
+import { VaccineComponent } from './vaccine/vaccine.component';
+import { EditVaccineComponent } from './vaccine/edit-vaccine/edit-vaccine.component';
+import { FinanceReportComponent } from './finance-report/finance-report.component';
 
 const routes: Routes = [
   {
@@ -84,8 +87,20 @@ const routes: Routes = [
         component: VaccinationComponent,
       },
       {
-        path: 'edit-vaccination/:id',
+        path: 'vaccination/:id',
         component: EditVaccinationComponent,
+      },
+      {
+        path: 'vaccine',
+        component: VaccineComponent,
+      },
+      {
+        path: 'vaccine/:id',
+        component: EditVaccineComponent,
+      },
+      {
+        path: 'finance-report',
+        component: FinanceReportComponent,
       },
     ],
   },
