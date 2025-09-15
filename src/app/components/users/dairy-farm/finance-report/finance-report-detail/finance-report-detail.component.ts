@@ -1,26 +1,25 @@
-import { CommonModule } from '@angular/common';
 import { Component, ViewChild } from '@angular/core';
-import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
-import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatSort, MatSortModule } from '@angular/material/sort';
-import { SelectModule } from 'primeng/select';
-import { DialogModule } from 'primeng/dialog';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { catchError, map, merge, startWith, switchMap, tap } from 'rxjs';
 import { MessageService } from 'primeng/api';
-import { ToastModule } from 'primeng/toast';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { StockOutModel } from '../../../../../models/dairy-farm-model/dairy-farm-model';
+import { ColdStoreServiceService } from '../../../../../services/cold-store-service/cold-store-service.service';
+import { MasterService } from '../../../../../services/master-service/master.service';
+import { AccountService } from '../../../../../services/account-service/account.service';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 import { SkeletonModule } from 'primeng/skeleton';
-import { masterModal } from '../../../../models/master-model/master-model';
-import { ColdStoreServiceService } from '../../../../services/cold-store-service/cold-store-service.service';
-import { MasterService } from '../../../../services/master-service/master.service';
-import { AccountService } from '../../../../services/account-service/account.service';
-import { LoadingComponent } from '../../../loading/loading.component';
-import { DataNotFoundComponent } from '../../../data-not-found/data-not-found.component';
-import { StockOutModel } from '../../../../models/dairy-farm-model/dairy-farm-model';
+import { DataNotFoundComponent } from '../../../../data-not-found/data-not-found.component';
+import { ToastModule } from 'primeng/toast';
+import { SelectModule } from 'primeng/select';
+import { DialogModule } from 'primeng/dialog';
+import { LoadingComponent } from '../../../../loading/loading.component';
 
 @Component({
-  selector: 'app-finance-report',
+  selector: 'app-finance-report-detail',
   imports: [
     MatPaginatorModule,
     MatSortModule,
@@ -36,39 +35,23 @@ import { StockOutModel } from '../../../../models/dairy-farm-model/dairy-farm-mo
     DataNotFoundComponent,
     RouterLink,
   ],
-  templateUrl: './finance-report.component.html',
-  styleUrl: './finance-report.component.scss',
+  templateUrl: './finance-report-detail.component.html',
+  styleUrl: './finance-report-detail.component.scss',
   providers: [MessageService],
 })
-export class FinanceReportComponent {
+export class FinanceReportDetailComponent {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   dataSource!: MatTableDataSource<StockOutModel>;
-  isRateLimitReached = false;
+  stockOutList: StockOutModel[] = [];
+  searchKey: any = null;
   isLoadingResults: any = false;
   loading: boolean = false;
   resultsLength: any = 0;
-  searchKey: any = null;
   stockId: any = null;
   busUnitId: any = null;
-  stockOutList: StockOutModel[] = [];
-  BusinessUnits: masterModal[] = [];
-  businessUnitId: any = null;
-  businessUnitName: any = '';
-  bgColor: string = '#FFCE3A';
-  // for add animal popup
-  addLoading: boolean = false;
-  visible: boolean = false;
-  addAnimalModel!: FormGroup;
-  displayedColumns: string[] = [
-    'col1',
-    'col2',
-    'col3',
-    'col4',
-    'col5',
-    'col6',
-    'col7',
-  ];
+  isRateLimitReached = false;
+  displayedColumns: string[] = ['col1', 'col2', 'col3', 'col4', 'col5'];
   constructor(
     private route: ActivatedRoute,
     private coldStoreService: ColdStoreServiceService,
@@ -77,14 +60,14 @@ export class FinanceReportComponent {
     private router: Router
   ) {}
   ngOnInit() {
-    this.busUnitId = localStorage.getItem('DF_businessUnitId');
-    this.businessUnitName = localStorage.getItem('DF_businessUnit_Name');
-    this.loadBusinessUnits();
+    // this.liveStockId = this.route.snapshot.params['id'];
+    // this.businessUnitName = localStorage.getItem('DF_businessUnit_Name');
   }
   ngAfterViewInit() {
     setTimeout(() => {
       this.getStocksOutList();
     }, 0);
+    this.getStocksOutList();
   }
   getStocksOutList() {
     this.paginator.pageIndex = 0;
@@ -187,38 +170,5 @@ export class FinanceReportComponent {
           }
         }
       );
-  }
-  addAnimal() {}
-  SearchBySearchKey(event: any) {
-    if (event.key != 'Enter') {
-      if (this.searchKey == '' || this.searchKey == null) {
-        this.searchKey = null;
-      }
-    }
-  }
-
-  loadBusinessUnits() {
-    this.masterService.getBusinessUnitTypes().subscribe(
-      (res) => {
-        var dt = res;
-        this.BusinessUnits = [];
-        for (let a = 0; a < dt.length; a++) {
-          let _data: masterModal = {
-            id: dt[a].businessUnitId,
-            type: dt[a].name,
-          };
-          this.BusinessUnits.push(_data);
-        }
-      },
-      (error) => {
-        if (error.status == 401) {
-          this.accountService.doLogout();
-        }
-      }
-    );
-  }
-  ResetFilter() {
-    this.searchKey = null;
-    this.ngAfterViewInit();
   }
 }

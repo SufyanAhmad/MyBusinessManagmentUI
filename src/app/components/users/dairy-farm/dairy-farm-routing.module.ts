@@ -19,6 +19,7 @@ import { EditVaccinationComponent } from './vaccination/edit-vaccination/edit-va
 import { VaccineComponent } from './vaccine/vaccine.component';
 import { EditVaccineComponent } from './vaccine/edit-vaccine/edit-vaccine.component';
 import { FinanceReportComponent } from './finance-report/finance-report.component';
+import { FinanceReportDetailComponent } from './finance-report/finance-report-detail/finance-report-detail.component';
 
 const routes: Routes = [
   {
@@ -101,6 +102,10 @@ const routes: Routes = [
       {
         path: 'finance-report',
         component: FinanceReportComponent,
+      },
+      {
+        path: 'finance-report/:id',
+        component: FinanceReportDetailComponent,
       },
     ],
   },

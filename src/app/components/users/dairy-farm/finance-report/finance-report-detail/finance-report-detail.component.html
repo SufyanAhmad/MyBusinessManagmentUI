@@ -1,0 +1,190 @@
+<div class="container-fluid">
+  <div class="d-pointer">
+    <span class="breadcrumb" style="text-transform: uppercase"
+      >Dairy Farm /
+    </span>
+    <span class="breadcrumb-bold">&nbsp;Animal Finance & Report Detail</span>
+  </div>
+  <!-- User Header -->
+  <div
+    class="header-card d-flex align-items-center justify-content-between mb-4"
+  >
+    <div class="heading mb-0" style="color: #4079b0 !important">
+      COW / DASIY
+    </div>
+  </div>
+
+  <!-- Customer Details -->
+  <!-- <div
+    class="d-flex justify-content-between align-items-center"
+    style="margin-top: 70px"
+  >
+    <span class="heading" style="color: #4079b0 !important">
+      Finance & Report Detail
+    </span>
+    <span *ngIf="isReadOnly" (click)="isReadOnly = false">
+      <button class="edit-btn">EDIT</button>
+    </span>
+    <span *ngIf="!isReadOnly" class="d-flex justify-content-end gap-4">
+      <button (click)="discardChanges()" type="button" class="btn-discard">
+        Discard
+      </button>
+      <button
+        type="button"
+        (click)="
+          editLiveStockModel.valid && !editLoading
+            ? editLiveStockDetail()
+            : null
+        "
+        [ngClass]="{
+          'btn-save': editLiveStockModel.valid && !editLoading,
+          'btn-disable': editLiveStockModel.invalid || editLoading
+        }"
+      >
+        Save &nbsp;
+        <span
+          *ngIf="editLoading"
+          class="spinner-border spinner-border-sm"
+          role="status"
+          aria-hidden="true"
+        ></span>
+      </button>
+    </span>
+  </div> -->
+  <div class="mat-elevation-z8 mt-5 rounded-table">
+    <div class="table-responsive">
+      <table mat-table matSort [dataSource]="dataSource">
+        <ng-container matColumnDef="col1">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            class="table-header"
+            style="min-width: 120px"
+          >
+            Date
+          </th>
+          <td mat-cell *matCellDef="let element" class="tableText-thin">
+            10/07/25
+          </td>
+          <td mat-footer-cell *matFooterCellDef></td>
+        </ng-container>
+        <!-- <ng-container matColumnDef="col2">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            class="table-header"
+            style="min-width: 150px"
+          >
+            Cow ID / Name
+          </th>
+          <td
+            mat-cell
+            *matCellDef="let element"
+            class="tableText-bold"
+            [routerLink]="['/dairyFarm/finance-report/', element.stockOutId]"
+          >
+            COW-001<br />
+            Dasiy
+          </td>
+          <td mat-footer-cell *matFooterCellDef></td>
+        </ng-container> -->
+        <ng-container matColumnDef="col2">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            class="table-header"
+            style="min-width: 140px !important"
+          >
+            Milk Yield (L)
+          </th>
+          <td mat-cell *matCellDef="let element" class="tableText-thin">
+            12.3
+          </td>
+          <td mat-footer-cell *matFooterCellDef class="tableText-bold">
+            Total Milk Yield <br />
+            36 L
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="col3">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            class="table-header"
+            style="min-width: 150px !important"
+          >
+            Milk Sale (Rs.)
+          </th>
+          <td mat-cell *matCellDef="let element" class="tableText-thin">615</td>
+          <td mat-footer-cell *matFooterCellDef class="tableText-bold">
+            Total Milk Sale <br />
+            Rs. 1,800
+          </td>
+        </ng-container>
+        <!-- <ng-container matColumnDef="col5">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            class="table-header"
+            style="min-width: 150px !important"
+          >
+            Other Income (Rs.)
+          </th>
+          <td mat-cell *matCellDef="let element" class="tableText-thin">
+            100 (Calf sale)
+          </td>
+          <td mat-footer-cell *matFooterCellDef class="tableText-bold">
+            Total Other Income <br />
+            Rs. 590
+          </td>
+        </ng-container> -->
+        <ng-container matColumnDef="col4">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            class="table-header"
+            style="min-width: 170px !important"
+          >
+            Expenses (Rs.)
+          </th>
+          <td mat-cell *matCellDef="let element" class="tableText-thin">180</td>
+          <td mat-footer-cell *matFooterCellDef class="tableText-bold">
+            Total Expenses<br />Rs. 590
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="col5">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            class="table-header"
+            style="min-width: 170px !important"
+          >
+            Note
+          </th>
+          <td mat-cell *matCellDef="let element" class="tableText-thin">
+            FMD Vaccine di
+          </td>
+          <td mat-footer-cell *matFooterCellDef class="tableText-bold"></td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        <tr
+          mat-footer-row
+          *matFooterRowDef="displayedColumns"
+          style="border: 1px solid rgba(0, 0, 0, 0.12)"
+        ></tr>
+      </table>
+    </div>
+  </div>
+  <app-data-not-found *ngIf="stockOutList.length == 0 && !isLoadingResults" />
+  <div class="skelton" *ngIf="isLoadingResults">
+    <app-loading></app-loading>
+  </div>
+  <mat-paginator
+    pageSize="10"
+    [length]="stockOutList.length"
+    showFirstLastButtons
+    aria-label="Select page of periodic elements"
+  >
+  </mat-paginator>
+</div>
+<p-toast />

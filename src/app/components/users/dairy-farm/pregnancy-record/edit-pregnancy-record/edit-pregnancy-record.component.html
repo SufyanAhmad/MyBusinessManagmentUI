@@ -1,76 +1,128 @@
 <div class="container-fluid">
-   <div class="d-pointer">
-    <span class="breadcrumb"  style="text-transform: uppercase;"  >Dashboard / </span>
-    <span  class="breadcrumb-bold">&nbsp;Animal Detail</span>
-    </div>
-  <!-- User Header -->
-  <div class="header-card d-flex align-items-center justify-content-between mb-4" >
-    <div class="heading mb-0" style="color:#4079B0 !important;">
-     PREGNANCY & BIRTH RECORD
-    </div>
-    </div>
-  <!-- Customer Details -->
- <div class="d-flex justify-content-between align-items-center" style="margin-top: 70px;">
-    <span class="heading" style="color:#4079B0 !important;">
-   Pregnancy & Birth Record Detail
+  <div class="d-pointer">
+    <span class="breadcrumb" style="text-transform: uppercase"
+      >Dairy Farm /
     </span>
-    <span *ngIf="isReadOnly" (click)="isReadOnly = false;">
-        <button class="edit-btn">EDIT</button>
-    </span>
-    <span  *ngIf="!isReadOnly"  class="d-flex justify-content-end gap-4" >
-      <button (click)="discardChanges()"  type="button" class="btn-discard"  
-       >
-          Discard
-          
-        </button>
-       <button  type="button" (click)="(editLiveStockModel.valid && !editLoading)?editLiveStockDetail():null" 
-         [ngClass]="{
-        'btn-save': editLiveStockModel.valid && !editLoading,
-        'btn-disable': editLiveStockModel.invalid || editLoading
-           }"  >
-          Save &nbsp;
-           <span *ngIf="editLoading"  class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-        </button>
-      </span>
-   </div>
-  <form >
-  <div class="row g-3 align-items-end mt-4">
-    
-    <div class="col-md-4 mb-4">
-      <span class="label1">Record id</span>
-    <input type="text" value="BR-001"  class="input-felid" [ngClass]="{ 'input-disable': isReadOnly  }" placeholder="Enter breed id...">
-    </div>
-    <div class="col-md-4 mb-4 position-relative">
-     <span class="label1">Animal id</span>
-    <input type="text" value="COW"  class="input-felid" [ngClass]="{ 'input-disable': isReadOnly  }" placeholder="Enter type...">
-
-    </div>
-    <div class="col-md-4 mb-4 position-relative">
-     <span class="label1">breed id</span>
-    <input type="text" value="COW"  class="input-felid" [ngClass]="{ 'input-disable': isReadOnly  }" placeholder="Enter type...">
-
-    </div>
-    <div class="col-md-4 mb-4">
-     <span class="label1">PREGNANT DATE</span>
-    <input type="date" value="NILI-RAVI"  class="input-felid custom-date" [ngClass]="{ 'input-disable': isReadOnly  }" placeholder="Enter breed name...">
-
-    </div> 
-    <div class="col-md-4 mb-4">
-     <span class="label1">EXPECTED DELIVERY</span>
-    <input type="date" value="NILI-RAVI"  class="input-felid custom-date" [ngClass]="{ 'input-disable': isReadOnly  }" placeholder="Enter breed name...">
-
-    </div> 
-    <div class="col-md-4 mb-4">
-     <span class="label1">ACTUAL DELIVERY</span>
-    <input type="date" value="NILI-RAVI"  class="input-felid custom-date" [ngClass]="{ 'input-disable': isReadOnly  }" placeholder="Enter breed name...">
-
-    </div> 
-   <div class="col-md-4 mb-4 position-relative">
-     <span class="label1">STATUS</span>
-    <input type="text" value="PAKISTAN" class="input-felid" [ngClass]="{ 'input-disable': isReadOnly  }" placeholder="Enter origin...">
-    </div>
-    
+    <span class="breadcrumb-bold">&nbsp;Animal Detail</span>
   </div>
+  <!-- User Header -->
+  <div
+    class="header-card d-flex align-items-center justify-content-between mb-4"
+  >
+    <div class="heading mb-0" style="color: #4079b0 !important">
+      PREGNANCY & BIRTH RECORD
+    </div>
+  </div>
+  <!-- Customer Details -->
+  <div
+    class="d-flex justify-content-between align-items-center"
+    style="margin-top: 70px"
+  >
+    <span class="heading" style="color: #4079b0 !important">
+      Pregnancy & Birth Record Detail
+    </span>
+    <span *ngIf="isReadOnly" (click)="isReadOnly = false">
+      <button class="edit-btn">EDIT</button>
+    </span>
+    <span *ngIf="!isReadOnly" class="d-flex justify-content-end gap-4">
+      <button (click)="discardChanges()" type="button" class="btn-discard">
+        Discard
+      </button>
+      <button
+        type="button"
+        (click)="
+          editLiveStockModel.valid && !editLoading
+            ? editLiveStockDetail()
+            : null
+        "
+        [ngClass]="{
+          'btn-save': editLiveStockModel.valid && !editLoading,
+          'btn-disable': editLiveStockModel.invalid || editLoading
+        }"
+      >
+        Save &nbsp;
+        <span
+          *ngIf="editLoading"
+          class="spinner-border spinner-border-sm"
+          role="status"
+          aria-hidden="true"
+        ></span>
+      </button>
+    </span>
+  </div>
+  <form>
+    <div class="row g-3 align-items-end mt-4">
+      <div class="col-md-4 mb-4">
+        <span class="label1">Record id</span>
+        <input
+          type="text"
+          value="BR-001"
+          class="input-felid"
+          [ngClass]="{ 'input-disable': isReadOnly }"
+          placeholder="Enter breed id..."
+        />
+      </div>
+      <div class="col-md-4 mb-4 position-relative">
+        <span class="label1">Animal id</span>
+        <input
+          type="text"
+          value="COW"
+          class="input-felid"
+          [ngClass]="{ 'input-disable': isReadOnly }"
+          placeholder="Enter type..."
+        />
+      </div>
+      <div class="col-md-4 mb-4 position-relative">
+        <span class="label1">breed id</span>
+        <input
+          type="text"
+          value="COW"
+          class="input-felid"
+          [ngClass]="{ 'input-disable': isReadOnly }"
+          placeholder="Enter type..."
+        />
+      </div>
+      <div class="col-md-4 mb-4">
+        <span class="label1">PREGNANT DATE</span>
+        <input
+          type="date"
+          value="NILI-RAVI"
+          class="input-felid custom-date"
+          [ngClass]="{ 'input-disable': isReadOnly }"
+          placeholder="Enter breed name..."
+        />
+      </div>
+      <div class="col-md-4 mb-4">
+        <span class="label1">EXPECTED DELIVERY</span>
+        <input
+          type="date"
+          value="NILI-RAVI"
+          class="input-felid custom-date"
+          [ngClass]="{ 'input-disable': isReadOnly }"
+          placeholder="Enter breed name..."
+        />
+      </div>
+      <div class="col-md-4 mb-4">
+        <span class="label1">ACTUAL DELIVERY</span>
+        <input
+          type="date"
+          value="NILI-RAVI"
+          class="input-felid custom-date"
+          [ngClass]="{ 'input-disable': isReadOnly }"
+          placeholder="Enter breed name..."
+        />
+      </div>
+      <div class="col-md-4 mb-4 position-relative">
+        <span class="label1">STATUS</span>
+        <input
+          type="text"
+          value="PAKISTAN"
+          class="input-felid"
+          [ngClass]="{ 'input-disable': isReadOnly }"
+          placeholder="Enter origin..."
+        />
+      </div>
+    </div>
   </form>
 </div>
 <p-toast />
