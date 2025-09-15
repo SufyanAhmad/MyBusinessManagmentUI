@@ -1,7 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { catchError, map, merge, startWith, switchMap, tap } from 'rxjs';
 import { MessageService } from 'primeng/api';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
@@ -33,7 +33,6 @@ import { LoadingComponent } from '../../../../loading/loading.component';
     ToastModule,
     LoadingComponent,
     DataNotFoundComponent,
-    RouterLink,
   ],
   templateUrl: './finance-report-detail.component.html',
   styleUrl: './finance-report-detail.component.scss',
