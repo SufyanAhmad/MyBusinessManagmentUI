@@ -16,7 +16,11 @@ import { MasterService } from '../../../../../services/master-service/master.ser
 import { masterModal } from '../../../../../models/master-model/master-model';
 import { ColdStoreServiceService } from '../../../../../services/cold-store-service/cold-store-service.service';
 import { PoultryFarmService } from '../../../../../services/poultry-farm-service/poultry-farm.service';
-import { LiveStockModel } from '../../../../../models/dairy-farm-model/dairy-farm-model';
+import {
+  AnimalModel,
+  LiveStockModel,
+} from '../../../../../models/dairy-farm-model/dairy-farm-model';
+import { DairyFarmService } from '../../../../../services/dairy-farm.service';
 
 @Component({
   selector: 'app-edit-animal',
@@ -33,73 +37,114 @@ import { LiveStockModel } from '../../../../../models/dairy-farm-model/dairy-far
 })
 export class EditAnimalComponent {
   isReadOnly: boolean = true;
-  isActive: boolean = false;
   loading: boolean = false;
   editLoading: boolean = false;
-  liveStockId: any = null;
+  animalId: any = null;
   businessUnitName: any = '';
   isArchived: boolean = false;
   businessUnitTypes: masterModal[] = [];
+  isFemale: boolean = true;
+  isActive: boolean = false;
 
-  editLiveStockModel!: FormGroup;
-  liveStockDetail: LiveStockModel = {
-    livestockBatchId: '',
-    breed: '',
-    quantity: 0,
-    arrivalDate: '',
-    ageInDays: 0,
-    healthStatus: '',
+  editAnimalModel!: FormGroup;
+  AnimalDetail: AnimalModel = {
+    animalId: '',
+    createdBy: '',
+    createdAt: '',
+    animalRef: '',
+    animalType: '',
+    businessUnit: '',
+    breedRef: '',
+    animalTypeId: 0,
+    breedId: '',
+    animalCode: '',
+    age: '',
+    isFemale: true,
+    isActive: true,
+    purchaseDate: '',
+    price: 0,
+    note: '',
     businessUnitId: '',
   };
-  constLiveStockDetail: LiveStockModel = {
-    livestockBatchId: '',
-    breed: '',
-    quantity: 0,
-    arrivalDate: '',
-    ageInDays: 0,
-    healthStatus: '',
+  constAnimalDetail: AnimalModel = {
+    animalId: '',
+    createdBy: '',
+    createdAt: '',
+    animalRef: '',
+    animalType: '',
+    businessUnit: '',
+    breedRef: '',
+    animalTypeId: 0,
+    breedId: '',
+    animalCode: '',
+    age: '',
+    isFemale: true,
+    isActive: true,
+    purchaseDate: '',
+    price: 0,
+    note: '',
     businessUnitId: '',
   };
   constructor(
     private route: ActivatedRoute,
     private location: Location,
     private formBuilder: FormBuilder,
-    private poultryFarmService: PoultryFarmService,
+    private dairyFarmService: DairyFarmService,
     private messageService: MessageService,
     private accountService: AccountService,
     private masterService: MasterService,
     private coldStoreService: ColdStoreServiceService
   ) {}
   ngOnInit() {
-    this.liveStockId = this.route.snapshot.params['id'];
+    this.animalId = this.route.snapshot.params['id'];
     this.businessUnitName = localStorage.getItem('DF_businessUnit_Name');
 
     this.initForm();
-    //  this.getLiveStockDetails();
+    this.getAnimalDetails();
   }
-  getLiveStockDetails() {
+  getAnimalDetails() {
     this.loading = true;
-    this.poultryFarmService.GetLiveStockDetail(this.liveStockId).subscribe(
+    this.dairyFarmService.GetAnimalDetail(this.animalId).subscribe(
       (dt) => {
-        let data = dt;
-        this.isArchived = data.archived;
-        let arrDate = data.arrivalDate.split('T')[0];
-        this.liveStockDetail = {
-          livestockBatchId: data.livestockBatchId,
-          breed: data.breed,
-          quantity: data.quantity,
-          arrivalDate: arrDate,
-          ageInDays: data.ageInDays,
-          healthStatus: data.healthStatus,
+        let data = dt.data;
+        // let createdAt = data.createdAt.split('T')[0];
+        this.AnimalDetail = {
+          animalId: data.animalId,
+          createdBy: data.createdBy,
+          createdAt: data.createdAt,
+          animalRef: data.animalRef,
+          animalType: data.animalType,
+          businessUnit: data.businessUnit,
+          breedRef: data.breedRef,
+          animalTypeId: data.animalTypeId,
+          breedId: data.breedId,
+          animalCode: data.animalCode,
+          age: data.age,
+          isFemale: data.isFemale,
+          isActive: data.isActive,
+          purchaseDate: data.purchaseDate,
+          price: data.price,
+          note: data.note,
           businessUnitId: data.businessUnitId,
         };
-        this.constLiveStockDetail = {
-          livestockBatchId: data.livestockBatchId,
-          breed: data.breed,
-          quantity: data.quantity,
-          arrivalDate: arrDate,
-          ageInDays: data.ageInDays,
-          healthStatus: data.healthStatus,
+
+        this.constAnimalDetail = {
+          animalId: data.animalId,
+          createdBy: data.createdBy,
+          createdAt: data.createdAt,
+          animalRef: data.animalRef,
+          animalType: data.animalType,
+          businessUnit: data.businessUnit,
+          breedRef: data.breedRef,
+          animalTypeId: data.animalTypeId,
+          breedId: data.breedId,
+          animalCode: data.animalCode,
+          age: data.age,
+          isFemale: data.isFemale,
+          isActive: data.isActive,
+          purchaseDate: data.purchaseDate,
+          price: data.price,
+          note: data.note,
           businessUnitId: data.businessUnitId,
         };
         this.initForm();
@@ -120,19 +165,20 @@ export class EditAnimalComponent {
       }
     );
   }
-  editLiveStockDetail() {
+  editAnimalDetail() {
     this.editLoading = true;
-    this.poultryFarmService
-      .UpdateLiveStockDetail(this.liveStockId, this.editLiveStockModel.value)
+    this.dairyFarmService
+      .UpdateAnimalDetail(this.animalId, this.editAnimalModel.value)
       .subscribe(
         (dt) => {
           this.messageService.add({
             severity: 'success',
             summary: 'Updated',
-            detail: 'Live stock updated successfully',
+            detail: 'Animal updated successfully',
             life: 3000,
           });
-          this.goBack();
+          // this.goBack();
+          this.getAnimalDetails();
           this.editLoading = false;
         },
         (error) => {
@@ -149,69 +195,66 @@ export class EditAnimalComponent {
         }
       );
   }
-  editArchiveStatus() {
-    this.coldStoreService
-      .updateArchiveStatus(this.liveStockId, this.isArchived)
-      .subscribe(
-        (dt) => {
-          this.messageService.add({
-            severity: 'success',
-            summary: 'Update',
-            detail: 'Cold store shelf change archived successfully',
-            life: 3000,
-          });
-        },
-        (error) => {
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Error',
-            detail: error.message,
-            life: 3000,
-          });
-          if (error.status == 401) {
-            this.accountService.doLogout();
-          }
-        }
-      );
-  }
+
   discardChanges() {
-    this.liveStockDetail = {
-      livestockBatchId: this.constLiveStockDetail.livestockBatchId,
-      businessUnitId: this.constLiveStockDetail.businessUnitId,
-      breed: this.constLiveStockDetail.breed,
-      quantity: this.constLiveStockDetail.quantity,
-      arrivalDate: this.constLiveStockDetail.arrivalDate,
-      ageInDays: this.constLiveStockDetail.ageInDays,
-      healthStatus: this.constLiveStockDetail.healthStatus,
+    this.AnimalDetail = {
+      animalTypeId: this.constAnimalDetail.animalTypeId,
+      breedId: this.constAnimalDetail.breedId,
+      animalCode: this.constAnimalDetail.animalCode,
+      age: this.constAnimalDetail.age,
+      isFemale: this.constAnimalDetail.isFemale,
+      isActive: this.constAnimalDetail.isActive,
+      purchaseDate: this.constAnimalDetail.purchaseDate,
+      price: this.constAnimalDetail.price,
+      note: this.constAnimalDetail.note,
+      businessUnitId: this.constAnimalDetail.businessUnitId,
     };
     this.isReadOnly = true;
     this.initForm();
   }
+
+  // initForm() {
+  //   this.editLiveStockModel = this.formBuilder.group({
+  //     businessUnitId: [this.AnimalDetail.businessUnitId, [Validators.required]],
+  //     animalId: [this.AnimalDetail.animalId, [Validators.required]],
+  //     createdBy: [this.AnimalDetail.createdBy, [Validators.required]],
+  //     this.AnimalDetail.createdAt =
+  //     this.AnimalDetail.createdAt?.split('T')[0] || '',
+  //     quantity: [
+  //       this.AnimalDetail.quantity,
+  //       [
+  //         Validators.required,
+  //         Validators.pattern('^[1-9][0-9]*$'),
+  //         Validators.min(1),
+  //       ],
+  //     ],
+  //     arrivalDate: [this.AnimalDetail.arrivalDate, [Validators.required]],
+  //     ageInDays: [
+  //       this.AnimalDetail.ageInDays,
+  //       [
+  //         Validators.required,
+  //         Validators.pattern('^[1-9][0-9]*$'),
+  //         Validators.min(1),
+  //       ],
+  //     ],
+  //     healthStatus: [this.AnimalDetail.healthStatus, [Validators.required]],
+  //   });
+  // }
+
   initForm() {
-    this.editLiveStockModel = this.formBuilder.group({
-      businessUnitId: [
-        this.liveStockDetail.businessUnitId,
-        [Validators.required],
-      ],
-      breed: [this.liveStockDetail.breed, [Validators.required]],
-      quantity: [
-        this.liveStockDetail.quantity,
-        [
-          Validators.required,
-          Validators.pattern('^[1-9][0-9]*$'),
-          Validators.min(1),
-        ],
-      ],
-      arrivalDate: [this.liveStockDetail.arrivalDate, [Validators.required]],
-      ageInDays: [
-        this.liveStockDetail.ageInDays,
-        [
-          Validators.required,
-          Validators.pattern('^[1-9][0-9]*$'),
-          Validators.min(1),
-        ],
-      ],
-      healthStatus: [this.liveStockDetail.healthStatus, [Validators.required]],
+    this.AnimalDetail.purchaseDate =
+      this.AnimalDetail?.purchaseDate?.split('T')[0] ?? '';
+    this.editAnimalModel = this.formBuilder.group({
+      animalTypeId: [this.AnimalDetail.animalTypeId, Validators.required],
+      breedId: [this.AnimalDetail.breedId, Validators.required],
+      animalCode: [this.AnimalDetail.animalCode, [Validators.required]],
+      age: [this.AnimalDetail.age],
+      isFemale: [this.AnimalDetail.isFemale, [Validators.required]],
+      isActive: [this.AnimalDetail.isActive, [Validators.required]],
+      purchaseDate: [this.AnimalDetail.purchaseDate, [Validators.required]],
+      price: [this.AnimalDetail.price, [Validators.required]],
+      note: [this.AnimalDetail.note, [Validators.required]],
+      businessUnitId: [this.AnimalDetail.businessUnitId, [Validators.required]],
     });
   }
   loadBusinessUnitTypes() {
@@ -239,6 +282,31 @@ export class EditAnimalComponent {
       event.preventDefault();
     }
   }
+  // editArchiveStatus() {
+  //   this.coldStoreService
+  //     .updateArchiveStatus(this.liveStockId, this.isArchived)
+  //     .subscribe(
+  //       (dt) => {
+  //         this.messageService.add({
+  //           severity: 'success',
+  //           summary: 'Update',
+  //           detail: 'Cold store shelf change archived successfully',
+  //           life: 3000,
+  //         });
+  //       },
+  //       (error) => {
+  //         this.messageService.add({
+  //           severity: 'error',
+  //           summary: 'Error',
+  //           detail: error.message,
+  //           life: 3000,
+  //         });
+  //         if (error.status == 401) {
+  //           this.accountService.doLogout();
+  //         }
+  //       }
+  //     );
+  // }
   goBack() {
     this.location.back();
   }

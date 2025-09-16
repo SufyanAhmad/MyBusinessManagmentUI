@@ -185,4 +185,19 @@ export class MasterService {
       })
     );
   }
+  // Dairy Farm //
+  getAnimalTypes() {
+    return this.repositoryService.get('Master/get-animal-types', true).pipe(
+      map((response: any) => {
+        return response;
+      })
+    );
+  }
+  getBreeds() {
+    return this.repositoryService.get('Master/get-breeds', true).pipe(
+      map((response: any) => {
+        return response;
+      })
+    );
+  }
 }

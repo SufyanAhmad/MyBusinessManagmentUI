@@ -15,12 +15,39 @@ export interface StockOutModel {
   remainingStock: number;
   totalRentRate: number;
 }
-export interface LiveStockModel{
-  livestockBatchId:string;
-  breed:string;
+export interface LiveStockModel {
+  livestockBatchId: string;
+  breed: string;
   quantity: number;
-  arrivalDate:string;
+  arrivalDate: string;
   ageInDays: number;
-  healthStatus:string;
-  businessUnitId:string;
-};
+  healthStatus: string;
+  businessUnitId: string;
+}
+// Dairy Farm Models //
+export interface DairyFarmModel {
+  businessUnitId: String;
+  name: String;
+  location: String;
+  businessTypeId: number;
+  businessType: string;
+}
+export interface AnimalModel {
+  animalId?: String;
+  createdBy?: String;
+  createdAt?: String;
+  animalRef?: String;
+  animalType?: String;
+  businessUnit?: String;
+  breedRef?: String;
+  animalTypeId: number;
+  breedId: String;
+  animalCode: String;
+  age: String;
+  isFemale: Boolean;
+  isActive: Boolean;
+  purchaseDate: String;
+  price: number;
+  note: String;
+  businessUnitId: string;
+}

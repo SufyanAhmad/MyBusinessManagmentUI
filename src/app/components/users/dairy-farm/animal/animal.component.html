@@ -22,19 +22,19 @@
         <input
           type="text"
           autocomplete="off"
-          (keyup)="SearchBySearchKey($event); getStocksOutList()"
-          (keyup.enter)="getStocksOutList()"
+          (keyup)="SearchBySearchKey($event); getAnimalList()"
+          (keyup.enter)="getAnimalList()"
           style="padding-left: 40px"
           [(ngModel)]="searchKey"
           class="search-input"
           name="searchValue"
-          placeholder="Search Reference..."
+          placeholder="Search animal id..."
         />
         <div style="position: absolute; top: 4px; right: 0">
           <svg
             class="search-cross-icon"
             *ngIf="searchKey != null"
-            (click)="searchKey = null; getStocksOutList()"
+            (click)="searchKey = null; getAnimalList()"
             style="
               margin-top: 6px !important;
               margin-right: 10px !important;
@@ -136,9 +136,9 @@
             mat-cell
             *matCellDef="let element"
             class="tableText-bold"
-            [routerLink]="['/dairyFarm/animal/', element.stockOutId]"
+            [routerLink]="['/dairyFarm/animal/', element.animalId]"
           >
-            COW-001
+            {{ element.animalRef }}
           </td>
         </ng-container>
         <ng-container matColumnDef="breedId">
@@ -151,7 +151,7 @@
             Breed id
           </th>
           <td mat-cell *matCellDef="let element" class="tableText-thin">
-            BR-001
+            {{ element.breedRef }}
           </td>
         </ng-container>
         <ng-container matColumnDef="type">
@@ -164,8 +164,26 @@
             TYPE
           </th>
           <td mat-cell *matCellDef="let element">
-            <div class="mat_table_btn" [style.background-color]="bgColor">
-              Cow
+            <div
+              class="mat_table_btn"
+              *ngIf="element.animalTypeId == 1"
+              [style.background-color]="'#FFCE3A'"
+            >
+              {{ element.animalType }}
+            </div>
+            <div
+              class="mat_table_btn"
+              *ngIf="element.animalTypeId == 2"
+              [style.background-color]="'#7C9052'"
+            >
+              {{ element.animalType }}
+            </div>
+            <div
+              class="mat_table_btn"
+              *ngIf="element.animalTypeId == 3"
+              [style.background-color]="'#FF5C40'"
+            >
+              {{ element.animalType }}
             </div>
           </td>
         </ng-container>
@@ -179,7 +197,7 @@
             Animal CODE
           </th>
           <td mat-cell *matCellDef="let element" class="tableText-thin">
-            C-001
+            {{ element.animalCode }}
           </td>
         </ng-container>
         <ng-container matColumnDef="age">
@@ -192,7 +210,7 @@
             Age
           </th>
           <td mat-cell *matCellDef="let element" class="tableText-thin">
-            4 Year 5 Month
+            {{ element.age }}
           </td>
         </ng-container>
         <ng-container matColumnDef="gender">
@@ -205,8 +223,19 @@
             Gender
           </th>
           <td mat-cell *matCellDef="let element">
-            <div class="mat_table_btn" [style.background-color]="'#E53564'">
+            <div
+              class="mat_table_btn"
+              *ngIf="element.isFemale == true"
+              [style.background-color]="'#E53564'"
+            >
               Female
+            </div>
+            <div
+              class="mat_table_btn"
+              *ngIf="element.isFemale == false"
+              [style.background-color]="'#7ABADD'"
+            >
+              Male
             </div>
           </td>
         </ng-container>
@@ -220,8 +249,7 @@
             Purchase Date
           </th>
           <td mat-cell *matCellDef="let element">
-            <!-- {{element.stockOutDate | date:'dd/MM/yyyy'}} -->
-            10/07/25
+            {{ element.purchaseDate | date : "dd/MM/yyyy" }}
           </td>
         </ng-container>
         <ng-container matColumnDef="price">
@@ -234,7 +262,7 @@
             Price
           </th>
           <td mat-cell *matCellDef="let element" class="tableText-thin">
-            100000
+            {{ element.price }}
           </td>
         </ng-container>
         <ng-container matColumnDef="status">
@@ -247,7 +275,18 @@
             Status
           </th>
           <td mat-cell *matCellDef="let element" class="tableText-thin">
-            <div class="mat_table_btn" [style.background-color]="'#50B595'">
+            <div
+              class="mat_table_btn"
+              *ngIf="element.isActive == true"
+              [style.background-color]="'#50B595'"
+            >
+              Active
+            </div>
+            <div
+              class="mat_table_btn"
+              *ngIf="element.isActive == false"
+              [style.background-color]="'#FD9808'"
+            >
               Inactive
             </div>
           </td>
@@ -262,7 +301,7 @@
             Note
           </th>
           <td mat-cell *matCellDef="let element" class="tableText-thin">
-            late By 5 days
+            {{ element.note }}
           </td>
         </ng-container>
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
@@ -270,13 +309,13 @@
       </table>
     </div>
   </div>
-  <app-data-not-found *ngIf="stockOutList.length == 0 && !isLoadingResults" />
+  <app-data-not-found *ngIf="animalList.length == 0 && !isLoadingResults" />
   <div class="skelton" *ngIf="isLoadingResults">
     <app-loading></app-loading>
   </div>
   <mat-paginator
     pageSize="10"
-    [length]="stockOutList.length"
+    [length]="animalList.length"
     showFirstLastButtons
     aria-label="Select page of periodic elements"
   >
@@ -292,25 +331,63 @@
   [draggable]="false"
   [resizable]="false"
 >
-  <form>
+  <form [formGroup]="addAnimalModel">
     <div class="row" style="row-gap: 20px">
-      <div class="col-6">
+      <!-- <div class="col-6">
         <span class="label"
           >Animal ID<span class="required-icon">*</span>
         </span>
-        <input type="text" class="input-felid" placeholder="Enter name..." />
-      </div>
+        <input type="text" formControlName="" class="input-felid" placeholder="Enter name..." />
+      </div> -->
       <div class="col-6">
-        <span class="label">Type<span class="required-icon">*</span></span>
-        <input
-          type="text"
-          class="input-felid"
-          placeholder="Enter location..."
-        />
+        <span class="label"
+          >Animal Type<span class="required-icon">*</span>
+        </span>
+        <div class="alt-dropdown">
+          <p-select
+            [options]="AnimalTypes"
+            [(ngModel)]="key"
+            name="key"
+            optionLabel="type"
+            optionValue="id"
+            (onChange)="ngAfterViewInit()"
+            [showClear]="true"
+            placeholder="Animal Type "
+            formControlName="animalTypeId"
+          />
+        </div>
       </div>
       <div class="col-6">
         <span class="label">Breed ID<span class="required-icon">*</span> </span>
-        <input type="text" class="input-felid" placeholder="Enter name..." />
+        <div class="alt-dropdown">
+          <p-select
+            [options]="Breeds"
+            [(ngModel)]="breedId"
+            name="breedId"
+            optionLabel="type"
+            optionValue="id"
+            (onChange)="ngAfterViewInit()"
+            [showClear]="true"
+            placeholder="Breeds"
+            formControlName="breedId"
+          />
+        </div>
+      </div>
+      <div class="col-6">
+        <span class="label">Breed ID<span class="required-icon">*</span> </span>
+        <div class="alt-dropdown">
+          <p-select
+            [options]="BusinessUnits"
+            [(ngModel)]="businessUnitId"
+            name="businessUnitId"
+            optionLabel="type"
+            optionValue="id"
+            (onChange)="ngAfterViewInit()"
+            [showClear]="true"
+            placeholder="Business Unit"
+            formControlName="businessUnitId"
+          />
+        </div>
       </div>
       <div class="col-6">
         <span class="label"
@@ -319,12 +396,18 @@
         <input
           type="text"
           class="input-felid"
-          placeholder="Enter location..."
+          formControlName="animalCode"
+          placeholder="Enter animal code..."
         />
       </div>
       <div class="col-6">
         <span class="label">Age<span class="required-icon">*</span> </span>
-        <input type="text" class="input-felid" placeholder="Enter name..." />
+        <input
+          type="text"
+          class="input-felid"
+          formControlName="age"
+          placeholder="Enter age..."
+        />
       </div>
       <div class="col-6">
         <span class="label"
@@ -333,12 +416,18 @@
         <input
           type="date"
           class="input-felid custome-date"
-          placeholder="Enter location..."
+          placeholder="Enter purchase date..."
+          formControlName="purchaseDate"
         />
       </div>
       <div class="col-6">
         <span class="label">Price<span class="required-icon">*</span> </span>
-        <input type="number" class="input-felid" placeholder="Enter name..." />
+        <input
+          type="number"
+          class="input-felid"
+          formControlName="price"
+          placeholder="Enter price..."
+        />
       </div>
       <div class="col-6 d-flex gap-5 align-items-center">
         <!-- for Jins -->
@@ -349,8 +438,10 @@
               ><input
                 class="form-check-input"
                 type="radio"
-                name="isHen"
-                [value]="true"
+                name="isFemale"
+                [value]="false"
+                [(ngModel)]="isFemale"
+                formControlName="isFemale"
             /></span>
           </div>
           <div style="display: flex">
@@ -359,41 +450,42 @@
               ><input
                 class="form-check-input"
                 type="radio"
-                name="isHen"
-                [value]="false"
+                name="isFemale"
+                [value]="true"
+                [(ngModel)]="isFemale"
+                formControlName="isFemale"
             /></span>
           </div>
         </div>
-        <!-- for status -->
-        <div class="mt-3" style="display: flex">
-          <div style="display: flex">
-            <span class="label">Active</span>
-            <span
-              ><input
-                class="form-check-input"
-                type="radio"
-                name="isStatus"
-                [value]="true"
-            /></span>
-          </div>
-          <div style="display: flex">
-            <span class="label" style="margin-left: 25px">Inactive</span>
-            <span
-              ><input
-                class="form-check-input"
-                type="radio"
-                name="isStatus"
-                [value]="false"
-            /></span>
-          </div>
+      </div>
+      <!-- for status -->
+      <div class="col-6 d-flex gap-5 align-items-center mt-3">
+        <div>
+          <span class="label">Active</span>
+          <input
+            class="form-check-input"
+            type="radio"
+            formControlName="isActive"
+            [value]="true"
+          />
+        </div>
+        <div style="margin-left: 25px">
+          <span class="label">Inactive</span>
+          <input
+            class="form-check-input"
+            type="radio"
+            formControlName="isActive"
+            [value]="false"
+          />
         </div>
       </div>
       <div class="col-12">
         <span class="label">Note<span class="required-icon">*</span></span>
         <input
           type="text"
+          formControlName="note"
           class="input-felid"
-          placeholder="Enter location..."
+          placeholder="Enter note..."
         />
       </div>
     </div>
@@ -401,15 +493,24 @@
       <button (click)="visible = false" type="button" class="btn-discard">
         Discard
       </button>
-      <button type="button" class="btn-save">Save</button>
-      <!-- <button  type="button" (click)="(addAnimalModel.valid && !addLoading)?addAnimal():null"
-         [ngClass]="{
-        'btn-save': addAnimalModel.valid && !addLoading,
-        'btn-disable': addAnimalModel.invalid || addLoading
-           }"  >
-          Save &nbsp;
-           <span *ngIf="addLoading"  class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-        </button> -->
+      <button
+        type="button"
+        (click)="onSave()"
+        [disabled]="addAnimalModel.invalid || addLoading"
+        [ngClass]="{
+          'btn-save': addAnimalModel.valid && !addLoading,
+          'btn-disable': addAnimalModel.invalid || addLoading
+        }"
+      >
+        Save&nbsp;
+        <span
+          *ngIf="addLoading"
+          class="spinner-border spinner-border-sm"
+          role="status"
+          aria-hidden="true"
+        ></span>
+      </button>
     </div>
   </form>
 </p-dialog>
+<p-toast></p-toast>

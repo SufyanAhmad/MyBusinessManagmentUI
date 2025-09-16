@@ -84,7 +84,6 @@ export class SuperAdminService {
         })
       );
   }
-
   getBusinessUnitDetail(id: any) {
     return this.repositoryService
       .get('BusinessUnit/get-business-unit/' + id, true)
@@ -338,14 +337,14 @@ export class SuperAdminService {
         })
       );
   }
-  getStorageUnitBarGraph(){
+  getStorageUnitBarGraph() {
     return this.repositoryService
-    .get('Dashboard/get-storage-unit-bar-graph',true)
-    .pipe(
-      map((resource:any) =>{
-      return resource; 
-    })
-    );
+      .get('Dashboard/get-storage-unit-bar-graph', true)
+      .pipe(
+        map((resource: any) => {
+          return resource;
+        })
+      );
   }
 
   getCustomerDetailById(id: any) {
@@ -357,7 +356,7 @@ export class SuperAdminService {
         })
       );
   }
-    getBankLedgerBySearchFilter(data: any) {
+  getBankLedgerBySearchFilter(data: any) {
     return this.repositoryService
       .post(
         'BankLedger/get-bankLedger-by-search-and-filter-with-pagination',
@@ -370,15 +369,27 @@ export class SuperAdminService {
         })
       );
   }
-    addBankLedger(data: any) {
-    return this.repositoryService.post('BankLedger/add-bankLedger', data, true).pipe(
-      map((response: any) => {
-        return response;
-      })
-    );
+  addBankLedger(data: any) {
+    return this.repositoryService
+      .post('BankLedger/add-bankLedger', data, true)
+      .pipe(
+        map((response: any) => {
+          return response;
+        })
+      );
   }
   getBankLedgerDetail(id: any) {
-    return this.repositoryService.get('BankLedger/get-bankLedger/' + id, true).pipe(
+    return this.repositoryService
+      .get('BankLedger/get-bankLedger/' + id, true)
+      .pipe(
+        map((response: any) => {
+          return response;
+        })
+      );
+  }
+  // Dairy farm //
+  addAnimal(data: any) {
+    return this.repositoryService.post('Animal/add-animal', data, true).pipe(
       map((response: any) => {
         return response;
       })

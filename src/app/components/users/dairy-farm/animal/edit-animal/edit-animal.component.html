@@ -29,13 +29,11 @@
       <button
         type="button"
         (click)="
-          editLiveStockModel.valid && !editLoading
-            ? editLiveStockDetail()
-            : null
+          editAnimalModel.valid && !editLoading ? editAnimalDetail() : null
         "
         [ngClass]="{
-          'btn-save': editLiveStockModel.valid && !editLoading,
-          'btn-disable': editLiveStockModel.invalid || editLoading
+          'btn-save': editAnimalModel.valid && !editLoading,
+          'btn-disable': editAnimalModel.invalid || editLoading
         }"
       >
         Save &nbsp;
@@ -48,107 +46,141 @@
       </button>
     </span>
   </div>
-  <form>
+  <form [formGroup]="editAnimalModel">
     <div class="row g-3 align-items-end mt-4">
-      <div class="col-md-4 mb-4">
+      <!-- <div class="col-md-4 mb-4">
         <span class="label1">Animal Id</span>
         <input
           type="text"
-          value="BR-001"
           class="input-felid"
           [ngClass]="{ 'input-disable': isReadOnly }"
           placeholder="Enter breed id..."
+          formControlName="animalRef"
         />
-      </div>
+      </div> -->
 
       <div class="col-md-4 mb-4 position-relative">
         <span class="label1">type</span>
         <input
           type="text"
-          value="COW"
           class="input-felid"
           [ngClass]="{ 'input-disable': isReadOnly }"
           placeholder="Enter type..."
+          formControlName="animalTypeId"
         />
       </div>
-      <div class="col-md-4 mb-4">
+      <!-- <div class="col-md-4 mb-4">
         <span class="label1">Breed id</span>
         <input
           type="text"
-          value="BR-001"
           class="input-felid"
           [ngClass]="{ 'input-disable': isReadOnly }"
           placeholder="Enter breed id..."
+          formControlName="breedRef"
         />
-      </div>
+      </div> -->
       <div class="col-md-4 mb-4">
         <span class="label1">animal code</span>
         <input
           type="text"
-          value="NILI-RAVI"
           class="input-felid"
           [ngClass]="{ 'input-disable': isReadOnly }"
           placeholder="Enter breed name..."
+          formControlName="animalCode"
         />
       </div>
       <div class="col-md-4 mb-4 position-relative">
         <span class="label1">age</span>
         <input
           type="text"
-          value="PAKISTAN"
           class="input-felid"
           [ngClass]="{ 'input-disable': isReadOnly }"
           placeholder="Enter origin..."
+          formControlName="age"
         />
       </div>
       <div class="col-md-4 mb-4 position-relative">
         <span class="label1">purchase date</span>
         <input
           type="date"
-          value="9/07/2023"
           class="input-felid custome-date"
           [ngClass]="{ 'input-disable': isReadOnly }"
-          placeholder="Enter origin..."
+          placeholder="Enter purchase date..."
+          formControlName="purchaseDate"
         />
       </div>
       <div class="col-md-4 mb-4 position-relative">
         <span class="label1">price</span>
         <input
-          type="text"
+          type="number"
           value="PAKISTAN"
           class="input-felid"
           [ngClass]="{ 'input-disable': isReadOnly }"
-          placeholder="Enter origin..."
+          placeholder="Enter price..."
+          formControlName="price"
         />
       </div>
       <div class="col-md-4 mb-4 position-relative">
-        <span class="label1">gender</span>
-        <input
-          type="text"
-          value="PAKISTAN"
-          class="input-felid"
-          [ngClass]="{ 'input-disable': isReadOnly }"
-          placeholder="Enter origin..."
-        />
+        <div class="mt-3 gap-3" style="display: flex">
+          <div style="display: flex">
+            <span class="label">Male</span>
+            <span
+              ><input
+                class="form-check-input"
+                type="radio"
+                name="isFemale"
+                [value]="false"
+                [(ngModel)]="isFemale"
+                formControlName="isFemale"
+            /></span>
+          </div>
+          <div style="display: flex">
+            <span class="label" style="margin-left: 25px">Female</span>
+            <span
+              ><input
+                class="form-check-input"
+                type="radio"
+                name="isFemale"
+                [value]="true"
+                [(ngModel)]="isFemale"
+                formControlName="isFemale"
+            /></span>
+          </div>
+        </div>
       </div>
       <div class="col-md-4 mb-4 position-relative">
-        <span class="label1">status</span>
-        <input
-          type="text"
-          value="PAKISTAN"
-          class="input-felid"
-          [ngClass]="{ 'input-disable': isReadOnly }"
-          placeholder="Enter origin..."
-        />
+        <div class="d-flex gap-3 align-items-center mt-3">
+          <!-- Active -->
+          <div>
+            <span class="label">Active</span>
+            <input
+              class="form-check-input"
+              type="radio"
+              formControlName="isActive"
+              [value]="true"
+            />
+          </div>
+
+          <!-- Inactive -->
+          <div style="margin-left: 25px">
+            <span class="label">Inactive</span>
+            <input
+              class="form-check-input"
+              type="radio"
+              formControlName="isActive"
+              [value]="false"
+            />
+          </div>
+        </div>
       </div>
       <div class="col-md-12 mb-4">
         <span class="label1">note</span>
         <input
           type="text"
-          value="HIGH MILK YIELD"
           class="input-felid"
           [ngClass]="{ 'input-disable': isReadOnly }"
           placeholder="Enter note..."
+          formControlName="note"
         />
       </div>
     </div>

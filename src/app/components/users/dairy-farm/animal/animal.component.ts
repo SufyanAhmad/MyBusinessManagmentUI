@@ -1,23 +1,30 @@
 import { CommonModule } from '@angular/common';
 import { Component, ViewChild } from '@angular/core';
-import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { SelectModule } from 'primeng/select';
 import { DialogModule } from 'primeng/dialog';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { catchError, map, merge, startWith, switchMap, tap } from 'rxjs';
+import { catchError, map, merge, of, startWith, switchMap, tap } from 'rxjs';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { SkeletonModule } from 'primeng/skeleton';
 import { masterModal } from '../../../../models/master-model/master-model';
-import { ColdStoreServiceService } from '../../../../services/cold-store-service/cold-store-service.service';
 import { MasterService } from '../../../../services/master-service/master.service';
 import { AccountService } from '../../../../services/account-service/account.service';
 import { LoadingComponent } from '../../../loading/loading.component';
 import { DataNotFoundComponent } from '../../../data-not-found/data-not-found.component';
-import { StockOutModel } from '../../../../models/dairy-farm-model/dairy-farm-model';
+import { SuperAdminService } from '../../../../services/super-admin-service/super-admin.service';
+import { AnimalModel } from '../../../../models/dairy-farm-model/dairy-farm-model';
+import { DairyFarmService } from '../../../../services/dairy-farm.service';
 
 @Component({
   selector: 'app-animal',
@@ -43,17 +50,23 @@ import { StockOutModel } from '../../../../models/dairy-farm-model/dairy-farm-mo
 export class AnimalComponent {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
-  dataSource!: MatTableDataSource<StockOutModel>;
+  dataSource!: MatTableDataSource<AnimalModel>;
   isRateLimitReached = false;
   isLoadingResults: any = false;
   loading: boolean = false;
   resultsLength: any = 0;
   searchKey: any = null;
-  stockId: any = null;
+  animalId: any = null;
   busUnitId: any = null;
-  stockOutList: StockOutModel[] = [];
+  isActive: boolean = true;
+  isFemale: boolean = true;
+  animalList: AnimalModel[] = [];
   BusinessUnits: masterModal[] = [];
+  AnimalTypes: masterModal[] = [];
+  Breeds: masterModal[] = [];
   businessUnitId: any = null;
+  key: any = null;
+  breedId: any = null;
   businessUnitName: any = '';
   bgColor: string = '#FFCE3A';
   // for add animal popup
@@ -74,112 +87,97 @@ export class AnimalComponent {
   ];
   constructor(
     private route: ActivatedRoute,
-    private coldStoreService: ColdStoreServiceService,
+    private dairyFarmService: DairyFarmService,
     private masterService: MasterService,
     private accountService: AccountService,
+    private superAdminService: SuperAdminService,
+    private messageService: MessageService,
+    private formBuilder: FormBuilder,
     private router: Router
   ) {}
   ngOnInit() {
     this.busUnitId = localStorage.getItem('DF_businessUnitId');
     this.businessUnitName = localStorage.getItem('DF_businessUnit_Name');
     this.loadBusinessUnits();
+    this.loadAnimalTypes();
+    this.loadBreeds();
+    this.initForm();
   }
   ngAfterViewInit() {
     setTimeout(() => {
-      this.getStocksOutList();
+      this.getAnimalList();
     }, 0);
   }
-  getStocksOutList() {
+  getAnimalList() {
     this.paginator.pageIndex = 0;
     this.paginator.page.observers = [];
-    this.stockOutList = [];
-    this.dataSource = new MatTableDataSource(this.stockOutList);
+    this.animalList = [];
+    this.dataSource = new MatTableDataSource(this.animalList);
+
     this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
+
     merge(this.paginator.page)
       .pipe(
         startWith({}),
         switchMap(() => {
           this.isLoadingResults = true;
-          this.stockOutList = [];
-          this.dataSource = new MatTableDataSource(this.stockOutList);
-
-          if (this.searchKey == null) {
-            this.searchKey = null;
-          }
-          if (this.stockId == undefined) {
-            this.stockId = null;
-          }
+          this.animalList = [];
+          this.dataSource = new MatTableDataSource(this.animalList);
 
           let data = {
-            searchKey: this.searchKey,
-            businessUnitId: this.busUnitId,
-            isActive: true,
-            from: null,
-            to: null,
-            stockId: this.stockId,
+            searchKey: this.searchKey ?? null,
+            businessUnitId: this.busUnitId ?? null,
             pageNumber: this.paginator.pageIndex + 1,
             pageSize: 10,
           };
 
-          return this.coldStoreService.getStockOutBySearchFilter(data).pipe(
+          return this.dairyFarmService.getAnimalBySearchFilter(data).pipe(
             catchError((resp: any) => {
               if (resp.status == 401) {
                 this.accountService.doLogout();
                 this.router.navigateByUrl('/');
               }
-              return resp;
+              return of({ data: { totalCount: 0, list: [] } });
             })
           );
         }),
-        map((data) => {
-          this.isRateLimitReached = data === null;
-          if (data === null) {
+        map((resp: any) => {
+          if (!resp || !resp.data) {
             return [];
           }
-          this.resultsLength = data.totalCount;
-          return data;
+          this.resultsLength = resp.data.totalCount;
+          return resp.data.list;
         })
       )
       .subscribe(
-        (data) => {
-          this.stockOutList = [];
-          // data.list.length
-          for (let a = 0; a < 5; a++) {
-            let stockOut: StockOutModel = {
-              // batchReference:data.list[a].batchReference,
-              // reference:data.list[a].reference,
-              // stockOutId: data.list[a].stockOutId,
-              // stockId: data.list[a].stockId,
-              // outQuantity: data.list[a].outQuantity,
-              // stockOutDate: data.list[a].stockOutDate,
-              // rentMonths : data.list[a].rentMonths,
-              // totalDays: data.list[a].totalDays,
-              // clientId: data.list[a].clientId,
-              // client: data.list[a].client,
-              // stockInDate: data.list[a].stockInDate,
-              // rentRate: data.list[a].rentRate,
-              // note:data.list[a].note,
-              // remainingStock:data.list[a].remainingStock,
-              // totalRentRate: data.list[a].totalRentRate,
-              batchReference: 'testing',
-              reference: 'testing',
-              stockOutId: 'testing',
-              stockId: 'testing',
-              outQuantity: 0,
-              stockOutDate: 'testing',
-              rentMonths: 0,
-              totalDays: 'testing',
-              clientId: 'testing',
-              client: 'testing',
-              stockInDate: 'testing',
-              rentRate: 0,
-              note: 'testing',
-              remainingStock: 0,
-              totalRentRate: 0,
-            };
-            this.stockOutList.push(stockOut);
+        (list) => {
+          this.animalList = [];
+          if (list && list.length > 0) {
+            this.dataSource.data = list;
+            for (let a = 0; a < list.length; a++) {
+              let animal: AnimalModel = {
+                animalId: list[a].animalId,
+                createdBy: list[a].createdBy,
+                createdAt: list[a].createdAt,
+                animalRef: list[a].animalRef,
+                animalType: list[a].animalType,
+                businessUnit: list[a].businessUnit,
+                breedRef: list[a].breedRef,
+                animalTypeId: list[a].animalTypeId,
+                breedId: list[a].breedId,
+                animalCode: list[a].animalCode,
+                age: list[a].age,
+                isFemale: list[a].isFemale,
+                isActive: list[a].isActive,
+                purchaseDate: list[a].purchaseDate,
+                price: list[a].price,
+                note: list[a].note,
+                businessUnitId: list[a].businessUnitId,
+              };
+              this.animalList.push(animal);
+            }
           }
-          this.dataSource = new MatTableDataSource(this.stockOutList);
+          this.dataSource = new MatTableDataSource(this.animalList);
           this.isLoadingResults = false;
         },
         (error) => {
@@ -191,7 +189,56 @@ export class AnimalComponent {
         }
       );
   }
-  addAnimal() {}
+
+  addAnimal() {
+    this.addLoading = true;
+    this.superAdminService.addAnimal(this.addAnimalModel.value).subscribe(
+      (dt) => {
+        this.addLoading = false;
+        this.visible = false;
+        this.getAnimalList();
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Added',
+          detail: 'Animal added successfully',
+          life: 3000,
+        });
+      },
+      (error) => {
+        this.addLoading = false;
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: error.error.message,
+          life: 3000,
+        });
+        if (error.status == 401) {
+          this.accountService.doLogout();
+          this.router.navigateByUrl('/');
+        }
+      }
+    );
+  }
+  onSave() {
+    if (this.addAnimalModel.valid && !this.addLoading) {
+      this.addAnimal();
+    }
+  }
+  initForm() {
+    this.addAnimalModel = this.formBuilder.group({
+      animalTypeId: [0, [Validators.required]],
+      breedId: [null, [Validators.required]],
+      animalCode: [null, [Validators.required]],
+      age: [null, [Validators.required]],
+      address: [null],
+      isFemale: [null, [Validators.pattern]],
+      isActive: [null, [Validators.pattern]],
+      purchaseDate: [null, [Validators.pattern]],
+      price: [0, [Validators.pattern]],
+      note: [null, [Validators.pattern]],
+      businessUnitId: [null, [Validators.pattern]],
+    });
+  }
   SearchBySearchKey(event: any) {
     if (event.key != 'Enter') {
       if (this.searchKey == '' || this.searchKey == null) {
@@ -201,7 +248,7 @@ export class AnimalComponent {
   }
 
   loadBusinessUnits() {
-    this.masterService.getBusinessUnitTypes().subscribe(
+    this.masterService.getBusinessUnitTypesById(3).subscribe(
       (res) => {
         var dt = res;
         this.BusinessUnits = [];
@@ -211,6 +258,46 @@ export class AnimalComponent {
             type: dt[a].name,
           };
           this.BusinessUnits.push(_data);
+        }
+      },
+      (error) => {
+        if (error.status == 401) {
+          this.accountService.doLogout();
+        }
+      }
+    );
+  }
+  loadAnimalTypes() {
+    this.masterService.getAnimalTypes().subscribe(
+      (res) => {
+        let dt = res.data;
+        this.AnimalTypes = [];
+        for (let a = 0; a < dt.length; a++) {
+          let _data: masterModal = {
+            id: dt[a].key,
+            type: dt[a].value,
+          };
+          this.AnimalTypes.push(_data);
+        }
+      },
+      (error) => {
+        if (error.status == 401) {
+          this.accountService.doLogout();
+        }
+      }
+    );
+  }
+  loadBreeds() {
+    this.masterService.getBreeds().subscribe(
+      (res) => {
+        var dt = res.data;
+        this.Breeds = [];
+        for (let a = 0; a < dt.length; a++) {
+          let _data: masterModal = {
+            id: dt[a].breedId,
+            type: dt[a].breedRef,
+          };
+          this.Breeds.push(_data);
         }
       },
       (error) => {
