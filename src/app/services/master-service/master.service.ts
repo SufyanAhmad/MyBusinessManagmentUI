@@ -193,6 +193,13 @@ export class MasterService {
       })
     );
   }
+  getAnimal() {
+    return this.repositoryService.get('Master/get-animals', true).pipe(
+      map((response: any) => {
+        return response;
+      })
+    );
+  }
   getBreeds() {
     return this.repositoryService.get('Master/get-breeds', true).pipe(
       map((response: any) => {

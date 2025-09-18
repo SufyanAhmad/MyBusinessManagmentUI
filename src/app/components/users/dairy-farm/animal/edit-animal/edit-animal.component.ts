@@ -14,12 +14,7 @@ import { SelectModule } from 'primeng/select';
 import { AccountService } from '../../../../../services/account-service/account.service';
 import { MasterService } from '../../../../../services/master-service/master.service';
 import { masterModal } from '../../../../../models/master-model/master-model';
-import { ColdStoreServiceService } from '../../../../../services/cold-store-service/cold-store-service.service';
-import { PoultryFarmService } from '../../../../../services/poultry-farm-service/poultry-farm.service';
-import {
-  AnimalModel,
-  LiveStockModel,
-} from '../../../../../models/dairy-farm-model/dairy-farm-model';
+import { AnimalModel } from '../../../../../models/dairy-farm-model/dairy-farm-model';
 import { DairyFarmService } from '../../../../../services/dairy-farm.service';
 
 @Component({
@@ -43,8 +38,10 @@ export class EditAnimalComponent {
   businessUnitName: any = '';
   isArchived: boolean = false;
   businessUnitTypes: masterModal[] = [];
+  AnimalTypes: masterModal[] = [];
   isFemale: boolean = true;
   isActive: boolean = false;
+  key: any = null;
 
   editAnimalModel!: FormGroup;
   AnimalDetail: AnimalModel = {
@@ -92,8 +89,7 @@ export class EditAnimalComponent {
     private dairyFarmService: DairyFarmService,
     private messageService: MessageService,
     private accountService: AccountService,
-    private masterService: MasterService,
-    private coldStoreService: ColdStoreServiceService
+    private masterService: MasterService
   ) {}
   ngOnInit() {
     this.animalId = this.route.snapshot.params['id'];
@@ -101,13 +97,13 @@ export class EditAnimalComponent {
 
     this.initForm();
     this.getAnimalDetails();
+    this.loadAnimalTypes();
   }
   getAnimalDetails() {
     this.loading = true;
     this.dairyFarmService.GetAnimalDetail(this.animalId).subscribe(
       (dt) => {
         let data = dt.data;
-        // let createdAt = data.createdAt.split('T')[0];
         this.AnimalDetail = {
           animalId: data.animalId,
           createdBy: data.createdBy,
@@ -268,6 +264,26 @@ export class EditAnimalComponent {
             type: dt[a].name,
           };
           this.businessUnitTypes.push(_data);
+        }
+      },
+      (error) => {
+        if (error.status == 401) {
+          this.accountService.doLogout();
+        }
+      }
+    );
+  }
+  loadAnimalTypes() {
+    this.masterService.getAnimalTypes().subscribe(
+      (res) => {
+        let dt = res.data;
+        this.AnimalTypes = [];
+        for (let a = 0; a < dt.length; a++) {
+          let _data: masterModal = {
+            id: dt[a].key,
+            type: dt[a].value,
+          };
+          this.AnimalTypes.push(_data);
         }
       },
       (error) => {

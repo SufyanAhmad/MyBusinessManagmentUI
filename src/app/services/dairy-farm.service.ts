@@ -36,9 +36,57 @@ export class DairyFarmService {
       })
     );
   }
+  addAnimal(data: any) {
+    return this.repositoryService.post('Animal/add-animal', data, true).pipe(
+      map((response: any) => {
+        return response;
+      })
+    );
+  }
   UpdateAnimalDetail(id: any, data: any) {
     return this.repositoryService
       .putWithOutFile('Animal/update-animal/' + id, data)
+      .pipe(
+        map((response: any) => {
+          return response;
+        })
+      );
+  }
+  getBreedBySearchFilter(data: any) {
+    return this.repositoryService
+      .post('Breed/get-bread-by-search-and-filter-with-pagination', data, true)
+      .pipe(
+        map((response: any) => {
+          return response;
+        })
+      );
+  }
+  addBreed(data: any) {
+    return this.repositoryService.post('Breed/add-breed', data, true).pipe(
+      map((response: any) => {
+        return response;
+      })
+    );
+  }
+  GetBreedDetail(id: any) {
+    return this.repositoryService.get('Breed/get-bread/' + id, true).pipe(
+      map((response: any) => {
+        return response;
+      })
+    );
+  }
+  UpdateBreedDetail(id: any, data: any) {
+    return this.repositoryService
+      .putWithOutFile('Breed/update-breed/' + id, data)
+      .pipe(
+        map((response: any) => {
+          return response;
+        })
+      );
+  }
+  getFeedBySearchFilter(data: any) {
+    return this.repositoryService
+      .post('Feed/get-feed-by-search-and-filter-with-pagination', data, true)
       .pipe(
         map((response: any) => {
           return response;

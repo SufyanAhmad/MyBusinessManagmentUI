@@ -628,3 +628,8 @@ input[type="radio"].form-check-input:checked {
     color: #4079b0 !important;
   }
 }
+input[readonly] {
+  background-color: #efeded !important;
+  border-color: 1px solid #4079b080 !important;
+  color: #4079b0 !important;
+}

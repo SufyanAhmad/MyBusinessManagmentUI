@@ -25,6 +25,26 @@ export interface LiveStockModel {
   businessUnitId: string;
 }
 // Dairy Farm Models //
+export interface BusinessUnitModel {
+  totalProfit: number;
+  totalSale: number;
+  businessUnitId: string;
+  name: string;
+  location: string;
+  businessTypeId: number;
+  businessTypeName: string;
+  isAdded?: boolean;
+  isChecked?: boolean;
+  userRoleId?: number;
+  totalUser?: number;
+  totalEmployee?: number;
+  totalStockIn?: number;
+  totalStockOut?: number;
+  totalPendingItems?: number;
+  totalInventoryItems?: number;
+  totalSales?: number;
+  totalStorageUnitPendingItems?: number;
+}
 export interface DairyFarmModel {
   businessUnitId: String;
   name: String;
@@ -49,5 +69,30 @@ export interface AnimalModel {
   purchaseDate: String;
   price: number;
   note: String;
-  businessUnitId: string;
+  businessUnitId: String;
+}
+export interface BreedModel {
+  breedId: String;
+  breedRef: String;
+  animalType: String;
+  businessUnit: String;
+  animalTypeId: number;
+  name: String;
+  origin: String;
+  note: String;
+  businessUnitId: String;
+}
+export interface FeedModel {
+  feedId: String;
+  feedRef: String;
+  animalRef: String;
+  supplierName: String;
+  businessUnit: String;
+  animalId: String;
+  supplierId: String;
+  name: String;
+  quantity: Number;
+  feedTime: String;
+  note: String;
+  businessUnitId: String;
 }

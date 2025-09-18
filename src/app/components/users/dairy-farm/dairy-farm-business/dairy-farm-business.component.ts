@@ -13,10 +13,14 @@ import { DairyFarmService } from './../../../../services/dairy-farm.service';
 import { MessageService } from 'primeng/api';
 import { AccountService } from '../../../../services/account-service/account.service';
 import { Router } from '@angular/router';
-import { DairyFarmModel } from '../../../../models/dairy-farm-model/dairy-farm-model';
+import {
+  BusinessUnitModel,
+  DairyFarmModel,
+} from '../../../../models/dairy-farm-model/dairy-farm-model';
 import { SuperAdminService } from '../../../../services/super-admin-service/super-admin.service';
-import { MasterService } from '../../../../services/master-service/master.service';
 import { masterModal } from '../../../../models/master-model/master-model';
+import { ToastModule } from 'primeng/toast';
+import { MasterService } from '../../../../services/master-service/master.service';
 @Component({
   selector: 'app-dairy-farm-business',
   imports: [
@@ -25,6 +29,7 @@ import { masterModal } from '../../../../models/master-model/master-model';
     FormsModule,
     ReactiveFormsModule,
     DialogModule,
+    ToastModule,
   ],
   templateUrl: './dairy-farm-business.component.html',
   styleUrl: './dairy-farm-business.component.scss',
@@ -32,9 +37,10 @@ import { masterModal } from '../../../../models/master-model/master-model';
 })
 export class DairyFarmBusinessComponent {
   BusinessUnits: masterModal[] = [];
-  dairyFarmList: DairyFarmModel[] = [];
+  dairyFarmList: BusinessUnitModel[] = [];
   detailLoading: boolean = false;
   businessUnitId: any = null;
+  businessTypes: masterModal[] = [];
   dairyFarmDetail: DairyFarmModel = {
     businessUnitId: '',
     name: '',
@@ -99,62 +105,117 @@ export class DairyFarmBusinessComponent {
         }
       );
   }
-  // getBusinessUnitDetails() {
-  //   this.detailLoading = true;
-  //   this.superAdminService.getBusinessUnitDetail(this.businessUnitId).subscribe(
+  // getBusinessUnits() {
+  //   this.loading = true;
+  //   this.superAdminService.getBusinessUnits().subscribe(
   //     (dt) => {
-  //       let data = dt;
-  //       this.dairyFarmDetail = {
-  //         businessUnitId: data.businessUnitId,
-  //         name: data.name,
-  //         location: data.location,
-  //         businessTypeId: data.businessTypeId,
-  //         businessType: data.businessType,
-  //       };
-  //       // this._initForm();
-  //       this.detailLoading = false;
+  //       this.dairyFarmList = [];
+  //       // this.poultryFarmUnitList = [];
+  //       // this.storageUnitList = [];
+  //       for (let a = 0; a < dt.length; a++) {
+  //         let busUnit: BusinessUnitModel = {
+  //           totalProfit: dt[a].totalProfit,
+  //           totalSale: dt[a].totalSale,
+  //           businessUnitId: dt[a].businessUnitId,
+  //           name: dt[a].name,
+  //           location: dt[a].location,
+  //           businessTypeId: dt[a].businessTypeId,
+  //           businessTypeName: dt[a].businessTypeName,
+  //           totalUser: dt[a].totalUser,
+  //           totalEmployee: dt[a].totalEmployee,
+  //           totalStockIn: dt[a].totalStockIn,
+  //           totalStockOut: dt[a].totalStockOut,
+  //           totalPendingItems: dt[a].totalPendingItems,
+  //           totalInventoryItems: dt[a].totalInventoryItems,
+  //           totalSales: dt[a].totalSales,
+  //           totalStorageUnitPendingItems: dt[a].totalStorageUnitPendingItems,
+  //         };
+  //         if (busUnit.businessTypeId == 3) {
+  //           this.dairyFarmList.push(busUnit);
+  //         } else if (busUnit.businessTypeId == 1) {
+  //             this.poultryFarmUnitList.push(busUnit);
+  //           } else if (busUnit.businessTypeId == 2) {
+  //             this.storageUnitList.push(busUnit);
+  //         }
+  //       }
+  //       this.loading = false;
+  //       this.loadBusinessTypes();
   //     },
   //     (error) => {
+  //       this.loading = true;
   //       this.messageService.add({
   //         severity: 'error',
   //         summary: 'Error',
-  //         detail: error.error.message,
-  //         life: 4000,
+  //         detail: error.message,
+  //         life: 3000,
   //       });
-  //       this.accountService.doLogout();
-  //       // if (error.status == 401) {
-  //       // }
+  //       if (error.status == 401) {
+  //         this.accountService.doLogout();
+  //       }
   //     }
   //   );
   // }
-
   getBusinessUnits() {
     this.loading = true;
-    this.superAdminService.getBusinessUnitDetail(this.businessUnitId).subscribe(
+    this.superAdminService.getBusinessUnits().subscribe(
       (dt) => {
         this.dairyFarmList = [];
+
         for (let a = 0; a < dt.length; a++) {
-          debugger;
-          let busUnit: DairyFarmModel = {
+          let busUnit: BusinessUnitModel = {
+            totalProfit: dt[a].totalProfit,
+            totalSale: dt[a].totalSale,
             businessUnitId: dt[a].businessUnitId,
             name: dt[a].name,
             location: dt[a].location,
             businessTypeId: dt[a].businessTypeId,
-            businessType: dt[a].businessType,
+            businessTypeName: dt[a].businessTypeName,
+            totalUser: dt[a].totalUser,
+            totalEmployee: dt[a].totalEmployee,
+            totalStockIn: dt[a].totalStockIn,
+            totalStockOut: dt[a].totalStockOut,
+            totalPendingItems: dt[a].totalPendingItems,
+            totalInventoryItems: dt[a].totalInventoryItems,
+            totalSales: dt[a].totalSales,
+            totalStorageUnitPendingItems: dt[a].totalStorageUnitPendingItems,
           };
-          // Push into dairyFarmList
-          this.dairyFarmList.push(busUnit);
+          if (busUnit.businessTypeId === 3) {
+            this.dairyFarmList.push(busUnit);
+          }
         }
+
         this.loading = false;
+        this.loadBusinessTypes();
       },
       (error) => {
-        this.loading = false; // <-- should set false on error too
+        this.loading = false;
         this.messageService.add({
           severity: 'error',
           summary: 'Error',
           detail: error.message,
           life: 3000,
         });
+        if (error.status === 401) {
+          this.accountService.doLogout();
+        }
+      }
+    );
+  }
+
+  loadBusinessTypes() {
+    this.masterService.getBusinessTypes().subscribe(
+      (res) => {
+        var dt = res;
+        this.businessTypes = [];
+        for (let a = 0; a < dt.length; a++) {
+          let _data: masterModal = {
+            id: dt[a].key,
+            type: dt[a].value,
+          };
+          this.businessTypes.push(_data);
+        }
+      },
+      (error) => {
         if (error.status == 401) {
           this.accountService.doLogout();
         }

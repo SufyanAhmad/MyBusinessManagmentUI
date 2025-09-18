@@ -9,7 +9,7 @@
       DAIRY FARM
     </div>
     <div *ngIf="!loading" class="row">
-      <div class="col-md-6 col-lg-4 mb-4" *ngFor="let item of [1, 1, 1]">
+      <div class="col-md-6 col-lg-4 mb-4" *ngFor="let item of dairyFarmList">
         <div
           class="custom-card text-center"
           style="background-color: #dce7f6; min-height: 180px"
@@ -24,7 +24,7 @@
               text-overflow: ellipsis;
             "
           >
-            Golden Meadow Dairy
+            {{ item.name }}
           </div>
 
           <div
@@ -41,7 +41,7 @@
             "
             title="toba"
           >
-            Location : toba
+            Location : {{ item.location }}
           </div>
         </div>
       </div>
@@ -144,3 +144,4 @@
     </div>
   </form>
 </p-dialog>
+<p-toast></p-toast>

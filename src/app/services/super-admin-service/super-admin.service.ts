@@ -388,11 +388,4 @@ export class SuperAdminService {
       );
   }
   // Dairy farm //
-  addAnimal(data: any) {
-    return this.repositoryService.post('Animal/add-animal', data, true).pipe(
-      map((response: any) => {
-        return response;
-      })
-    );
-  }
 }

@@ -9,7 +9,9 @@
   <div
     class="header-card d-flex align-items-center justify-content-between mb-4"
   >
-    <div class="heading mb-0" style="color: #4079b0 !important">Animal ID</div>
+    <div class="heading mb-0" style="color: #4079b0 !important">
+      {{ AnimalDetail.animalRef }}
+    </div>
   </div>
   <!-- Customer Details -->
   <div
@@ -48,18 +50,28 @@
   </div>
   <form [formGroup]="editAnimalModel">
     <div class="row g-3 align-items-end mt-4">
-      <!-- <div class="col-md-4 mb-4">
+      <div class="col-md-4 mb-4">
         <span class="label1">Animal Id</span>
         <input
           type="text"
           class="input-felid"
+          [readonly]="true"
           [ngClass]="{ 'input-disable': isReadOnly }"
           placeholder="Enter breed id..."
-          formControlName="animalRef"
+          [value]="AnimalDetail.animalRef"
         />
-      </div> -->
-
-      <div class="col-md-4 mb-4 position-relative">
+      </div>
+      <div class="col-md-4 mb-4">
+        <span class="label1">Breed id</span>
+        <input
+          type="text"
+          class="input-felid"
+          [readonly]="true"
+          placeholder="Enter breed id..."
+          [value]="AnimalDetail.breedRef"
+        />
+      </div>
+      <!-- <div class="col-md-4 mb-4 position-relative">
         <span class="label1">type</span>
         <input
           type="text"
@@ -68,17 +80,21 @@
           placeholder="Enter type..."
           formControlName="animalTypeId"
         />
-      </div>
-      <!-- <div class="col-md-4 mb-4">
-        <span class="label1">Breed id</span>
-        <input
-          type="text"
-          class="input-felid"
-          [ngClass]="{ 'input-disable': isReadOnly }"
-          placeholder="Enter breed id..."
-          formControlName="breedRef"
-        />
       </div> -->
+      <div class="col-md-4 mb-4 position-relative">
+        <span class="label"
+          >Animal Type<span class="required-icon">*</span>
+        </span>
+        <div class="alt-dropdown" [ngClass]="{ 'input-disable': isReadOnly }">
+          <p-select
+            [options]="AnimalTypes"
+            optionLabel="type"
+            optionValue="id"
+            formControlName="animalTypeId"
+            placeholder="Animal Type"
+          ></p-select>
+        </div>
+      </div>
       <div class="col-md-4 mb-4">
         <span class="label1">animal code</span>
         <input

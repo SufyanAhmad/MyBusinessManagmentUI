@@ -29,13 +29,11 @@
       <button
         type="button"
         (click)="
-          editLiveStockModel.valid && !editLoading
-            ? editLiveStockDetail()
-            : null
+          editBreedModel.valid && !editLoading ? editLiveStockDetail() : null
         "
         [ngClass]="{
-          'btn-save': editLiveStockModel.valid && !editLoading,
-          'btn-disable': editLiveStockModel.invalid || editLoading
+          'btn-save': editBreedModel.valid && !editLoading,
+          'btn-disable': editBreedModel.invalid || editLoading
         }"
       >
         Save &nbsp;
@@ -48,28 +46,19 @@
       </button>
     </span>
   </div>
-  <form>
+  <form [formGroup]="editBreedModel">
     <div class="row g-3 align-items-end mt-4">
       <div class="col-md-4 mb-4">
         <span class="label1">Breed id</span>
         <input
           type="text"
-          value="BR-001"
+          [value]="BreedDetail.breedRef"
           class="input-felid"
-          [ngClass]="{ 'input-disable': isReadOnly }"
+          [readonly]="true"
           placeholder="Enter breed id..."
         />
       </div>
-      <div class="col-md-4 mb-4 position-relative">
-        <span class="label1">type</span>
-        <input
-          type="text"
-          value="COW"
-          class="input-felid"
-          [ngClass]="{ 'input-disable': isReadOnly }"
-          placeholder="Enter type..."
-        />
-      </div>
+
       <div class="col-md-4 mb-4">
         <span class="label1">breed name</span>
         <input
@@ -78,7 +67,22 @@
           class="input-felid"
           [ngClass]="{ 'input-disable': isReadOnly }"
           placeholder="Enter breed name..."
+          formControlName="name"
         />
+      </div>
+      <div class="col-md-4 mb-4 position-relative">
+        <span class="label"
+          >Animal Type<span class="required-icon">*</span>
+        </span>
+        <div class="alt-dropdown" [ngClass]="{ 'input-disable': isReadOnly }">
+          <p-select
+            [options]="AnimalTypes"
+            optionLabel="type"
+            optionValue="id"
+            formControlName="animalTypeId"
+            placeholder="Animal Type"
+          ></p-select>
+        </div>
       </div>
       <div class="col-md-4 mb-4 position-relative">
         <span class="label1">origin</span>
@@ -88,6 +92,7 @@
           class="input-felid"
           [ngClass]="{ 'input-disable': isReadOnly }"
           placeholder="Enter origin..."
+          formControlName="origin"
         />
       </div>
       <div class="col-md-12 mb-4">
@@ -98,6 +103,7 @@
           class="input-felid"
           [ngClass]="{ 'input-disable': isReadOnly }"
           placeholder="Enter note..."
+          formControlName="note"
         />
       </div>
     </div>

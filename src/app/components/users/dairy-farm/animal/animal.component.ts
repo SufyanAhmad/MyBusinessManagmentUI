@@ -22,7 +22,6 @@ import { MasterService } from '../../../../services/master-service/master.servic
 import { AccountService } from '../../../../services/account-service/account.service';
 import { LoadingComponent } from '../../../loading/loading.component';
 import { DataNotFoundComponent } from '../../../data-not-found/data-not-found.component';
-import { SuperAdminService } from '../../../../services/super-admin-service/super-admin.service';
 import { AnimalModel } from '../../../../models/dairy-farm-model/dairy-farm-model';
 import { DairyFarmService } from '../../../../services/dairy-farm.service';
 
@@ -90,7 +89,6 @@ export class AnimalComponent {
     private dairyFarmService: DairyFarmService,
     private masterService: MasterService,
     private accountService: AccountService,
-    private superAdminService: SuperAdminService,
     private messageService: MessageService,
     private formBuilder: FormBuilder,
     private router: Router
@@ -192,7 +190,7 @@ export class AnimalComponent {
 
   addAnimal() {
     this.addLoading = true;
-    this.superAdminService.addAnimal(this.addAnimalModel.value).subscribe(
+    this.dairyFarmService.addAnimal(this.addAnimalModel.value).subscribe(
       (dt) => {
         this.addLoading = false;
         this.visible = false;
@@ -309,6 +307,7 @@ export class AnimalComponent {
   }
   ResetFilter() {
     this.searchKey = null;
+    this.businessUnitId = null;
     this.ngAfterViewInit();
   }
 }
