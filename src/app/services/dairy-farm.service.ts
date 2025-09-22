@@ -93,4 +93,40 @@ export class DairyFarmService {
         })
       );
   }
+  addFeed(data: any) {
+    return this.repositoryService.post('Feed/add-feed', data, true).pipe(
+      map((response: any) => {
+        return response;
+      })
+    );
+  }
+  GetFeedDetail(id: any) {
+    return this.repositoryService.get('Feed/get-feed/' + id, true).pipe(
+      map((response: any) => {
+        return response;
+      })
+    );
+  }
+  UpdateFeedDetail(id: any, data: any) {
+    return this.repositoryService
+      .putWithOutFile('Feed/update-feed/' + id, data)
+      .pipe(
+        map((response: any) => {
+          return response;
+        })
+      );
+  }
+  getMilkProductionBySearchFilter(data: any) {
+    return this.repositoryService
+      .post(
+        'MilkProduction/get-milkProduction-by-search-and-filter-with-pagination',
+        data,
+        true
+      )
+      .pipe(
+        map((response: any) => {
+          return response;
+        })
+      );
+  }
 }

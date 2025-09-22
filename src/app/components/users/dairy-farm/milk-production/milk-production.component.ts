@@ -7,7 +7,7 @@ import { MatSort, MatSortModule } from '@angular/material/sort';
 import { SelectModule } from 'primeng/select';
 import { DialogModule } from 'primeng/dialog';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { catchError, map, merge, startWith, switchMap, tap } from 'rxjs';
+import { catchError, map, merge, of, startWith, switchMap, tap } from 'rxjs';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { SkeletonModule } from 'primeng/skeleton';
@@ -17,7 +17,11 @@ import { MasterService } from '../../../../services/master-service/master.servic
 import { AccountService } from '../../../../services/account-service/account.service';
 import { LoadingComponent } from '../../../loading/loading.component';
 import { DataNotFoundComponent } from '../../../data-not-found/data-not-found.component';
-import { StockOutModel } from '../../../../models/dairy-farm-model/dairy-farm-model';
+import {
+  MilkProductionModel,
+  StockOutModel,
+} from '../../../../models/dairy-farm-model/dairy-farm-model';
+import { DairyFarmService } from '../../../../services/dairy-farm.service';
 
 @Component({
   selector: 'app-milk-production',
@@ -43,7 +47,7 @@ import { StockOutModel } from '../../../../models/dairy-farm-model/dairy-farm-mo
 export class MilkProductionComponent {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
-  dataSource!: MatTableDataSource<StockOutModel>;
+  dataSource!: MatTableDataSource<MilkProductionModel>;
   isRateLimitReached = false;
   isLoadingResults: any = false;
   loading: boolean = false;
@@ -51,7 +55,7 @@ export class MilkProductionComponent {
   searchKey: any = null;
   stockId: any = null;
   busUnitId: any = null;
-  stockOutList: StockOutModel[] = [];
+  MilkProductionList: MilkProductionModel[] = [];
   BusinessUnits: masterModal[] = [];
   businessUnitId: any = null;
   businessUnitName: any = '';
@@ -77,6 +81,7 @@ export class MilkProductionComponent {
     private coldStoreService: ColdStoreServiceService,
     private masterService: MasterService,
     private accountService: AccountService,
+    private dairyFarmService: DairyFarmService,
     private router: Router
   ) {}
   ngOnInit() {
@@ -86,100 +91,79 @@ export class MilkProductionComponent {
   }
   ngAfterViewInit() {
     setTimeout(() => {
-      this.getStocksOutList();
+      this.getMilkProductionList();
     }, 0);
   }
-  getStocksOutList() {
+  getMilkProductionList() {
     this.paginator.pageIndex = 0;
     this.paginator.page.observers = [];
-    this.stockOutList = [];
-    this.dataSource = new MatTableDataSource(this.stockOutList);
+    this.MilkProductionList = [];
+    this.dataSource = new MatTableDataSource(this.MilkProductionList);
+
     this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
+
     merge(this.paginator.page)
       .pipe(
         startWith({}),
         switchMap(() => {
           this.isLoadingResults = true;
-          this.stockOutList = [];
-          this.dataSource = new MatTableDataSource(this.stockOutList);
-
-          if (this.searchKey == null) {
-            this.searchKey = null;
-          }
-          if (this.stockId == undefined) {
-            this.stockId = null;
-          }
+          this.MilkProductionList = [];
+          this.dataSource = new MatTableDataSource(this.MilkProductionList);
 
           let data = {
-            searchKey: this.searchKey,
+            searchKey: this.searchKey || null,
             businessUnitId: this.busUnitId,
-            isActive: true,
-            from: null,
-            to: null,
-            stockId: this.stockId,
             pageNumber: this.paginator.pageIndex + 1,
             pageSize: 10,
           };
 
-          return this.coldStoreService.getStockOutBySearchFilter(data).pipe(
-            catchError((resp: any) => {
-              if (resp.status == 401) {
-                this.accountService.doLogout();
-                this.router.navigateByUrl('/');
-              }
-              return resp;
-            })
-          );
+          return this.dairyFarmService
+            .getMilkProductionBySearchFilter(data)
+            .pipe(
+              catchError((resp: any) => {
+                if (resp.status == 401) {
+                  this.accountService.doLogout();
+                  this.router.navigateByUrl('/');
+                }
+                return of(null);
+              })
+            );
         }),
-        map((data) => {
-          this.isRateLimitReached = data === null;
-          if (data === null) {
-            return [];
+        map((resp: any) => {
+          this.isRateLimitReached = resp === null;
+          if (!resp || !resp.data) {
+            return { list: [], totalCount: 0 };
           }
-          this.resultsLength = data.totalCount;
-          return data;
+          this.resultsLength = resp.data.totalCount || 0;
+          return resp.data;
         })
       )
       .subscribe(
         (data) => {
-          this.stockOutList = [];
-          // data.list.length
-          for (let a = 0; a < 5; a++) {
-            let stockOut: StockOutModel = {
-              // batchReference:data.list[a].batchReference,
-              // reference:data.list[a].reference,
-              // stockOutId: data.list[a].stockOutId,
-              // stockId: data.list[a].stockId,
-              // outQuantity: data.list[a].outQuantity,
-              // stockOutDate: data.list[a].stockOutDate,
-              // rentMonths : data.list[a].rentMonths,
-              // totalDays: data.list[a].totalDays,
-              // clientId: data.list[a].clientId,
-              // client: data.list[a].client,
-              // stockInDate: data.list[a].stockInDate,
-              // rentRate: data.list[a].rentRate,
-              // note:data.list[a].note,
-              // remainingStock:data.list[a].remainingStock,
-              // totalRentRate: data.list[a].totalRentRate,
-              batchReference: 'testing',
-              reference: 'testing',
-              stockOutId: 'testing',
-              stockId: 'testing',
-              outQuantity: 0,
-              stockOutDate: 'testing',
-              rentMonths: 0,
-              totalDays: 'testing',
-              clientId: 'testing',
-              client: 'testing',
-              stockInDate: 'testing',
-              rentRate: 0,
-              note: 'testing',
-              remainingStock: 0,
-              totalRentRate: 0,
-            };
-            this.stockOutList.push(stockOut);
+          this.MilkProductionList = [];
+          if (data.list && data.list.length > 0) {
+            for (let a = 0; a < data.list.length; a++) {
+              let stockOut: MilkProductionModel = {
+                updatedBy: data.list[a].updatedBy,
+                updatedAt: data.list[a].updatedAt,
+                milkProductionId: data.list[a].milkProductionId,
+                milkProductionRef: data.list[a].milkProductionRef,
+                animalRef: data.list[a].animalRef,
+                businessUnit: data.list[a].businessUnit,
+                createdBy: data.list[a].createdBy,
+                createdAt: data.list[a].createdAt,
+                animalId: data.list[a].animalId,
+                date: data.list[a].date,
+                morning: data.list[a].morning,
+                evening: data.list[a].evening,
+                total: data.list[a].total,
+                businessUnitId: data.list[a].businessUnitId,
+              };
+              this.MilkProductionList.push(stockOut);
+            }
           }
-          this.dataSource = new MatTableDataSource(this.stockOutList);
+
+          this.dataSource = new MatTableDataSource(this.MilkProductionList);
           this.isLoadingResults = false;
         },
         (error) => {
@@ -191,6 +175,7 @@ export class MilkProductionComponent {
         }
       );
   }
+
   addAnimal() {}
   SearchBySearchKey(event: any) {
     if (event.key != 'Enter') {

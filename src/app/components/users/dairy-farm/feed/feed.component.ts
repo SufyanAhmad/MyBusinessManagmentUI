@@ -82,6 +82,7 @@ export class FeedComponent {
     private accountService: AccountService,
     private dairyFarmService: DairyFarmService,
     private formBuilder: FormBuilder,
+    private messageService: MessageService,
     private router: Router
   ) {}
   ngOnInit() {
@@ -173,7 +174,36 @@ export class FeedComponent {
         }
       );
   }
-  addAnimal() {}
+  addFeed() {
+    this.addLoading = true;
+    this.dairyFarmService.addFeed(this.addFeedModel.value).subscribe(
+      (dt) => {
+        this.addLoading = false;
+        this.visible = false;
+        this.getFeedList();
+        this.addFeedModel.reset();
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Added',
+          detail: 'Feed added successfully',
+          life: 3000,
+        });
+      },
+      (error) => {
+        this.addLoading = false;
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: error.error.message,
+          life: 3000,
+        });
+        if (error.status == 401) {
+          this.accountService.doLogout();
+          this.router.navigateByUrl('/');
+        }
+      }
+    );
+  }
   SearchBySearchKey(event: any) {
     if (event.key != 'Enter') {
       if (this.searchKey == '' || this.searchKey == null) {
@@ -186,7 +216,7 @@ export class FeedComponent {
       animalId: [null, [Validators.required]],
       supplierId: [null, [Validators.required]],
       name: [null, [Validators.required]],
-      quantity: [0, [Validators.required]],
+      quantity: [, [Validators.required, Validators.pattern('^[0-9]*$')]],
       feedTime: [null, [Validators.required]],
       note: [null, [Validators.required]],
       businessUnitId: [null, [Validators.pattern]],
@@ -219,8 +249,8 @@ export class FeedComponent {
         this.AnimalList = [];
         for (let a = 0; a < dt.length; a++) {
           let _data: masterModal = {
-            id: dt[a].key,
-            type: dt[a].value,
+            id: dt[a].animalId,
+            type: dt[a].animalRef,
           };
           this.AnimalList.push(_data);
         }

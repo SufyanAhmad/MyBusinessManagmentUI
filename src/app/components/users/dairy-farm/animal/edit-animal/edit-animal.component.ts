@@ -176,6 +176,7 @@ export class EditAnimalComponent {
           // this.goBack();
           this.getAnimalDetails();
           this.editLoading = false;
+          this.isReadOnly = true;
         },
         (error) => {
           this.editLoading = false;

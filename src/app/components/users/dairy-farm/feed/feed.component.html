@@ -136,7 +136,7 @@
             mat-cell
             *matCellDef="let element"
             class="tableText-bold"
-            [routerLink]="['/dairyFarm/feed/', element.stockOutId]"
+            [routerLink]="['/dairyFarm/feed/', element.feedId]"
           >
             {{ element.feedRef }}
           </td>
@@ -253,7 +253,6 @@
         <div class="alt-dropdown">
           <p-select
             [options]="AnimalList"
-            [(ngModel)]="key"
             name="key"
             optionLabel="type"
             optionValue="id"
@@ -265,13 +264,10 @@
         </div>
       </div>
       <div class="col-6">
-        <span class="label"
-          >Animal ID<span class="required-icon">*</span>
-        </span>
+        <span class="label">Supplier<span class="required-icon">*</span> </span>
         <div class="alt-dropdown">
           <p-select
             [options]="SupplierList"
-            [(ngModel)]="key"
             name="key"
             optionLabel="type"
             optionValue="id"
@@ -284,7 +280,7 @@
       </div>
       <div class="col-6">
         <span class="label"
-          >Animal ID<span class="required-icon">*</span>
+          >Business unit<span class="required-icon">*</span>
         </span>
         <div class="alt-dropdown">
           <p-select
@@ -303,7 +299,7 @@
       <div class="col-6">
         <span class="label">Quantity<span class="required-icon">*</span></span>
         <input
-          type="text"
+          type="number"
           class="input-felid"
           placeholder="Enter quantity..."
           formControlName="quantity"
@@ -333,15 +329,24 @@
       <button (click)="visible = false" type="button" class="btn-discard">
         Discard
       </button>
-      <button type="button" class="btn-save">Save</button>
-      <!-- <button  type="button" (click)="(addAnimalModel.valid && !addLoading)?addAnimal():null"
-         [ngClass]="{
-        'btn-save': addAnimalModel.valid && !addLoading,
-        'btn-disable': addAnimalModel.invalid || addLoading
-           }"  >
-          Save &nbsp;
-           <span *ngIf="addLoading"  class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-        </button> -->
+      <!-- <button type="button" class="btn-save">Save</button> -->
+      <button
+        type="button"
+        (click)="addFeedModel.valid && !addLoading ? addFeed() : null"
+        [ngClass]="{
+          'btn-save': addFeedModel.valid && !addLoading,
+          'btn-disable': addFeedModel.invalid || addLoading
+        }"
+      >
+        Save &nbsp;
+        <span
+          *ngIf="addLoading"
+          class="spinner-border spinner-border-sm"
+          role="status"
+          aria-hidden="true"
+        ></span>
+      </button>
     </div>
   </form>
 </p-dialog>
+<p-toast></p-toast>

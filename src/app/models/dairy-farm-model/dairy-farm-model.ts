@@ -96,3 +96,19 @@ export interface FeedModel {
   note: String;
   businessUnitId: String;
 }
+export interface MilkProductionModel {
+  updatedBy: String;
+  updatedAt: String;
+  milkProductionId: String;
+  milkProductionRef: String;
+  animalRef: String;
+  businessUnit: String;
+  createdBy: String;
+  createdAt: String;
+  animalId: String;
+  date: String;
+  morning: Number;
+  evening: Number;
+  total: Number;
+  businessUnitId: String;
+}

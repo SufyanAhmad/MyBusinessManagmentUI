@@ -139,8 +139,9 @@ export class EditBreedComponent {
             detail: 'Breed updated successfully',
             life: 3000,
           });
-          this.goBack();
+          this.getBreedDetails();
           this.editLoading = false;
+          this.isReadOnly = true;
         },
         (error) => {
           this.editLoading = false;

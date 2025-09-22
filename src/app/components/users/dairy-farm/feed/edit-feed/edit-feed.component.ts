@@ -16,7 +16,8 @@ import { MasterService } from '../../../../../services/master-service/master.ser
 import { masterModal } from '../../../../../models/master-model/master-model';
 import { ColdStoreServiceService } from '../../../../../services/cold-store-service/cold-store-service.service';
 import { PoultryFarmService } from '../../../../../services/poultry-farm-service/poultry-farm.service';
-import { LiveStockModel } from '../../../../../models/dairy-farm-model/dairy-farm-model';
+import { FeedModel } from '../../../../../models/dairy-farm-model/dairy-farm-model';
+import { DairyFarmService } from '../../../../../services/dairy-farm.service';
 
 @Component({
   selector: 'app-edit-feed',
@@ -36,28 +37,58 @@ export class EditFeedComponent {
   isActive: boolean = false;
   loading: boolean = false;
   editLoading: boolean = false;
-  liveStockId: any = null;
+  feedId: any = null;
   businessUnitName: any = '';
   isArchived: boolean = false;
   businessUnitTypes: masterModal[] = [];
+  AnimalTypes: masterModal[] = [];
 
-  editLiveStockModel!: FormGroup;
-  liveStockDetail: LiveStockModel = {
-    livestockBatchId: '',
-    breed: '',
+  // editFeedModel!: FeedModel;
+  // liveStockDetail: LiveStockModel = {
+  //   livestockBatchId: '',
+  //   breed: '',
+  //   quantity: 0,
+  //   arrivalDate: '',
+  //   ageInDays: 0,
+  //   healthStatus: '',
+  //   businessUnitId: '',
+  // };
+  // constLiveStockDetail: LiveStockModel = {
+  //   livestockBatchId: '',
+  //   breed: '',
+  //   quantity: 0,
+  //   arrivalDate: '',
+  //   ageInDays: 0,
+  //   healthStatus: '',
+  //   businessUnitId: '',
+  // };
+  editFeedModel!: FormGroup;
+  FeedDetail: FeedModel = {
+    feedId: '',
+    feedRef: '',
+    animalRef: '',
+    supplierName: '',
+    businessUnit: '',
+    animalId: '',
+    supplierId: '',
+    name: '',
     quantity: 0,
-    arrivalDate: '',
-    ageInDays: 0,
-    healthStatus: '',
+    feedTime: '',
+    note: '',
     businessUnitId: '',
   };
-  constLiveStockDetail: LiveStockModel = {
-    livestockBatchId: '',
-    breed: '',
+  constFeedDetail: FeedModel = {
+    feedId: '',
+    feedRef: '',
+    animalRef: '',
+    supplierName: '',
+    businessUnit: '',
+    animalId: '',
+    supplierId: '',
+    name: '',
     quantity: 0,
-    arrivalDate: '',
-    ageInDays: 0,
-    healthStatus: '',
+    feedTime: '',
+    note: '',
     businessUnitId: '',
   };
   constructor(
@@ -68,38 +99,91 @@ export class EditFeedComponent {
     private messageService: MessageService,
     private accountService: AccountService,
     private masterService: MasterService,
-    private coldStoreService: ColdStoreServiceService
+    private coldStoreService: ColdStoreServiceService,
+    private dairyFarmService: DairyFarmService
   ) {}
   ngOnInit() {
-    this.liveStockId = this.route.snapshot.params['id'];
+    this.feedId = this.route.snapshot.params['id'];
     this.businessUnitName = localStorage.getItem('DF_businessUnit_Name');
 
     this.initForm();
-    //  this.getLiveStockDetails();
+    this.getBreedDetails();
+    this.loadAnimalTypes();
   }
-  getLiveStockDetails() {
+  // getLiveStockDetails() {
+  //   this.loading = true;
+  //   this.poultryFarmService.GetLiveStockDetail(this.liveStockId).subscribe(
+  //     (dt) => {
+  //       let data = dt;
+  //       this.isArchived = data.archived;
+  //       let arrDate = data.arrivalDate.split('T')[0];
+  //       this.liveStockDetail = {
+  //         livestockBatchId: data.livestockBatchId,
+  //         breed: data.breed,
+  //         quantity: data.quantity,
+  //         arrivalDate: arrDate,
+  //         ageInDays: data.ageInDays,
+  //         healthStatus: data.healthStatus,
+  //         businessUnitId: data.businessUnitId,
+  //       };
+  //       this.constLiveStockDetail = {
+  //         livestockBatchId: data.livestockBatchId,
+  //         breed: data.breed,
+  //         quantity: data.quantity,
+  //         arrivalDate: arrDate,
+  //         ageInDays: data.ageInDays,
+  //         healthStatus: data.healthStatus,
+  //         businessUnitId: data.businessUnitId,
+  //       };
+  //       this.initForm();
+  //       this.loadBusinessUnitTypes();
+  //       this.loading = false;
+  //     },
+  //     (error) => {
+  //       this.loading = false;
+  //       this.messageService.add({
+  //         severity: 'error',
+  //         summary: 'Error',
+  //         detail: error.message,
+  //         life: 4000,
+  //       });
+  //       if (error.status == 401) {
+  //         this.accountService.doLogout();
+  //       }
+  //     }
+  //   );
+  // }
+  getBreedDetails() {
     this.loading = true;
-    this.poultryFarmService.GetLiveStockDetail(this.liveStockId).subscribe(
+    this.dairyFarmService.GetFeedDetail(this.feedId).subscribe(
       (dt) => {
-        let data = dt;
-        this.isArchived = data.archived;
-        let arrDate = data.arrivalDate.split('T')[0];
-        this.liveStockDetail = {
-          livestockBatchId: data.livestockBatchId,
-          breed: data.breed,
+        let data = dt.data;
+        this.FeedDetail = {
+          feedId: data.feedId,
+          feedRef: data.feedRef,
+          animalId: data.animalId,
+          animalRef: data.animalRef,
+          supplierId: data.supplierId,
+          supplierName: data.supplierName,
+          businessUnit: data.businessUnit,
+          name: data.name,
           quantity: data.quantity,
-          arrivalDate: arrDate,
-          ageInDays: data.ageInDays,
-          healthStatus: data.healthStatus,
+          feedTime: data.feedTime,
+          note: data.note,
           businessUnitId: data.businessUnitId,
         };
-        this.constLiveStockDetail = {
-          livestockBatchId: data.livestockBatchId,
-          breed: data.breed,
+        this.constFeedDetail = {
+          feedId: data.feedId,
+          feedRef: data.feedRef,
+          animalId: data.animalId,
+          animalRef: data.animalRef,
+          supplierId: data.supplierId,
+          supplierName: data.supplierName,
+          businessUnit: data.businessUnit,
+          name: data.name,
           quantity: data.quantity,
-          arrivalDate: arrDate,
-          ageInDays: data.ageInDays,
-          healthStatus: data.healthStatus,
+          feedTime: data.feedTime,
+          note: data.note,
           businessUnitId: data.businessUnitId,
         };
         this.initForm();
@@ -120,48 +204,24 @@ export class EditFeedComponent {
       }
     );
   }
-  editLiveStockDetail() {
+  editFeedDetail() {
     this.editLoading = true;
-    this.poultryFarmService
-      .UpdateLiveStockDetail(this.liveStockId, this.editLiveStockModel.value)
+    this.dairyFarmService
+      .UpdateFeedDetail(this.feedId, this.editFeedModel.value)
       .subscribe(
         (dt) => {
           this.messageService.add({
             severity: 'success',
             summary: 'Updated',
-            detail: 'Live stock updated successfully',
+            detail: 'Feed updated successfully',
             life: 3000,
           });
-          this.goBack();
+          this.getBreedDetails();
           this.editLoading = false;
+          this.isReadOnly = true;
         },
         (error) => {
           this.editLoading = false;
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Error',
-            detail: error.message,
-            life: 3000,
-          });
-          if (error.status == 401) {
-            this.accountService.doLogout();
-          }
-        }
-      );
-  }
-  editArchiveStatus() {
-    this.coldStoreService
-      .updateArchiveStatus(this.liveStockId, this.isArchived)
-      .subscribe(
-        (dt) => {
-          this.messageService.add({
-            severity: 'success',
-            summary: 'Update',
-            detail: 'Cold store shelf change archived successfully',
-            life: 3000,
-          });
-        },
-        (error) => {
           this.messageService.add({
             severity: 'error',
             summary: 'Error',
@@ -175,43 +235,39 @@ export class EditFeedComponent {
       );
   }
   discardChanges() {
-    this.liveStockDetail = {
-      livestockBatchId: this.constLiveStockDetail.livestockBatchId,
-      businessUnitId: this.constLiveStockDetail.businessUnitId,
-      breed: this.constLiveStockDetail.breed,
-      quantity: this.constLiveStockDetail.quantity,
-      arrivalDate: this.constLiveStockDetail.arrivalDate,
-      ageInDays: this.constLiveStockDetail.ageInDays,
-      healthStatus: this.constLiveStockDetail.healthStatus,
+    this.FeedDetail = {
+      feedId: this.constFeedDetail.feedId,
+      feedRef: this.constFeedDetail.feedRef,
+      animalId: this.constFeedDetail.animalId,
+      animalRef: this.constFeedDetail.animalRef,
+      quantity: this.constFeedDetail.quantity,
+      supplierId: this.constFeedDetail.supplierId,
+      supplierName: this.constFeedDetail.supplierName,
+      name: this.constFeedDetail.name,
+      feedTime: this.constFeedDetail.feedTime,
+      note: this.constFeedDetail.note,
+      businessUnit: this.constFeedDetail.businessUnit,
+      businessUnitId: this.constFeedDetail.businessUnitId,
     };
     this.isReadOnly = true;
     this.initForm();
   }
   initForm() {
-    this.editLiveStockModel = this.formBuilder.group({
-      businessUnitId: [
-        this.liveStockDetail.businessUnitId,
-        [Validators.required],
-      ],
-      breed: [this.liveStockDetail.breed, [Validators.required]],
+    this.editFeedModel = this.formBuilder.group({
+      businessUnitId: [this.FeedDetail.businessUnitId, [Validators.required]],
+      animalId: [this.FeedDetail.animalId, [Validators.required]],
+      supplierId: [this.FeedDetail.supplierId, [Validators.required]],
+      name: [this.FeedDetail.name, [Validators.required]],
       quantity: [
-        this.liveStockDetail.quantity,
+        this.FeedDetail.quantity,
         [
           Validators.required,
           Validators.pattern('^[1-9][0-9]*$'),
           Validators.min(1),
         ],
       ],
-      arrivalDate: [this.liveStockDetail.arrivalDate, [Validators.required]],
-      ageInDays: [
-        this.liveStockDetail.ageInDays,
-        [
-          Validators.required,
-          Validators.pattern('^[1-9][0-9]*$'),
-          Validators.min(1),
-        ],
-      ],
-      healthStatus: [this.liveStockDetail.healthStatus, [Validators.required]],
+      feedTime: [this.FeedDetail.feedTime, [Validators.required]],
+      note: [this.FeedDetail.note, [Validators.required]],
     });
   }
   loadBusinessUnitTypes() {
@@ -234,11 +290,31 @@ export class EditFeedComponent {
       }
     );
   }
-  preventDecimal(event: KeyboardEvent) {
-    if (event.key === '.' || event.key === ',') {
-      event.preventDefault();
-    }
+  loadAnimalTypes() {
+    this.masterService.getAnimalTypes().subscribe(
+      (res) => {
+        let dt = res.data;
+        this.AnimalTypes = [];
+        for (let a = 0; a < dt.length; a++) {
+          let _data: masterModal = {
+            id: dt[a].key,
+            type: dt[a].value,
+          };
+          this.AnimalTypes.push(_data);
+        }
+      },
+      (error) => {
+        if (error.status == 401) {
+          this.accountService.doLogout();
+        }
+      }
+    );
   }
+  // preventDecimal(event: KeyboardEvent) {
+  //   if (event.key === '.' || event.key === ',') {
+  //     event.preventDefault();
+  //   }
+  // }
   goBack() {
     this.location.back();
   }
