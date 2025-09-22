@@ -97,18 +97,36 @@ export interface FeedModel {
   businessUnitId: String;
 }
 export interface MilkProductionModel {
-  updatedBy: String;
-  updatedAt: String;
-  milkProductionId: String;
-  milkProductionRef: String;
-  animalRef: String;
-  businessUnit: String;
-  createdBy: String;
-  createdAt: String;
+  updatedBy?: String;
+  updatedAt?: String;
+  milkProductionId?: String;
+  milkProductionRef?: String;
+  animalRef?: String;
+  businessUnit?: String;
+  createdBy?: String;
+  createdAt?: String;
   animalId: String;
   date: String;
   morning: Number;
   evening: Number;
   total: Number;
+  businessUnitId: String;
+}
+export interface PregnancyRecordModel {
+  updatedBy?: String;
+  updatedAt?: String;
+  pregnancyBirthRecordId?: String;
+  recordRef?: String;
+  animalRef?: String;
+  breedRef?: String;
+  businessUnit?: String;
+  createdBy?: String;
+  createdAt?: String;
+  animalId: String;
+  breedId: String;
+  pregnantDate: String;
+  expectedDelivery: String;
+  actualDelivery: String;
+  delivered: Boolean;
   businessUnitId: String;
 }

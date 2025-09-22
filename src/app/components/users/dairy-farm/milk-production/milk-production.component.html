@@ -136,7 +136,10 @@
             mat-cell
             *matCellDef="let element"
             class="tableText-bold"
-            [routerLink]="['/dairyFarm/milk-production/', element.stockOutId]"
+            [routerLink]="[
+              '/dairyFarm/milk-production/',
+              element.milkProductionId
+            ]"
           >
             {{ element.milkProductionRef }}
           </td>

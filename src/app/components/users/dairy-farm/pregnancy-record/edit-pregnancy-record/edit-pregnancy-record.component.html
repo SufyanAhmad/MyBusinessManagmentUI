@@ -31,13 +31,13 @@
       <button
         type="button"
         (click)="
-          editLiveStockModel.valid && !editLoading
+          editPregnancyRecordModel.valid && !editLoading
             ? editLiveStockDetail()
             : null
         "
         [ngClass]="{
-          'btn-save': editLiveStockModel.valid && !editLoading,
-          'btn-disable': editLiveStockModel.invalid || editLoading
+          'btn-save': editPregnancyRecordModel.valid && !editLoading,
+          'btn-disable': editPregnancyRecordModel.invalid || editLoading
         }"
       >
         Save &nbsp;
@@ -50,37 +50,49 @@
       </button>
     </span>
   </div>
-  <form>
+  <form [formGroup]="editPregnancyRecordModel">
     <div class="row g-3 align-items-end mt-4">
       <div class="col-md-4 mb-4">
         <span class="label1">Record id</span>
         <input
           type="text"
-          value="BR-001"
+          [value]="PregnancyRecordDetail.recordRef"
           class="input-felid"
-          [ngClass]="{ 'input-disable': isReadOnly }"
+          [readonly]="true"
           placeholder="Enter breed id..."
         />
       </div>
       <div class="col-md-4 mb-4 position-relative">
-        <span class="label1">Animal id</span>
-        <input
-          type="text"
-          value="COW"
-          class="input-felid"
-          [ngClass]="{ 'input-disable': isReadOnly }"
-          placeholder="Enter type..."
-        />
+        <span class="label"
+          >Animal ID<span class="required-icon">*</span>
+        </span>
+        <div class="alt-dropdown" [ngClass]="{ 'input-disable': isReadOnly }">
+          <p-select
+            [options]="AnimalList"
+            name="key"
+            optionLabel="type"
+            optionValue="id"
+            [showClear]="true"
+            placeholder="Animal "
+            formControlName="animalId"
+          />
+        </div>
       </div>
       <div class="col-md-4 mb-4 position-relative">
-        <span class="label1">breed id</span>
-        <input
-          type="text"
-          value="COW"
-          class="input-felid"
-          [ngClass]="{ 'input-disable': isReadOnly }"
-          placeholder="Enter type..."
-        />
+        <span class="label">Breed ID<span class="required-icon">*</span> </span>
+        <div class="alt-dropdown" [ngClass]="{ 'input-disable': isReadOnly }">
+          <p-select
+            [options]="Breeds"
+            [(ngModel)]="breedId"
+            name="breedId"
+            optionLabel="type"
+            optionValue="id"
+            (onChange)="ngAfterViewInit()"
+            [showClear]="true"
+            placeholder="Breeds"
+            formControlName="breedId"
+          />
+        </div>
       </div>
       <div class="col-md-4 mb-4">
         <span class="label1">PREGNANT DATE</span>
@@ -90,6 +102,7 @@
           class="input-felid custom-date"
           [ngClass]="{ 'input-disable': isReadOnly }"
           placeholder="Enter breed name..."
+          formControlName="pregnantDate"
         />
       </div>
       <div class="col-md-4 mb-4">
@@ -100,6 +113,7 @@
           class="input-felid custom-date"
           [ngClass]="{ 'input-disable': isReadOnly }"
           placeholder="Enter breed name..."
+          formControlName="expectedDelivery"
         />
       </div>
       <div class="col-md-4 mb-4">
@@ -110,17 +124,45 @@
           class="input-felid custom-date"
           [ngClass]="{ 'input-disable': isReadOnly }"
           placeholder="Enter breed name..."
+          formControlName="actualDelivery"
         />
       </div>
       <div class="col-md-4 mb-4 position-relative">
-        <span class="label1">STATUS</span>
+        <div class="mt-3" style="display: flex">
+          <div style="display: flex">
+            <span class="label"> Pending</span>
+            <span
+              ><input
+                class="form-check-input"
+                type="radio"
+                name="delivered"
+                [value]="false"
+                [(ngModel)]="delivered"
+                formControlName="delivered"
+            /></span>
+          </div>
+          <div style="display: flex">
+            <span class="label" style="margin-left: 25px">Delivered</span>
+            <span
+              ><input
+                class="form-check-input"
+                type="radio"
+                name="delivered"
+                [value]="true"
+                [(ngModel)]="delivered"
+                formControlName="delivered"
+            /></span>
+          </div>
+        </div>
+
+        <!-- <span class="label1">STATUS</span>
         <input
           type="text"
           value="PAKISTAN"
           class="input-felid"
           [ngClass]="{ 'input-disable': isReadOnly }"
           placeholder="Enter origin..."
-        />
+        /> -->
       </div>
     </div>
   </form>

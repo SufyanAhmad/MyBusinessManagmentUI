@@ -31,13 +31,13 @@
       <button
         type="button"
         (click)="
-          editLiveStockModel.valid && !editLoading
+          editMilkProductionModel.valid && !editLoading
             ? editLiveStockDetail()
             : null
         "
         [ngClass]="{
-          'btn-save': editLiveStockModel.valid && !editLoading,
-          'btn-disable': editLiveStockModel.invalid || editLoading
+          'btn-save': editMilkProductionModel.valid && !editLoading,
+          'btn-disable': editMilkProductionModel.invalid || editLoading
         }"
       >
         Save &nbsp;
@@ -50,19 +50,35 @@
       </button>
     </span>
   </div>
-  <form>
+  <form [formGroup]="editMilkProductionModel">
     <div class="row g-3 align-items-end mt-4">
       <div class="col-md-4 mb-4">
         <span class="label1">Record id</span>
         <input
           type="text"
-          value="BR-001"
           class="input-felid"
-          [ngClass]="{ 'input-disable': isReadOnly }"
+          [readonly]="true"
           placeholder="Enter breed id..."
+          [value]="MilkProductionDetail.milkProductionRef"
         />
       </div>
       <div class="col-md-4 mb-4 position-relative">
+        <span class="label"
+          >Animal ID<span class="required-icon">*</span>
+        </span>
+        <div class="alt-dropdown" [ngClass]="{ 'input-disable': isReadOnly }">
+          <p-select
+            [options]="AnimalList"
+            name="key"
+            optionLabel="type"
+            optionValue="id"
+            [showClear]="true"
+            placeholder="Animal "
+            formControlName="animalId"
+          />
+        </div>
+      </div>
+      <!-- <div class="col-md-4 mb-4 position-relative">
         <span class="label1">Animal id</span>
         <input
           type="text"
@@ -70,8 +86,9 @@
           class="input-felid"
           [ngClass]="{ 'input-disable': isReadOnly }"
           placeholder="Enter type..."
+          formControlName="animalId"
         />
-      </div>
+      </div> -->
       <div class="col-md-4 mb-4">
         <span class="label1">Date</span>
         <input
@@ -80,6 +97,7 @@
           class="input-felid custom-date"
           [ngClass]="{ 'input-disable': isReadOnly }"
           placeholder="Enter breed name..."
+          formControlName="date"
         />
       </div>
       <div class="col-md-4 mb-4 position-relative">
@@ -90,6 +108,7 @@
           class="input-felid"
           [ngClass]="{ 'input-disable': isReadOnly }"
           placeholder="Enter origin..."
+          formControlName="morning"
         />
       </div>
       <div class="col-md-4 mb-4 position-relative">
@@ -100,6 +119,7 @@
           class="input-felid"
           [ngClass]="{ 'input-disable': isReadOnly }"
           placeholder="Enter origin..."
+          formControlName="evening"
         />
       </div>
       <div class="col-md-4 mb-4">
@@ -110,6 +130,7 @@
           class="input-felid"
           [ngClass]="{ 'input-disable': isReadOnly }"
           placeholder="Enter note..."
+          formControlName="total"
         />
       </div>
     </div>

@@ -16,7 +16,11 @@ import { MasterService } from '../../../../../services/master-service/master.ser
 import { masterModal } from '../../../../../models/master-model/master-model';
 import { ColdStoreServiceService } from '../../../../../services/cold-store-service/cold-store-service.service';
 import { PoultryFarmService } from '../../../../../services/poultry-farm-service/poultry-farm.service';
-import { LiveStockModel } from '../../../../../models/dairy-farm-model/dairy-farm-model';
+import {
+  LiveStockModel,
+  PregnancyRecordModel,
+} from '../../../../../models/dairy-farm-model/dairy-farm-model';
+import { DairyFarmService } from '../../../../../services/dairy-farm.service';
 @Component({
   selector: 'app-edit-pregnancy-record',
   imports: [
@@ -35,28 +39,52 @@ export class EditPregnancyRecordComponent {
   isActive: boolean = false;
   loading: boolean = false;
   editLoading: boolean = false;
-  liveStockId: any = null;
+  pregnancyBirthRecordId: any = null;
   businessUnitName: any = '';
   isArchived: boolean = false;
-  businessUnitTypes: masterModal[] = [];
+  BusinessUnits: masterModal[] = [];
+  AnimalList: masterModal[] = [];
+  Breeds: masterModal[] = [];
+  businessUnitId: any = null;
+  delivered: boolean = true;
+  breedId: any = null;
 
-  editLiveStockModel!: FormGroup;
-  liveStockDetail: LiveStockModel = {
-    livestockBatchId: '',
-    breed: '',
-    quantity: 0,
-    arrivalDate: '',
-    ageInDays: 0,
-    healthStatus: '',
+  editPregnancyRecordModel!: FormGroup;
+
+  PregnancyRecordDetail: PregnancyRecordModel = {
+    updatedBy: '',
+    updatedAt: '',
+    pregnancyBirthRecordId: '',
+    recordRef: '',
+    animalRef: '',
+    breedRef: '',
+    businessUnit: '',
+    createdBy: '',
+    createdAt: '',
+    animalId: '',
+    breedId: '',
+    pregnantDate: '',
+    expectedDelivery: '',
+    actualDelivery: '',
+    delivered: true,
     businessUnitId: '',
   };
-  constLiveStockDetail: LiveStockModel = {
-    livestockBatchId: '',
-    breed: '',
-    quantity: 0,
-    arrivalDate: '',
-    ageInDays: 0,
-    healthStatus: '',
+  constPregnancyRecord: PregnancyRecordModel = {
+    updatedBy: '',
+    updatedAt: '',
+    pregnancyBirthRecordId: '',
+    recordRef: '',
+    animalRef: '',
+    breedRef: '',
+    businessUnit: '',
+    createdBy: '',
+    createdAt: '',
+    animalId: '',
+    breedId: '',
+    pregnantDate: '',
+    expectedDelivery: '',
+    actualDelivery: '',
+    delivered: true,
     businessUnitId: '',
   };
   constructor(
@@ -66,73 +94,108 @@ export class EditPregnancyRecordComponent {
     private poultryFarmService: PoultryFarmService,
     private messageService: MessageService,
     private accountService: AccountService,
+    private dairyFarmService: DairyFarmService,
     private masterService: MasterService,
     private coldStoreService: ColdStoreServiceService
   ) {}
   ngOnInit() {
-    this.liveStockId = this.route.snapshot.params['id'];
+    this.pregnancyBirthRecordId = this.route.snapshot.params['id'];
     this.businessUnitName = localStorage.getItem('DF_businessUnit_Name');
 
     this.initForm();
-    //  this.getLiveStockDetails();
+    this.getPregnancyRecordDetails();
+    this.loadAnimal();
+    this.loadBreeds();
+    this.loadBusinessUnits();
   }
-  getLiveStockDetails() {
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.getPregnancyRecordDetails();
+    }, 0);
+  }
+  getPregnancyRecordDetails() {
     this.loading = true;
-    this.poultryFarmService.GetLiveStockDetail(this.liveStockId).subscribe(
-      (dt) => {
-        let data = dt;
-        this.isArchived = data.archived;
-        let arrDate = data.arrivalDate.split('T')[0];
-        this.liveStockDetail = {
-          livestockBatchId: data.livestockBatchId,
-          breed: data.breed,
-          quantity: data.quantity,
-          arrivalDate: arrDate,
-          ageInDays: data.ageInDays,
-          healthStatus: data.healthStatus,
-          businessUnitId: data.businessUnitId,
-        };
-        this.constLiveStockDetail = {
-          livestockBatchId: data.livestockBatchId,
-          breed: data.breed,
-          quantity: data.quantity,
-          arrivalDate: arrDate,
-          ageInDays: data.ageInDays,
-          healthStatus: data.healthStatus,
-          businessUnitId: data.businessUnitId,
-        };
-        this.initForm();
-        this.loadBusinessUnitTypes();
-        this.loading = false;
-      },
-      (error) => {
-        this.loading = false;
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: error.message,
-          life: 4000,
-        });
-        if (error.status == 401) {
-          this.accountService.doLogout();
+    this.dairyFarmService
+      .GetPregnancyRecordDetail(this.pregnancyBirthRecordId)
+      .subscribe(
+        (dt) => {
+          let data = dt.data;
+          this.isArchived = data.archived;
+          let createdDate = data.createdAt?.split('T')[0];
+          let pregnantDate = data.pregnantDate?.split('T')[0];
+          let expectedDelivery = data.expectedDelivery?.split('T')[0];
+          let actualDelivery = data.actualDelivery?.split('T')[0];
+          this.PregnancyRecordDetail = {
+            updatedBy: data.updatedBy,
+            updatedAt: data.updatedAt,
+            pregnancyBirthRecordId: data.pregnancyBirthRecordId,
+            recordRef: data.recordRef,
+            animalRef: data.animalRef,
+            breedRef: data.breedRef,
+            businessUnit: data.businessUnit,
+            createdBy: data.createdBy,
+            createdAt: createdDate,
+            animalId: data.animalId,
+            breedId: data.breedId,
+            pregnantDate: pregnantDate,
+            expectedDelivery: expectedDelivery,
+            actualDelivery: actualDelivery,
+            delivered: data.delivered,
+            businessUnitId: data.businessUnitId,
+          };
+          this.constPregnancyRecord = {
+            updatedBy: data.updatedBy,
+            updatedAt: data.updatedAt,
+            pregnancyBirthRecordId: data.pregnancyBirthRecordId,
+            recordRef: data.recordRef,
+            animalRef: data.animalRef,
+            breedRef: data.breedRef,
+            businessUnit: data.businessUnit,
+            createdBy: data.createdBy,
+            createdAt: createdDate,
+            animalId: data.animalId,
+            breedId: data.breedId,
+            pregnantDate: pregnantDate,
+            expectedDelivery: expectedDelivery,
+            actualDelivery: actualDelivery,
+            delivered: data.delivered,
+            businessUnitId: data.businessUnitId,
+          };
+          this.initForm();
+          this.loading = false;
+        },
+        (error) => {
+          this.loading = false;
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: error.message,
+            life: 4000,
+          });
+          if (error.status == 401) {
+            this.accountService.doLogout();
+          }
         }
-      }
-    );
+      );
   }
   editLiveStockDetail() {
     this.editLoading = true;
-    this.poultryFarmService
-      .UpdateLiveStockDetail(this.liveStockId, this.editLiveStockModel.value)
+    this.dairyFarmService
+      .UpdatePregnancyRecordDetail(
+        this.pregnancyBirthRecordId,
+        this.editPregnancyRecordModel.value
+      )
       .subscribe(
         (dt) => {
           this.messageService.add({
             severity: 'success',
             summary: 'Updated',
-            detail: 'Live stock updated successfully',
+            detail: 'Pregnancy Record updated successfully',
             life: 3000,
           });
-          this.goBack();
+          this.getPregnancyRecordDetails();
           this.editLoading = false;
+          this.isReadOnly = true;
         },
         (error) => {
           this.editLoading = false;
@@ -150,7 +213,7 @@ export class EditPregnancyRecordComponent {
   }
   editArchiveStatus() {
     this.coldStoreService
-      .updateArchiveStatus(this.liveStockId, this.isArchived)
+      .updateArchiveStatus(this.pregnancyBirthRecordId, this.isArchived)
       .subscribe(
         (dt) => {
           this.messageService.add({
@@ -174,56 +237,92 @@ export class EditPregnancyRecordComponent {
       );
   }
   discardChanges() {
-    this.liveStockDetail = {
-      livestockBatchId: this.constLiveStockDetail.livestockBatchId,
-      businessUnitId: this.constLiveStockDetail.businessUnitId,
-      breed: this.constLiveStockDetail.breed,
-      quantity: this.constLiveStockDetail.quantity,
-      arrivalDate: this.constLiveStockDetail.arrivalDate,
-      ageInDays: this.constLiveStockDetail.ageInDays,
-      healthStatus: this.constLiveStockDetail.healthStatus,
+    this.PregnancyRecordDetail = {
+      animalId: this.constPregnancyRecord.animalId,
+      breedId: this.constPregnancyRecord.breedId,
+      pregnantDate: this.constPregnancyRecord.pregnantDate,
+      expectedDelivery: this.constPregnancyRecord.expectedDelivery,
+      actualDelivery: this.constPregnancyRecord.actualDelivery,
+      delivered: this.constPregnancyRecord.delivered,
+      businessUnitId: this.constPregnancyRecord.businessUnitId,
     };
     this.isReadOnly = true;
     this.initForm();
   }
   initForm() {
-    this.editLiveStockModel = this.formBuilder.group({
-      businessUnitId: [
-        this.liveStockDetail.businessUnitId,
+    this.editPregnancyRecordModel = this.formBuilder.group({
+      animalId: [this.PregnancyRecordDetail.animalId, [Validators.required]],
+      breedId: [this.PregnancyRecordDetail.breedId, [Validators.required]],
+      pregnantDate: [
+        this.PregnancyRecordDetail.pregnantDate,
         [Validators.required],
       ],
-      breed: [this.liveStockDetail.breed, [Validators.required]],
-      quantity: [
-        this.liveStockDetail.quantity,
-        [
-          Validators.required,
-          Validators.pattern('^[1-9][0-9]*$'),
-          Validators.min(1),
-        ],
+      expectedDelivery: [
+        this.PregnancyRecordDetail.expectedDelivery,
+        [Validators.required],
       ],
-      arrivalDate: [this.liveStockDetail.arrivalDate, [Validators.required]],
-      ageInDays: [
-        this.liveStockDetail.ageInDays,
-        [
-          Validators.required,
-          Validators.pattern('^[1-9][0-9]*$'),
-          Validators.min(1),
-        ],
+      actualDelivery: [
+        this.PregnancyRecordDetail.actualDelivery,
+        [Validators.required],
       ],
-      healthStatus: [this.liveStockDetail.healthStatus, [Validators.required]],
+      delivered: [this.PregnancyRecordDetail.delivered, [Validators.required]],
+      businessUnitId: [
+        this.PregnancyRecordDetail.businessUnitId,
+        [Validators.required],
+      ],
     });
   }
-  loadBusinessUnitTypes() {
-    this.masterService.getBusinessUnitTypes().subscribe(
+  loadBusinessUnits() {
+    this.masterService.getBusinessUnitTypesById(3).subscribe(
       (res) => {
         var dt = res;
-        this.businessUnitTypes = [];
+        this.BusinessUnits = [];
         for (let a = 0; a < dt.length; a++) {
           let _data: masterModal = {
             id: dt[a].businessUnitId,
             type: dt[a].name,
           };
-          this.businessUnitTypes.push(_data);
+          this.BusinessUnits.push(_data);
+        }
+      },
+      (error) => {
+        if (error.status == 401) {
+          this.accountService.doLogout();
+        }
+      }
+    );
+  }
+  loadAnimal() {
+    this.masterService.getAnimal().subscribe(
+      (res) => {
+        let dt = res.data;
+        this.AnimalList = [];
+        for (let a = 0; a < dt.length; a++) {
+          let _data: masterModal = {
+            id: dt[a].animalId,
+            type: dt[a].animalRef,
+          };
+          this.AnimalList.push(_data);
+        }
+      },
+      (error) => {
+        if (error.status == 401) {
+          this.accountService.doLogout();
+        }
+      }
+    );
+  }
+  loadBreeds() {
+    this.masterService.getBreeds().subscribe(
+      (res) => {
+        var dt = res.data;
+        this.Breeds = [];
+        for (let a = 0; a < dt.length; a++) {
+          let _data: masterModal = {
+            id: dt[a].breedId,
+            type: dt[a].breedRef,
+          };
+          this.Breeds.push(_data);
         }
       },
       (error) => {

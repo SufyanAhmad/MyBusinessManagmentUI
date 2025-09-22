@@ -129,4 +129,66 @@ export class DairyFarmService {
         })
       );
   }
+  GetMilkProductionDetail(id: any) {
+    return this.repositoryService
+      .get('MilkProduction/get-milkProduction/' + id, true)
+      .pipe(
+        map((response: any) => {
+          return response;
+        })
+      );
+  }
+  UpdateMilkProductionDetail(id: any, data: any) {
+    return this.repositoryService
+      .putWithOutFile('MilkProduction/update-milkProduction/' + id, data)
+      .pipe(
+        map((response: any) => {
+          return response;
+        })
+      );
+  }
+
+  getPregnancyRecordBySearchFilter(data: any) {
+    return this.repositoryService
+      .post(
+        'PregnancyBirthRecord/get-pregnancyBirthRecord-by-search-and-filter-with-pagination',
+        data,
+        true
+      )
+      .pipe(
+        map((response: any) => {
+          return response;
+        })
+      );
+  }
+  addPregnancyRecord(data: any) {
+    return this.repositoryService
+      .post('PregnancyBirthRecord/add-pregnancyBirthRecord', data, true)
+      .pipe(
+        map((response: any) => {
+          return response;
+        })
+      );
+  }
+  GetPregnancyRecordDetail(id: any) {
+    return this.repositoryService
+      .get('PregnancyBirthRecord/get-pregnancyBirthRecord/' + id, true)
+      .pipe(
+        map((response: any) => {
+          return response;
+        })
+      );
+  }
+  UpdatePregnancyRecordDetail(id: any, data: any) {
+    return this.repositoryService
+      .putWithOutFile(
+        'PregnancyBirthRecord/update-pregnancyBirthRecord/' + id,
+        data
+      )
+      .pipe(
+        map((response: any) => {
+          return response;
+        })
+      );
+  }
 }

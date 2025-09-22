@@ -16,7 +16,8 @@ import { MasterService } from '../../../../../services/master-service/master.ser
 import { masterModal } from '../../../../../models/master-model/master-model';
 import { ColdStoreServiceService } from '../../../../../services/cold-store-service/cold-store-service.service';
 import { PoultryFarmService } from '../../../../../services/poultry-farm-service/poultry-farm.service';
-import { LiveStockModel } from '../../../../../models/dairy-farm-model/dairy-farm-model';
+import { MilkProductionModel } from '../../../../../models/dairy-farm-model/dairy-farm-model';
+import { DairyFarmService } from '../../../../../services/dairy-farm.service';
 
 @Component({
   selector: 'app-edit-milk-production',
@@ -36,28 +37,43 @@ export class EditMilkProductionComponent {
   isActive: boolean = false;
   loading: boolean = false;
   editLoading: boolean = false;
-  liveStockId: any = null;
+  milkProductionId: any = null;
   businessUnitName: any = '';
   isArchived: boolean = false;
   businessUnitTypes: masterModal[] = [];
+  AnimalList: masterModal[] = [];
 
-  editLiveStockModel!: FormGroup;
-  liveStockDetail: LiveStockModel = {
-    livestockBatchId: '',
-    breed: '',
-    quantity: 0,
-    arrivalDate: '',
-    ageInDays: 0,
-    healthStatus: '',
+  editMilkProductionModel!: FormGroup;
+  MilkProductionDetail: MilkProductionModel = {
+    updatedBy: '',
+    updatedAt: '',
+    milkProductionId: '',
+    milkProductionRef: '',
+    animalRef: '',
+    businessUnit: '',
+    createdBy: '',
+    createdAt: '',
+    animalId: '',
+    date: '',
+    morning: 0,
+    evening: 0,
+    total: 0,
     businessUnitId: '',
   };
-  constLiveStockDetail: LiveStockModel = {
-    livestockBatchId: '',
-    breed: '',
-    quantity: 0,
-    arrivalDate: '',
-    ageInDays: 0,
-    healthStatus: '',
+  constMilkProductionDetail: MilkProductionModel = {
+    updatedBy: '',
+    updatedAt: '',
+    milkProductionId: '',
+    milkProductionRef: '',
+    animalRef: '',
+    businessUnit: '',
+    createdBy: '',
+    createdAt: '',
+    animalId: '',
+    date: '',
+    morning: 0,
+    evening: 0,
+    total: 0,
     businessUnitId: '',
   };
   constructor(
@@ -68,72 +84,94 @@ export class EditMilkProductionComponent {
     private messageService: MessageService,
     private accountService: AccountService,
     private masterService: MasterService,
-    private coldStoreService: ColdStoreServiceService
+    private coldStoreService: ColdStoreServiceService,
+    private dairyFarmService: DairyFarmService
   ) {}
   ngOnInit() {
-    this.liveStockId = this.route.snapshot.params['id'];
+    this.milkProductionId = this.route.snapshot.params['id'];
     this.businessUnitName = localStorage.getItem('DF_businessUnit_Name');
 
     this.initForm();
-    //  this.getLiveStockDetails();
+    this.getMilkProductionDetails();
+    this.loadAnimal();
   }
-  getLiveStockDetails() {
+  getMilkProductionDetails() {
     this.loading = true;
-    this.poultryFarmService.GetLiveStockDetail(this.liveStockId).subscribe(
-      (dt) => {
-        let data = dt;
-        this.isArchived = data.archived;
-        let arrDate = data.arrivalDate.split('T')[0];
-        this.liveStockDetail = {
-          livestockBatchId: data.livestockBatchId,
-          breed: data.breed,
-          quantity: data.quantity,
-          arrivalDate: arrDate,
-          ageInDays: data.ageInDays,
-          healthStatus: data.healthStatus,
-          businessUnitId: data.businessUnitId,
-        };
-        this.constLiveStockDetail = {
-          livestockBatchId: data.livestockBatchId,
-          breed: data.breed,
-          quantity: data.quantity,
-          arrivalDate: arrDate,
-          ageInDays: data.ageInDays,
-          healthStatus: data.healthStatus,
-          businessUnitId: data.businessUnitId,
-        };
-        this.initForm();
-        this.loadBusinessUnitTypes();
-        this.loading = false;
-      },
-      (error) => {
-        this.loading = false;
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: error.message,
-          life: 4000,
-        });
-        if (error.status == 401) {
-          this.accountService.doLogout();
+    this.dairyFarmService
+      .GetMilkProductionDetail(this.milkProductionId)
+      .subscribe(
+        (dt) => {
+          let data = dt.data;
+          let arrDate = data.date.split('T')[0];
+          this.MilkProductionDetail = {
+            updatedBy: data.updatedBy,
+            updatedAt: data.updatedAt,
+            milkProductionId: data.milkProductionId,
+            milkProductionRef: data.milkProductionRef,
+            animalRef: data.updatedAt,
+            businessUnit: data.updatedAt,
+            createdBy: data.createdBy,
+            createdAt: data.createdAt,
+            animalId: data.animalId,
+            date: arrDate,
+            morning: data.morning,
+            evening: data.evening,
+            total: data.total,
+            businessUnitId: data.businessUnitId,
+          };
+          this.constMilkProductionDetail = {
+            updatedBy: data.updatedBy,
+            updatedAt: data.updatedAt,
+            milkProductionId: data.milkProductionId,
+            milkProductionRef: data.milkProductionRef,
+            animalRef: data.updatedAt,
+            businessUnit: data.updatedAt,
+            createdBy: data.createdBy,
+            createdAt: data.createdAt,
+            animalId: data.animalId,
+            date: arrDate,
+            morning: data.morning,
+            evening: data.evening,
+            total: data.total,
+            businessUnitId: data.businessUnitId,
+          };
+          this.initForm();
+          this.loadBusinessUnitTypes();
+          this.loading = false;
+        },
+        (error) => {
+          this.loading = false;
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: error.message,
+            life: 4000,
+          });
+          if (error.status == 401) {
+            this.accountService.doLogout();
+          }
         }
-      }
-    );
+      );
   }
   editLiveStockDetail() {
     this.editLoading = true;
-    this.poultryFarmService
-      .UpdateLiveStockDetail(this.liveStockId, this.editLiveStockModel.value)
+    this.dairyFarmService
+      .UpdateMilkProductionDetail(
+        this.milkProductionId,
+        this.editMilkProductionModel.value
+      )
       .subscribe(
         (dt) => {
           this.messageService.add({
             severity: 'success',
             summary: 'Updated',
-            detail: 'Live stock updated successfully',
+            detail: 'Milk Production updated successfully',
             life: 3000,
           });
-          this.goBack();
+          // this.goBack();
+          this.getMilkProductionDetails();
           this.editLoading = false;
+          this.isReadOnly = true;
         },
         (error) => {
           this.editLoading = false;
@@ -151,7 +189,7 @@ export class EditMilkProductionComponent {
   }
   editArchiveStatus() {
     this.coldStoreService
-      .updateArchiveStatus(this.liveStockId, this.isArchived)
+      .updateArchiveStatus(this.milkProductionId, this.isArchived)
       .subscribe(
         (dt) => {
           this.messageService.add({
@@ -174,44 +212,30 @@ export class EditMilkProductionComponent {
         }
       );
   }
+
   discardChanges() {
-    this.liveStockDetail = {
-      livestockBatchId: this.constLiveStockDetail.livestockBatchId,
-      businessUnitId: this.constLiveStockDetail.businessUnitId,
-      breed: this.constLiveStockDetail.breed,
-      quantity: this.constLiveStockDetail.quantity,
-      arrivalDate: this.constLiveStockDetail.arrivalDate,
-      ageInDays: this.constLiveStockDetail.ageInDays,
-      healthStatus: this.constLiveStockDetail.healthStatus,
+    this.MilkProductionDetail = {
+      animalId: this.constMilkProductionDetail.animalId,
+      date: this.constMilkProductionDetail.date,
+      morning: this.constMilkProductionDetail.morning,
+      evening: this.constMilkProductionDetail.evening,
+      total: this.constMilkProductionDetail.total,
+      businessUnitId: this.constMilkProductionDetail.businessUnitId,
     };
     this.isReadOnly = true;
     this.initForm();
   }
   initForm() {
-    this.editLiveStockModel = this.formBuilder.group({
+    this.editMilkProductionModel = this.formBuilder.group({
+      animalId: [this.MilkProductionDetail.animalId, [Validators.required]],
+      date: [this.MilkProductionDetail.date, [Validators.required]],
+      morning: [this.MilkProductionDetail.morning, [Validators.required]],
+      evening: [this.MilkProductionDetail.evening, [Validators.required]],
+      total: [this.MilkProductionDetail.total, [Validators.required]],
       businessUnitId: [
-        this.liveStockDetail.businessUnitId,
+        this.MilkProductionDetail.businessUnitId,
         [Validators.required],
       ],
-      breed: [this.liveStockDetail.breed, [Validators.required]],
-      quantity: [
-        this.liveStockDetail.quantity,
-        [
-          Validators.required,
-          Validators.pattern('^[1-9][0-9]*$'),
-          Validators.min(1),
-        ],
-      ],
-      arrivalDate: [this.liveStockDetail.arrivalDate, [Validators.required]],
-      ageInDays: [
-        this.liveStockDetail.ageInDays,
-        [
-          Validators.required,
-          Validators.pattern('^[1-9][0-9]*$'),
-          Validators.min(1),
-        ],
-      ],
-      healthStatus: [this.liveStockDetail.healthStatus, [Validators.required]],
     });
   }
   loadBusinessUnitTypes() {
@@ -225,6 +249,26 @@ export class EditMilkProductionComponent {
             type: dt[a].name,
           };
           this.businessUnitTypes.push(_data);
+        }
+      },
+      (error) => {
+        if (error.status == 401) {
+          this.accountService.doLogout();
+        }
+      }
+    );
+  }
+  loadAnimal() {
+    this.masterService.getAnimal().subscribe(
+      (res) => {
+        let dt = res.data;
+        this.AnimalList = [];
+        for (let a = 0; a < dt.length; a++) {
+          let _data: masterModal = {
+            id: dt[a].animalId,
+            type: dt[a].animalRef,
+          };
+          this.AnimalList.push(_data);
         }
       },
       (error) => {
