@@ -191,4 +191,47 @@ export class DairyFarmService {
         })
       );
   }
+  getHealthVaccinationRecordBySearchFilter(data: any) {
+    return this.repositoryService
+      .post(
+        'HealthVaccinationRecord/get-healthVaccinationRecord-by-search-and-filter-with-pagination',
+        data,
+        true
+      )
+      .pipe(
+        map((response: any) => {
+          return response;
+        })
+      );
+  }
+  addHealthVaccinationRecord(data: any) {
+    return this.repositoryService
+      .post('HealthVaccinationRecord/add-healthVaccinationRecord', data, true)
+      .pipe(
+        map((response: any) => {
+          return response;
+        })
+      );
+  }
+  GetHealthVaccinationRecordDetail(id: any) {
+    return this.repositoryService
+      .get('HealthVaccinationRecord/get-healthVaccinationRecord/' + id, true)
+      .pipe(
+        map((response: any) => {
+          return response;
+        })
+      );
+  }
+  UpdateHealthVaccinationRecordDetail(id: any, data: any) {
+    return this.repositoryService
+      .putWithOutFile(
+        'HealthVaccinationRecord/update-healthVaccinationRecord/' + id,
+        data
+      )
+      .pipe(
+        map((response: any) => {
+          return response;
+        })
+      );
+  }
 }

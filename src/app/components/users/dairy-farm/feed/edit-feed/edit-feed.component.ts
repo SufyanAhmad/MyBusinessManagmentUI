@@ -14,8 +14,6 @@ import { SelectModule } from 'primeng/select';
 import { AccountService } from '../../../../../services/account-service/account.service';
 import { MasterService } from '../../../../../services/master-service/master.service';
 import { masterModal } from '../../../../../models/master-model/master-model';
-import { ColdStoreServiceService } from '../../../../../services/cold-store-service/cold-store-service.service';
-import { PoultryFarmService } from '../../../../../services/poultry-farm-service/poultry-farm.service';
 import { FeedModel } from '../../../../../models/dairy-farm-model/dairy-farm-model';
 import { DairyFarmService } from '../../../../../services/dairy-farm.service';
 
@@ -43,25 +41,6 @@ export class EditFeedComponent {
   businessUnitTypes: masterModal[] = [];
   AnimalTypes: masterModal[] = [];
 
-  // editFeedModel!: FeedModel;
-  // liveStockDetail: LiveStockModel = {
-  //   livestockBatchId: '',
-  //   breed: '',
-  //   quantity: 0,
-  //   arrivalDate: '',
-  //   ageInDays: 0,
-  //   healthStatus: '',
-  //   businessUnitId: '',
-  // };
-  // constLiveStockDetail: LiveStockModel = {
-  //   livestockBatchId: '',
-  //   breed: '',
-  //   quantity: 0,
-  //   arrivalDate: '',
-  //   ageInDays: 0,
-  //   healthStatus: '',
-  //   businessUnitId: '',
-  // };
   editFeedModel!: FormGroup;
   FeedDetail: FeedModel = {
     feedId: '',
@@ -95,11 +74,9 @@ export class EditFeedComponent {
     private route: ActivatedRoute,
     private location: Location,
     private formBuilder: FormBuilder,
-    private poultryFarmService: PoultryFarmService,
     private messageService: MessageService,
     private accountService: AccountService,
     private masterService: MasterService,
-    private coldStoreService: ColdStoreServiceService,
     private dairyFarmService: DairyFarmService
   ) {}
   ngOnInit() {

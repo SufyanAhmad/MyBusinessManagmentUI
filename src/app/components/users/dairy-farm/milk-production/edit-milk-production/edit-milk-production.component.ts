@@ -14,8 +14,6 @@ import { SelectModule } from 'primeng/select';
 import { AccountService } from '../../../../../services/account-service/account.service';
 import { MasterService } from '../../../../../services/master-service/master.service';
 import { masterModal } from '../../../../../models/master-model/master-model';
-import { ColdStoreServiceService } from '../../../../../services/cold-store-service/cold-store-service.service';
-import { PoultryFarmService } from '../../../../../services/poultry-farm-service/poultry-farm.service';
 import { MilkProductionModel } from '../../../../../models/dairy-farm-model/dairy-farm-model';
 import { DairyFarmService } from '../../../../../services/dairy-farm.service';
 
@@ -80,11 +78,9 @@ export class EditMilkProductionComponent {
     private route: ActivatedRoute,
     private location: Location,
     private formBuilder: FormBuilder,
-    private poultryFarmService: PoultryFarmService,
     private messageService: MessageService,
     private accountService: AccountService,
     private masterService: MasterService,
-    private coldStoreService: ColdStoreServiceService,
     private dairyFarmService: DairyFarmService
   ) {}
   ngOnInit() {
@@ -108,8 +104,8 @@ export class EditMilkProductionComponent {
             updatedAt: data.updatedAt,
             milkProductionId: data.milkProductionId,
             milkProductionRef: data.milkProductionRef,
-            animalRef: data.updatedAt,
-            businessUnit: data.updatedAt,
+            animalRef: data.animalRef,
+            businessUnit: data.businessUnit,
             createdBy: data.createdBy,
             createdAt: data.createdAt,
             animalId: data.animalId,
@@ -187,32 +183,6 @@ export class EditMilkProductionComponent {
         }
       );
   }
-  editArchiveStatus() {
-    this.coldStoreService
-      .updateArchiveStatus(this.milkProductionId, this.isArchived)
-      .subscribe(
-        (dt) => {
-          this.messageService.add({
-            severity: 'success',
-            summary: 'Update',
-            detail: 'Cold store shelf change archived successfully',
-            life: 3000,
-          });
-        },
-        (error) => {
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Error',
-            detail: error.message,
-            life: 3000,
-          });
-          if (error.status == 401) {
-            this.accountService.doLogout();
-          }
-        }
-      );
-  }
-
   discardChanges() {
     this.MilkProductionDetail = {
       animalId: this.constMilkProductionDetail.animalId,

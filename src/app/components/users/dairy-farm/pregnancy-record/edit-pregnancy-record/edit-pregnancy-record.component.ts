@@ -14,12 +14,7 @@ import { SelectModule } from 'primeng/select';
 import { AccountService } from '../../../../../services/account-service/account.service';
 import { MasterService } from '../../../../../services/master-service/master.service';
 import { masterModal } from '../../../../../models/master-model/master-model';
-import { ColdStoreServiceService } from '../../../../../services/cold-store-service/cold-store-service.service';
-import { PoultryFarmService } from '../../../../../services/poultry-farm-service/poultry-farm.service';
-import {
-  LiveStockModel,
-  PregnancyRecordModel,
-} from '../../../../../models/dairy-farm-model/dairy-farm-model';
+import { PregnancyRecordModel } from '../../../../../models/dairy-farm-model/dairy-farm-model';
 import { DairyFarmService } from '../../../../../services/dairy-farm.service';
 @Component({
   selector: 'app-edit-pregnancy-record',
@@ -91,12 +86,10 @@ export class EditPregnancyRecordComponent {
     private route: ActivatedRoute,
     private location: Location,
     private formBuilder: FormBuilder,
-    private poultryFarmService: PoultryFarmService,
     private messageService: MessageService,
     private accountService: AccountService,
     private dairyFarmService: DairyFarmService,
-    private masterService: MasterService,
-    private coldStoreService: ColdStoreServiceService
+    private masterService: MasterService
   ) {}
   ngOnInit() {
     this.pregnancyBirthRecordId = this.route.snapshot.params['id'];
@@ -178,7 +171,7 @@ export class EditPregnancyRecordComponent {
         }
       );
   }
-  editLiveStockDetail() {
+  editPregnancyRecordDetail() {
     this.editLoading = true;
     this.dairyFarmService
       .UpdatePregnancyRecordDetail(
@@ -199,31 +192,6 @@ export class EditPregnancyRecordComponent {
         },
         (error) => {
           this.editLoading = false;
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Error',
-            detail: error.message,
-            life: 3000,
-          });
-          if (error.status == 401) {
-            this.accountService.doLogout();
-          }
-        }
-      );
-  }
-  editArchiveStatus() {
-    this.coldStoreService
-      .updateArchiveStatus(this.pregnancyBirthRecordId, this.isArchived)
-      .subscribe(
-        (dt) => {
-          this.messageService.add({
-            severity: 'success',
-            summary: 'Update',
-            detail: 'Cold store shelf change archived successfully',
-            life: 3000,
-          });
-        },
-        (error) => {
           this.messageService.add({
             severity: 'error',
             summary: 'Error',

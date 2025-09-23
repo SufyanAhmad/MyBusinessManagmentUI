@@ -130,3 +130,19 @@ export interface PregnancyRecordModel {
   delivered: Boolean;
   businessUnitId: String;
 }
+export interface HealthVaccinationRecordModel {
+  updatedBy?: String;
+  updatedAt?: String;
+  healthVaccinationRecordId?: String;
+  recordRef?: String;
+  supplierName?: String;
+  businessUnit?: String;
+  createdBy?: String;
+  createdAt?: String;
+  supplierId: String;
+  date: String;
+  name: String;
+  purpose: String;
+  nextDueDate: String;
+  businessUnitId: String;
+}
