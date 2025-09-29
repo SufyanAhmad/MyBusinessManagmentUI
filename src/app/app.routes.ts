@@ -12,6 +12,7 @@ export const routes: Routes = [
         component:LoginComponent
     },
     { path: 'dairyFarm', loadChildren: () => import('./components/users/dairy-farm/dairy-farm-routing.module').then(m => m.DairyFarmRoutingModule) },
-    
+    { path: 'superAdmin', loadChildren: () => import('./components/super-admin/super-admin-routing.module').then((m) => m.SuperAdminRoutingModule) },
+
 
 ];

@@ -1,0 +1,56 @@
+.business-title {
+  border: 1px solid #00000033;
+  border-radius: 10px;
+  padding: 0.75rem 1rem;
+  background: #FFFFFF;
+   font-family: 'Poppins', sans-serif;
+ font-weight: 400;
+ font-size: 24px;
+ color: #000000;
+ background-color: #3BA3A5;
+ color: white;
+}
+
+.custom-card {
+  background-color: #FFFFFF;
+  border: 1px solid #00000033;
+  border-radius: 16px;
+  height: 100%;
+  padding: 20px;
+}
+.profit-sales{
+font-family: 'Poppins', sans-serif;
+font-weight: 500;
+font-size: 13px;
+color: #000000;
+// text-transform: capitalize;
+
+}
+
+.p-select{
+ width: 100% !important;
+  height: 40px !important;
+  border: 1px solid #00000080 !important;
+  // box-shadow: 0px 4px 4px 0px #00000040 !important;
+  background-color: #fff !important;
+//   padding: 0 15px !important;
+  font-family:'Montserrat', sans-serif !important;
+  font-size: 15px !important;
+  font-weight: 400 !important;
+  text-align: left !important;
+  color: #000000 !important;
+  outline: none !important;
+  border-radius: 0px !important;
+}
+::ng-deep .p-select-label {
+  color: #000000 !important;
+  line-height: 24px  !important;
+}
+
+::ng-deep .p-skeleton {
+    background-color: #c9c0c0 !important;
+    border-radius: 0px !important;
+}
+::ng-deep .p-skeleton {
+ --p-skeleton-animation-background:white  !important;
+}

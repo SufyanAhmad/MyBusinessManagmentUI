@@ -1,0 +1,156 @@
+<div class="container py-4">
+  <!-- User Header -->
+  <div
+    class="header-card d-flex align-items-center justify-content-between mb-4"
+  >
+    <div class="heading mb-0" style="color: #03192c">
+      {{ customerDetail.name }}
+    </div>
+    <div
+      class="status-toggle d-flex flex-wrap"
+      style="width: 180px; height: 40px"
+    >
+      <div class="status-pill" [ngClass]="{ active: customerDetail.isActive }">
+        <svg
+          *ngIf="customerDetail.isActive"
+          xmlns="http://www.w3.org/2000/svg"
+          width="18"
+          height="18"
+          style="margin-right: 10px"
+          viewBox="0 0 24 24"
+        >
+          <path
+            fill="currentColor"
+            d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10s10-4.5 10-10S17.5 2 12 2m0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8s8 3.59 8 8s-3.59 8-8 8m4.59-12.42L10 14.17l-2.59-2.58L6 13l4 4l8-8z"
+          />
+        </svg>
+        Active
+      </div>
+      <div
+        class="status-pill"
+        [ngClass]="{ active: !customerDetail.isActive, inactive: true }"
+      >
+        <svg
+          *ngIf="!customerDetail.isActive"
+          xmlns="http://www.w3.org/2000/svg"
+          width="18"
+          height="18"
+          style="margin-right: 10px"
+          viewBox="0 0 24 24"
+        >
+          <path
+            fill="currentColor"
+            d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10s10-4.5 10-10S17.5 2 12 2m0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8s8 3.59 8 8s-3.59 8-8 8m4.59-12.42L10 14.17l-2.59-2.58L6 13l4 4l8-8z"
+          />
+        </svg>
+        Inactive
+      </div>
+    </div>
+  </div>
+  <!-- Customer Details -->
+  <div class="d-flex justify-content-between align-items-center">
+    <span class="heading"> Customer Detail </span>
+    <span *ngIf="isReadOnly" (click)="isReadOnly = false">
+      <button class="edit-btn">EDIT</button>
+    </span>
+    <span *ngIf="!isReadOnly" class="d-flex justify-content-end gap-4">
+      <button (click)="discardChanges()" type="button" class="btn-discard">
+        Discard
+      </button>
+      <button
+        type="button"
+        (click)="
+          editCustomerModel.valid && !editLoading ? editCustomerDetail() : null
+        "
+        [ngClass]="{
+          'btn-save': editCustomerModel.valid && !editLoading,
+          'btn-disable': editCustomerModel.invalid || editLoading
+        }"
+      >
+        Save &nbsp;
+        <span
+          *ngIf="editLoading"
+          class="spinner-border spinner-border-sm"
+          role="status"
+          aria-hidden="true"
+        ></span>
+      </button>
+    </span>
+  </div>
+  <form [formGroup]="editCustomerModel">
+    <div class="row g-3 align-items-end mt-4">
+      <div class="col-md-4 mb-4 position-relative">
+        <span class="label">Name</span>
+        <input
+          type="text"
+          formControlName="name"
+          class="input-felid"
+          [ngClass]="{ 'input-disable': isReadOnly }"
+          class="input-felid"
+          placeholder="Enter name..."
+        />
+        <span
+            class="errorValidation"
+            style="position: absolute;left: 23px;bottom:-20px;"
+            *ngIf="
+                      editCustomerModel.controls['name'].touched && 
+                      editCustomerModel.controls['name'].errors?.['required']
+                      "
+            >Please enter a name</span
+          >
+      </div>
+      <div class="col-md-4 mb-4 position-relative">
+        <span class="label">Phone No</span>
+        <input
+          type="phone"
+          formControlName="phone"
+          class="input-felid"
+          [ngClass]="{ 'input-disable': isReadOnly }"
+          class="input-felid"
+          placeholder="03XX-XXXXXXX"
+        />
+         <span
+            class="errorValidation"
+              style="position: absolute;left: 23px;bottom:-20px;"
+            *ngIf="
+                        editCustomerModel.controls['phone'].touched && 
+                        editCustomerModel.controls['phone'].value != null && 
+                        editCustomerModel.controls['phone'].errors?.['pattern']
+                      "
+            >Please enter valid phone number</span
+          >
+      </div>
+      <div class="col-md-4 mb-4 position-relative">
+        <span class="label">Email</span>
+        <input
+          type="email"
+          formControlName="email"
+           [ngClass]="{ 'input-disable': isReadOnly }"
+          class="input-felid" 
+          placeholder="example@gmail.com"
+        />
+         <span
+            class="errorValidation"
+              style="position: absolute;left: 23px;bottom:-20px;"
+            *ngIf="editCustomerModel.controls['email'].touched && 
+            editCustomerModel.controls['email'].value != null && 
+            editCustomerModel.controls['email'].errors?.['pattern']"
+          >
+            Please enter valid email address.</span
+          >
+      </div>
+      <div class="col-md-4 mb-4">
+        <span class="label">Address</span>
+        <input
+          type="text"
+          formControlName="address"
+          class="input-felid"
+          [ngClass]="{ 'input-disable': isReadOnly }"
+          class="input-felid"
+          placeholder="Enter address..."
+        />
+      </div>
+    </div>
+  </form>
+</div>
+<p-toast />

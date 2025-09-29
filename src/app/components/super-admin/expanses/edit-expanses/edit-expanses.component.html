@@ -1,0 +1,120 @@
+
+<div class="container py-4">
+  <!-- User Header -->
+  <div
+    class="header-card d-flex align-items-center justify-content-between mb-4"
+  >
+    <div class="heading mb-0" style="color: #03192c">
+      {{ expanseDetail.name }}
+    </div>
+  </div>
+  <!-- Customer Details -->
+  <div class="d-flex justify-content-between align-items-center">
+    <span class="heading"> Expense Detail</span>
+    <!-- <span *ngIf="isReadOnly" (click)="isReadOnly = false">
+      <button class="edit-btn">EDIT</button>
+    </span> -->
+    <span *ngIf="!isReadOnly" class="d-flex justify-content-end gap-4">
+      <button (click)="discardChanges()" type="button" class="btn-discard">
+        Discard
+      </button>
+      <button
+        type="button"
+        (click)="
+          editExpanseModel.valid && !editLoading ? editCustomerDetail() : null
+        "
+        [ngClass]="{
+          'btn-save': editExpanseModel.valid && !editLoading,
+          'btn-disable': editExpanseModel.invalid || editLoading
+        }"
+      >
+        Save &nbsp;
+        <span
+          *ngIf="editLoading"
+          class="spinner-border spinner-border-sm"
+          role="status"
+          aria-hidden="true"
+        ></span>
+      </button>
+    </span>
+  </div>
+  <form [formGroup]="editExpanseModel">
+    <div class="row g-3 align-items-end mt-4">
+        <div class="col-md-4 mb-4">
+        <span class="label">End Date</span>
+        <input
+          type="date"
+          formControlName="date"
+          class="input-felid custom-date"
+          [ngClass]="{ 'input-disable': isReadOnly }"
+          placeholder="Enter end date..."
+        />
+      </div>
+      <div class="col-md-4 mb-4">
+        <span class="label">Name</span>
+        <input
+          type="text"
+          formControlName="name"
+          class="input-felid"
+          [ngClass]="{ 'input-disable': isReadOnly }"
+          class="input-felid"
+          placeholder="Enter account title..."
+        />
+      </div>
+      <div class="col-md-4 mb-4">
+        <span class="label">Amount</span>
+        <input
+          type="number"
+          formControlName="amount"
+          class="input-felid"
+          [ngClass]="{ 'input-disable': isReadOnly }"
+          class="input-felid"
+          placeholder="Enter account number..."
+        />
+      </div>
+      <div class="col-md-4 mb-4">
+        <span class="label">Payment Method</span>
+        <input
+          type="text"
+          formControlName="paymentMethod"
+          class="input-felid input-disable" readonly
+          placeholder="Enter bank number..."
+        />
+      </div>
+      <div class="col-md-4 mb-4">
+        <span class="label">Description</span>
+        <input
+          type="text"
+          formControlName="description"
+          class="input-felid"
+          [ngClass]="{ 'input-disable': isReadOnly }"
+          class="input-felid"
+          placeholder="Enter branch code..."
+        />
+      </div>
+      <div class="col-md-4 mb-4">
+        <span class="label">Party</span>
+        <input
+          type="text"
+          value="{{expanseDetail.party}}"
+          class="input-felid"
+          [ngClass]="{ 'input-disable': isReadOnly }"
+          class="input-felid"
+          placeholder="Enter city..."
+        />
+      </div>
+      <div class="col-md-4 mb-4">
+        <span class="label">Status</span>
+        <input
+          type="text"
+          value="{{expanseDetail.expenseStatus}}"
+          class="input-felid"
+          [ngClass]="{ 'input-disable': isReadOnly }"
+          class="input-felid"
+          placeholder="Enter city..."
+        />
+      </div>
+    </div>
+  </form>
+</div>
+<p-toast />

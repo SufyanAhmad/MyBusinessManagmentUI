@@ -1,0 +1,89 @@
+<div class="container-fluid">
+    <span class="d-flex flex-wrap justify-content-between">
+            <span class="d-flex flex-wrap">
+                <div class="position-relative searchinput mt-4 mb-3">
+                    <svg class="position-absolute search-icon" xmlns="http://www.w3.org/2000/svg" width="25px" height="25px" style="top: 7px; left: 10px" viewBox="0 0 24 24"><path fill="currentColor" d="m19.6 21l-6.3-6.3q-.75.6-1.725.95T9.5 16q-2.725 0-4.612-1.888T3 9.5t1.888-4.612T9.5 3t4.613 1.888T16 9.5q0 1.1-.35 2.075T14.7 13.3l6.3 6.3zM9.5 14q1.875 0 3.188-1.312T14 9.5t-1.312-3.187T9.5 5T6.313 6.313T5 9.5t1.313 3.188T9.5 14"/></svg>
+
+                    <input type="text" autocomplete="off" (keyup)="SearchBySearchKey($event)" (keyup.enter)="getActivityLogList()" style="padding-left: 40px"
+                        [(ngModel)]="searchKey" class="search-input" name="searchValue"
+                        placeholder="Search name..." />
+                    <div style="position: absolute; top: 4px; right: 0">
+                      <svg class="search-cross-icon" *ngIf="searchKey != null" (click)="searchKey = null;getActivityLogList()"  style="margin-top: 6px !important;margin-right:10px !important;color:#ED5D25" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g fill="currentColor" fill-rule="evenodd" clip-rule="evenodd"><path d="M5.47 5.47a.75.75 0 0 1 1.06 0l12 12a.75.75 0 1 1-1.06 1.06l-12-12a.75.75 0 0 1 0-1.06"/><path d="M18.53 5.47a.75.75 0 0 1 0 1.06l-12 12a.75.75 0 0 1-1.06-1.06l12-12a.75.75 0 0 1 1.06 0"/></g></svg>
+                    </div>
+                </div>
+                <div class="d-flex mt-4 mb-2 mx-4" style="gap: 5px; ">
+                    <span class="date-text mt-2">From</span>
+                    <input  type="date"  placeholder="To date" [(ngModel)]="fromDate" (change)="getActivityLogList()" class="date-input custom-date"
+                         />
+                </div>
+                <div class="d-flex mt-4 mb-2 mx-2" style="gap: 5px;">
+                    <span class="date-text mt-2">To</span>
+                    <input type="date" placeholder="From date" [(ngModel)]="toDate"  (change)="getActivityLogList()" class="date-input custom-date"
+                         />
+                </div>
+                
+            </span>
+            
+            <div  class="d-flex align-items-center gap-5" >
+                <span (click)="ResetFilter()" *ngIf="searchKey!=null ||toDate!=null||fromDate!=null;" class="tableText-bold mt-2" style="color: #E83838;font-weight: 700;">
+                   Reset Filter
+                </span>
+                <button (click)="visible=true" class="btn mt-4 mb-3" style="min-width: 120px;"
+                   >
+                    Clear Activity Logs
+                </button></div>
+               
+        </span>
+   <div class="mat-elevation-z8 mt-4 rounded-table">
+  <table mat-table  matSort [dataSource]="dataSource">
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef class="table-header"> Name </th>
+      <td mat-cell *matCellDef="let element"  class="tableText-bold"  > {{element.user}} </td>
+    </ng-container>
+  <ng-container matColumnDef="action">
+      <th mat-header-cell *matHeaderCellDef class="table-header"> Action </th>
+      <td mat-cell *matCellDef="let element" class="tableText-thin"  > {{element.action}} </td>
+    </ng-container>
+    <ng-container matColumnDef="actionDate">
+      <th mat-header-cell *matHeaderCellDef class="table-header"> Action Date </th>
+      <td mat-cell *matCellDef="let element" class="tableText-thin "> {{element.actionDate | date:'dd/MM/yyyy h:mm a '}} </td>
+    </ng-container>
+    <ng-container matColumnDef="desc">
+      <th mat-header-cell *matHeaderCellDef class="table-header">description
+      </th>
+      <td mat-cell *matCellDef="let element"> 
+         {{element.description}}
+      </td>
+    </ng-container>
+    
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+</div>  
+<app-data-not-found *ngIf="activityLogList.length == 0 && !isLoadingResults" />
+<div class=" skelton" *ngIf="isLoadingResults">
+    <app-loading></app-loading>
+  </div>     
+  <mat-paginator pageSize="10" [length]="activityLogList.length"
+                 showFirstLastButtons
+                 aria-label="Select page of periodic elements">
+  </mat-paginator>
+</div>
+<p-toast />
+<!-- conformation popup -->
+<p-dialog     header="Conformation" 
+    [modal]="true"
+  [(visible)]="visible" 
+  [draggable]="false" [resizable]="false"
+  >
+  <div class="d-flex gap-2">
+      <svg style="color:black" xmlns="http://www.w3.org/2000/svg" width="30px" height="30px" viewBox="0 0 24 24"><path fill="currentColor" d="m12 1l11.951 20.7H.05zM3.513 19.7h16.974L12 5zM13 9.5V15h-2V9.5zm-2 7h2.004v2.004H11z"/></svg>
+      <span style="color:black">Are you sure you want to clear activity logs.</span>
+     </div>
+  <div class="d-flex justify-content-end gap-2 mt-4">
+     
+    <p-button (onClick)="visible=false"  styleClass="confirmation-btn"   label="No" severity="info" [outlined]="true" />
+    <p-button (onClick)="clearAllActivityLog();visible=false"  styleClass="confirmation-btn"   label="Yes" severity="danger" [outlined]="true" />
+    </div>
+</p-dialog>

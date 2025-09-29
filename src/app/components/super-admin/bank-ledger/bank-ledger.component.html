@@ -1,0 +1,258 @@
+<div class="container-fluid">
+        <span class="d-flex align-items-center justify-content-between mt-5">
+        <div class="table-heading">Add Bank</div>
+        <div class="d-flex align-items-center gap-5">
+          <button
+             (click)="visible = true; initForm()"
+            class="btn mt-4 mb-3"
+            style="min-width: 135px"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="25"
+              height="25"
+              viewBox="0 0 24 24"
+            >
+              <g
+                fill="none"
+                stroke="currentColor"
+                stroke-dasharray="16"
+                stroke-dashoffset="16"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+              >
+                <path d="M5 12h14">
+                  <animate
+                    fill="freeze"
+                    attributeName="stroke-dashoffset"
+                    dur="0.48s"
+                    values="16;0"
+                  />
+                </path>
+                <path d="M12 5v14">
+                  <animate
+                    fill="freeze"
+                    attributeName="stroke-dashoffset"
+                    begin="0.48s"
+                    dur="0.48s"
+                    values="16;0"
+                  />
+                </path>
+              </g>
+            </svg>
+            New Bank
+          </button>
+        </div>
+      </span>
+  <div class="mat-elevation-z8 mt-4 rounded-table">
+    <table mat-table matSort [dataSource]="dataSource">
+      <ng-container matColumnDef="account">
+        <th
+          mat-header-cell
+          *matHeaderCellDef
+          class="table-header"
+          style="width: 200px"
+        >
+          Account Title
+        </th>
+        <td
+          mat-cell
+          *matCellDef="let element"
+          [routerLink]="['/superAdmin/bank-ledger', element.bankLedgerId]"
+          class="tableText-bold"
+          style="width: 160px"
+        >
+          {{ element.accountTitle }}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="accountNo">
+        <th
+          mat-header-cell
+          *matHeaderCellDef
+          class="table-header"
+          style="width: 200px;"
+        >
+          Account Number
+        </th>
+        <td
+          mat-cell
+          *matCellDef="let element"
+          class="tableText-thin"
+        >
+          {{ element.accountNumber }}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="bankName">
+        <th
+          mat-header-cell
+          *matHeaderCellDef
+          class="table-header"
+          style="width: 170px;"
+        >
+          Bank Name
+        </th>
+        <td
+          mat-cell
+          *matCellDef="let element"
+          class="tableText-thin"
+        >
+          {{ element.bankName }}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="code">
+        <th
+          mat-header-cell
+          *matHeaderCellDef
+          class="table-header"
+           style="width: 170px;"
+        >
+          Branch Code
+        </th>
+        <td
+          mat-cell
+          *matCellDef="let element"
+          class="tableText-thin"
+        >
+          {{ element.branchCode }}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="city">
+        <th mat-header-cell *matHeaderCellDef class="table-header">City</th>
+        <td mat-cell *matCellDef="let element" class="tableText-thin">
+          {{ element.city}}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="dlt">
+        <th mat-header-cell *matHeaderCellDef class="table-header"></th>
+        <td mat-cell *matCellDef="let element" class="tableText-thin">
+          <svg
+                  style="color: red; cursor: pointer"
+                  (click)="
+                    deletedItemId = element.bankLedgerId;
+                    openDeleteConfirmationDialog()
+                  "
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    fill="currentColor"
+                    d="M7 21q-.825 0-1.412-.587T5 19V6q-.425 0-.712-.288T4 5t.288-.712T5 4h4q0-.425.288-.712T10 3h4q.425 0 .713.288T15 4h4q.425 0 .713.288T20 5t-.288.713T19 6v13q0 .825-.587 1.413T17 21zM17 6H7v13h10zm-7 11q.425 0 .713-.288T11 16V9q0-.425-.288-.712T10 8t-.712.288T9 9v7q0 .425.288.713T10 17m4 0q.425 0 .713-.288T15 16V9q0-.425-.288-.712T14 8t-.712.288T13 9v7q0 .425.288.713T14 17M7 6v13z"
+                  />
+                </svg>
+        </td>
+      </ng-container>
+      
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+  </div>
+  <app-data-not-found *ngIf="bankLedgerList.length == 0 && !isLoadingResults" />
+  <div class="skelton" *ngIf="isLoadingResults">
+    <app-loading></app-loading>
+  </div>
+  <mat-paginator
+    pageSize="10"
+    [length]="bankLedgerList.length"
+    showFirstLastButtons
+    aria-label="Select page of periodic elements"
+  >
+  </mat-paginator>
+</div>
+<div class="flex justify-center">
+  <p-dialog
+    header="Add Bank"
+    [modal]="true"
+    [(visible)]="visible"
+    [style]="{ width: '40vw' }"
+    [draggable]="false"
+    [resizable]="false"
+  >
+    <form [formGroup]="addBankLedgerModel">
+      <div class="row">
+        <div class="name mt-3">
+          <span class="label">Account Title<span class="required-icon">*</span></span>
+          <input
+            type="text"
+            formControlName="accountTitle"
+            class="input-felid"
+            placeholder="Enter account title..."
+          />
+        </div>
+        <div class="name mt-3">
+          <span class="label">Account Number<span class="required-icon">*</span></span>
+          <input
+            type="number"
+            formControlName="accountNumber"
+            class="input-felid"
+            placeholder="Enter account number..."
+          />
+        </div>
+        <div class="name mt-3">
+          <span class="label">Bank Name<span class="required-icon">*</span></span>
+          <input
+            type="text"
+            formControlName="bankName"
+            class="input-felid"
+            placeholder="Enter bank name..."
+          />
+        </div>
+       
+        <div class="name mt-3">
+          <span class="label">Branch Code<span class="required-icon">*</span></span>
+          <input
+            type="text"
+            formControlName="branchCode"
+            class="input-felid "
+            placeholder="Enter branch code..."
+          />
+        </div>
+        <div class="name mt-3">
+          <span class="label">City<span class="required-icon">*</span></span>
+          <input
+            type="text"
+            formControlName="city"
+            class="input-felid "
+            placeholder="Enter city..."
+          />
+        </div>
+      </div>
+      <hr class="mt-5" />
+      <div
+        class="d-flex justify-content-end gap-4 mb-4"
+        style="margin-top: 20px"
+      >
+        <button (click)="visible = false" type="button" class="btn-discard">
+          Discard
+        </button>
+
+        <button
+          type="button"
+          (click)="addBankLedgerModel.valid && !addLoading ? addBankLedger() : null"
+          [ngClass]="{
+            'btn-save': addBankLedgerModel.valid && !addLoading,
+            'btn-disable': addBankLedgerModel.invalid || addLoading
+          }"
+        >
+          Save &nbsp;
+          <span
+            *ngIf="addLoading"
+            class="spinner-border spinner-border-sm"
+            role="status"
+            aria-hidden="true"
+          ></span>
+        </button>
+      </div>
+    </form>
+  </p-dialog>
+</div>
+<p-toast />
+<app-confirmation-popup
+  [visible]="bankConfirmDialog"
+  [message]="'Are you sure you want to delete this bank'"
+  (onConfirm)="deleteBank()"
+  (onCancel)="handleBankCancelled()"
+>
+</app-confirmation-popup>

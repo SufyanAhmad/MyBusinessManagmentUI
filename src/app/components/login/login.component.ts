@@ -97,7 +97,8 @@ export class LoginComponent {
     if (this.loginForm.valid) {
       this.accountService.login(this.loginForm.value).subscribe(
         (dt) => {
-          this.router.navigateByUrl('/dairyFarm/animal');
+          // this.router.navigateByUrl('/dairyFarm/animal');
+           this.router.navigateByUrl('/superAdmin');
           this.messageService.add({
             severity: 'success',
             summary: 'Success',

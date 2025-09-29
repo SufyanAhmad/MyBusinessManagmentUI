@@ -1,0 +1,382 @@
+<div class="container-fluid">
+  <div
+    *ngIf="
+      checkRouteUrl &&
+      (checkRouteUrl.startsWith('/storageUnit') ||
+        checkRouteUrl.startsWith('/coldStore') ||
+        checkRouteUrl.startsWith('/poultryFarm'))
+    "
+    div
+    class="d-pointer"
+  >
+    <span class="breadcrumb" [routerLink]="['/superAdmin']">BINISHAQ /</span>
+    <span
+      class="breadcrumb-bold"
+      [routerLink]="['/superAdmin/business/units']"
+      style="text-transform: uppercase"
+      >{{ businessUnitName }} /
+    </span>
+    <span class="breadcrumb-bold">&nbsp;Customers</span>
+  </div>
+  <span class="d-flex flex-wrap justify-content-between">
+    <span class="d-flex flex-wrap">
+      <div class="position-relative searchinput mt-4 mb-3">
+        <svg
+          (click)="getCustomers()"
+          class="position-absolute search-icon"
+          xmlns="http://www.w3.org/2000/svg"
+          width="25px"
+          height="25px"
+          style="top: 7px; left: 10px; cursor: pointer"
+          viewBox="0 0 24 24"
+        >
+          <path
+            fill="currentColor"
+            d="m19.6 21l-6.3-6.3q-.75.6-1.725.95T9.5 16q-2.725 0-4.612-1.888T3 9.5t1.888-4.612T9.5 3t4.613 1.888T16 9.5q0 1.1-.35 2.075T14.7 13.3l6.3 6.3zM9.5 14q1.875 0 3.188-1.312T14 9.5t-1.312-3.187T9.5 5T6.313 6.313T5 9.5t1.313 3.188T9.5 14"
+          />
+        </svg>
+
+        <input
+          type="text"
+          autocomplete="off"
+          (keyup)="SearchBySearchKey($event)"
+          (keyup.enter)="getCustomers()"
+          style="padding-left: 40px"
+          [(ngModel)]="searchKey"
+          class="search-input"
+          name="searchValue"
+          placeholder="Search name..."
+        />
+        <div style="position: absolute; top: 4px; right: 0">
+          <svg
+            class="search-cross-icon"
+            *ngIf="searchKey != null"
+            (click)="searchKey = null; getCustomers()"
+            style="
+              margin-top: 6px !important;
+              margin-right: 10px !important;
+              color: #ed5d25;
+            "
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+          >
+            <g fill="currentColor" fill-rule="evenodd" clip-rule="evenodd">
+              <path
+                d="M5.47 5.47a.75.75 0 0 1 1.06 0l12 12a.75.75 0 1 1-1.06 1.06l-12-12a.75.75 0 0 1 0-1.06"
+              />
+              <path
+                d="M18.53 5.47a.75.75 0 0 1 0 1.06l-12 12a.75.75 0 0 1-1.06-1.06l12-12a.75.75 0 0 1 1.06 0"
+              />
+            </g>
+          </svg>
+        </div>
+      </div>
+      <span class="alarms mt-4 mb-3 mx-3 d-flex align-items-center">
+        <p-checkbox
+          (onChange)="ngAfterViewInit()"
+          [binary]="true"
+          inputId="binary"
+          inputId="ny"
+          [(ngModel)]="isActive"
+        />
+        <label class="form-select" for="tricheckbox" class="mx-2">Active</label>
+      </span>
+    </span>
+
+    <div class="d-flex align-items-center gap-5">
+      <span
+        (click)="ResetFilter()"
+        *ngIf="searchKey != null || isActive != null"
+        class="tableText-bold mt-2"
+        style="color: #e83838; font-weight: 700"
+      >
+        Reset Filter
+      </span>
+      <button
+        (click)="visible = true; initForm()"
+        class="btn mt-4 mb-3"
+        style="min-width: 120px"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="25"
+          height="25"
+          viewBox="0 0 24 24"
+        >
+          <g
+            fill="none"
+            stroke="currentColor"
+            stroke-dasharray="16"
+            stroke-dashoffset="16"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+          >
+            <path d="M5 12h14">
+              <animate
+                fill="freeze"
+                attributeName="stroke-dashoffset"
+                dur="0.48s"
+                values="16;0"
+              />
+            </path>
+            <path d="M12 5v14">
+              <animate
+                fill="freeze"
+                attributeName="stroke-dashoffset"
+                begin="0.48s"
+                dur="0.48s"
+                values="16;0"
+              />
+            </path>
+          </g>
+        </svg>
+        New Customer
+      </button>
+    </div>
+  </span>
+  <div class="mat-elevation-z8 mt-4 rounded-table">
+    <div class="table-responsive">
+      <table mat-table matSort [dataSource]="dataSource">
+        <ng-container matColumnDef="name">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            class="table-header"
+            style="min-width: 140px"
+          >
+            Name
+          </th>
+          <td
+            mat-cell
+            *matCellDef="let element"
+            (click)="onEditCustomer(element.partyId)"
+            class="tableText-bold"
+            style="min-width: 140px"
+          >
+            <span
+              style="
+                display: inline-block;
+                max-width: 160px;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+              "
+              [title]="element.name"
+              >{{ element.name }}</span
+            >
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="phone">
+          <th mat-header-cell *matHeaderCellDef class="table-header">Phone</th>
+          <td mat-cell *matCellDef="let element" class="tableText-thin">
+            {{ element.phone }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="email">
+          <th mat-header-cell *matHeaderCellDef class="table-header">Email</th>
+          <td mat-cell *matCellDef="let element" class="tableText-thin">
+            {{ element.email }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="address">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            class="table-header"
+            style="min-width: 160px"
+          >
+            Address
+          </th>
+          <td mat-cell *matCellDef="let element" style="min-width: 160px">
+            <span
+              style="
+                display: inline-block;
+                max-width: 160px;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+              "
+              [title]="element.address"
+              >{{ element.address }}</span
+            >
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef class="table-header"></th>
+          <td mat-cell *matCellDef="let element">
+            <div class="status-toggle d-flex my-1">
+              <div
+                class="status-pill"
+                [ngClass]="{ active: element.isActive }"
+                (click)="
+                  !element.isActive?editCustomerStatus(element.partyId, true):null;
+                  element.isActive ==false?element.isActive =true:element.isActive = true;
+
+                "
+              >
+                <svg
+                  *ngIf="element.isActive"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="18"
+                  height="18"
+                  style="margin-right: 10px"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    fill="currentColor"
+                    d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10s10-4.5 10-10S17.5 2 12 2m0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8s8 3.59 8 8s-3.59 8-8 8m4.59-12.42L10 14.17l-2.59-2.58L6 13l4 4l8-8z"
+                  />
+                </svg>
+                Active
+              </div>
+              <div
+                class="status-pill"
+                [ngClass]="{ active: !element.isActive, inactive: true }"
+                (click)="
+                element.isActive?editCustomerStatus(element.partyId, false):null;
+                element.isActive ==true?element.isActive =false:element.isActive = false;
+                "
+              >
+                <svg
+                  *ngIf="!element.isActive"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="18"
+                  height="18"
+                  style="margin-right: 10px"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    fill="currentColor"
+                    d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10s10-4.5 10-10S17.5 2 12 2m0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8s8 3.59 8 8s-3.59 8-8 8m4.59-12.42L10 14.17l-2.59-2.58L6 13l4 4l8-8z"
+                  />
+                </svg>
+                Inactive
+              </div>
+            </div>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+    </div>
+  </div>
+  <app-data-not-found *ngIf="customerList.length == 0 && !isLoadingResults" />
+  <div class="skelton" *ngIf="isLoadingResults">
+    <app-loading></app-loading>
+  </div>
+  <mat-paginator
+    pageSize="10"
+    [length]="resultsLength"
+    showFirstLastButtons
+    aria-label="Select page of periodic elements"
+  >
+  </mat-paginator>
+</div>
+<div class="flex justify-center">
+  <p-dialog
+    header="Add Customer"
+    [modal]="true"
+    [(visible)]="visible"
+    contentStyleClass="responsive-dialog"
+    [draggable]="false"
+    [resizable]="false"
+  >
+    <form [formGroup]="addCustomerModel">
+      <div class="row">
+        <div>
+          <div class="name">
+            <span class="label">Name<span class="required-icon">*</span> </span>
+            <input
+              type="text"
+              formControlName="name"
+              class="input-felid"
+              placeholder="Enter name..."
+            />
+          </div>
+          <span
+            class="errorValidation"
+            *ngIf="
+                      addCustomerModel.controls['name'].touched && 
+                      addCustomerModel.controls['name'].errors?.['required']
+                      "
+            >Please enter a name</span
+          >
+          <div class="mt-3">
+            <span class="label">Phone No</span>
+            <input
+              type="text"
+              formControlName="phone"
+              class="input-felid"
+              placeholder="03XX-XXXXXXX"
+            />
+          </div>
+          <span
+            class="errorValidation"
+            *ngIf="
+                        addCustomerModel.controls['phone'].touched && 
+                        addCustomerModel.controls['phone'].value != null && 
+                        addCustomerModel.controls['phone'].errors?.['pattern']
+                      "
+            >Please enter valid phone number</span
+          >
+          <div class="mt-3">
+            <span class="label">Email</span>
+            <input
+              type="email"
+              formControlName="email"
+              class="input-felid"
+              placeholder="example@gmail.com"
+            />
+          </div>
+          <span
+            class="errorValidation"
+            *ngIf="addCustomerModel.controls['email'].touched && 
+            addCustomerModel.controls['email'].value != null && 
+            addCustomerModel.controls['email'].errors?.['pattern']"
+          >
+            Please enter valid email address.
+          </span>
+        </div>
+        <div class="mt-3">
+          <span class="label">Address</span>
+          <input
+            type="text"
+            formControlName="address"
+            class="input-felid"
+            placeholder="Enter address..."
+          />
+        </div>
+      </div>
+      <hr class="mt-5" />
+      <div
+        class="d-flex justify-content-end gap-4 mb-4"
+        style="margin-top: 20px"
+      >
+        <button (click)="visible = false" type="button" class="btn-discard">
+          Discard
+        </button>
+        <button
+          type="button"
+          (click)="addCustomerModel.valid && !addLoading ? addCustomer() : null"
+          [ngClass]="{
+            'btn-save': addCustomerModel.valid && !addLoading,
+            'btn-disable': addCustomerModel.invalid || addLoading
+          }"
+        >
+          Save &nbsp;
+          <span
+            *ngIf="addLoading"
+            class="spinner-border spinner-border-sm"
+            role="status"
+            aria-hidden="true"
+          ></span>
+        </button>
+      </div>
+    </form>
+  </p-dialog>
+</div>
+<p-toast />
