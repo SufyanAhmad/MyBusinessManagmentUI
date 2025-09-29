@@ -17,7 +17,6 @@ import { MatSort, MatSortModule } from '@angular/material/sort';
 import { CustomerModel } from '../../../models/super-admin/super-admin-model';
 import { catchError, filter, map, merge, startWith, switchMap } from 'rxjs';
 import { SuperAdminService } from '../../../services/super-admin-service/super-admin.service';
-import { MasterService } from '../../../services/master-service/master.service';
 import { MessageService } from 'primeng/api';
 import { AccountService } from '../../../services/account-service/account.service';
 import { LoadingComponent } from '../../loading/loading.component';

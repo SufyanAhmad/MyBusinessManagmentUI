@@ -85,6 +85,7 @@ export class DashboardComponent {
     this.loading = true;
     this.superAdminService.getTotalCounts().subscribe(
       (dt) => {
+        debugger
         let data = dt;
         this.TotalCount = {
           users: data.users,

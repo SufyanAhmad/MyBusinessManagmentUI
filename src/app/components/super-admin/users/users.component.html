@@ -52,7 +52,7 @@
           </svg>
         </div>
       </div>
-      <span class="alarms mt-4 mb-3 mx-3">
+      <!-- <span class="alarms mt-4 mb-3 mx-3">
         <p-select
           [options]="businessTypes"
           [(ngModel)]="businessTypeId"
@@ -62,7 +62,7 @@
           [showClear]="true"
           placeholder="Business Type"
         />
-      </span>
+      </span> -->
       <span class="alarms mt-4 mb-3 mx-3">
         <p-select
           [options]="businessUnitTypes"
@@ -520,14 +520,13 @@
   >
     <!-- <form  > -->
     <div class="business">
-      <h6 class="business-title">Cold Store</h6>
       <div *ngIf="!loading" class="row">
         <div class="unit-table p-0">
           <div class="table-header d-flex">
             <div class="header-cell">BUSINESS UNIT</div>
             <div class="header-cell">ROLE</div>
           </div>
-          <ng-container *ngFor="let item of coldStoreUnitList">
+          <ng-container *ngFor="let item of dairyFarmUnitList">
             <div class="table-row d-flex" *ngIf="item.isAdded == true">
               <!-- BUSINESS UNIT CELL -->
               <div class="table-cell">
@@ -570,7 +569,7 @@
               </div>
             </div>
           </ng-container>
-          <app-data-not-found *ngIf="coldStoreUnitList.length == 0" />
+          <app-data-not-found *ngIf="dairyFarmUnitList.length == 0" />
         </div>
       </div>
       <div *ngIf="loading" class="row">
@@ -583,134 +582,7 @@
       </div>
     </div>
 
-    <!-- Section: Poultry Farm -->
-    <div class="section mt-4">
-      <h6 class="business-title">Poultry Farm</h6>
-      <div *ngIf="!loading" class="row">
-        <div class="unit-table p-0">
-          <div class="table-header d-flex">
-            <div class="header-cell">BUSINESS UNIT</div>
-            <div class="header-cell">ROLE</div>
-          </div>
-          <ng-container *ngFor="let item of poultryFarmUnitList">
-            <div class="table-row d-flex" *ngIf="item.isAdded == true">
-              <!-- BUSINESS UNIT CELL -->
-              <div class="table-cell">
-                <p-checkbox
-                  [(ngModel)]="item.isAdded"
-                  [binary]="true"
-                  [disabled]="true"
-                ></p-checkbox>
-
-                <span
-                  class="business-title text-ellipsis"
-                  title="{{ item.name }}"
-                >
-                  {{ item.name }}
-                </span>
-              </div>
-
-              <!-- ROLE CELL -->
-              <div class="table-cell">
-                <span style="width: 120px !important">
-                  <select
-                    [(ngModel)]="item.userRoleId"
-                    class="table-td-input"
-                    [disabled]="!item.isChecked"
-                  >
-                    <option
-                      *ngFor="let option of userRoles"
-                      [value]="option.id"
-                    >
-                      {{ option.type }}
-                    </option>
-                  </select>
-                </span>
-                <div
-                  class="errorValidation"
-                  *ngIf="item.isAdded && !item.userRoleId"
-                >
-                  Please select a role.
-                </div>
-              </div>
-            </div>
-          </ng-container>
-          <app-data-not-found *ngIf="poultryFarmUnitList.length == 0" />
-        </div>
-      </div>
-      <div *ngIf="loading" class="row">
-        <div class="col-6 mb-4">
-          <p-skeleton height="100px"></p-skeleton>
-        </div>
-        <div class="col-6 mb-4">
-          <p-skeleton height="100px"></p-skeleton>
-        </div>
-      </div>
-    </div>
-    <!-- Section: Storage Unit -->
-    <div class="section mt-4">
-      <h6 class="business-title">Storage Unit</h6>
-      <div *ngIf="!loading" class="row">
-        <div class="unit-table p-0">
-          <div class="table-header d-flex">
-            <div class="header-cell">BUSINESS UNIT</div>
-            <div class="header-cell">ROLE</div>
-          </div>
-          <ng-container *ngFor="let item of storageUnitList">
-            <div class="table-row d-flex" *ngIf="item.isAdded == true">
-              <!-- BUSINESS UNIT CELL -->
-              <div class="table-cell">
-                <p-checkbox
-                  [(ngModel)]="item.isAdded"
-                  [binary]="true"
-                  [disabled]="true"
-                ></p-checkbox>
-
-                <span
-                  class="business-title text-ellipsis"
-                  title="{{ item.name }}"
-                >
-                  {{ item.name }}
-                </span>
-              </div>
-
-              <!-- ROLE CELL -->
-              <div class="table-cell">
-                <span style="width: 120px !important">
-                  <select
-                    [(ngModel)]="item.userRoleId"
-                    class="table-td-input"
-                    [disabled]="!item.isChecked"
-                  >
-                    <option
-                      *ngFor="let option of userRoles"
-                      [value]="option.id"
-                    >
-                      {{ option.type }}
-                    </option>
-                  </select>
-                </span>
-                <div
-                  class="errorValidation"
-                  *ngIf="item.isAdded && !item.userRoleId"
-                >
-                  Please select a role.
-                </div>
-              </div>
-            </div>
-          </ng-container>
-          <app-data-not-found *ngIf="storageUnitList.length == 0" />
-        </div>
-      </div>
-      <div *ngIf="loading" class="row">
-        <div class="col-6 mb-4">
-          <p-skeleton height="100px"></p-skeleton>
-        </div>
-        <div class="col-6 mb-4">
-          <p-skeleton height="100px"></p-skeleton>
-        </div>
-      </div>
-    </div>
+ 
   </p-dialog>
 </div>
 
@@ -726,17 +598,16 @@
   >
     <!-- <form  > -->
     <div class="business">
-      <h6 class="business-title">Cold Store</h6>
       <div *ngIf="!loading" class="row">
         <div class="unit-table p-0">
           <div class="table-header d-flex">
             <div class="header-cell">BUSINESS UNIT</div>
             <div class="header-cell">ROLE</div>
           </div>
-          <ng-container *ngFor="let item of coldStoreUnitList">
+          <ng-container *ngFor="let item of dairyFarmUnitList">
             <div class="table-row d-flex" *ngIf="item.isAdded == false">
               <!-- BUSINESS UNIT CELL -->
-              <div class="table-cell">
+              <div class="table-cell" style="margin-right: 10px;">
                 <p-checkbox
                   [binary]="true"
                   [(ngModel)]="item.isChecked"
@@ -777,138 +648,7 @@
               </div>
             </div>
           </ng-container>
-          <app-data-not-found *ngIf="coldStoreUnitList.length == 0" />
-        </div>
-      </div>
-      <div *ngIf="loading" class="row">
-        <div class="col-6 mb-4">
-          <p-skeleton height="100px"></p-skeleton>
-        </div>
-        <div class="col-6 mb-4">
-          <p-skeleton height="100px"></p-skeleton>
-        </div>
-      </div>
-    </div>
-
-    <!-- Section: Poultry Farm -->
-    <div class="section mt-4">
-      <h6 class="business-title">Poultry Farm</h6>
-      <div *ngIf="!loading" class="row">
-        <div class="unit-table p-0">
-          <div class="table-header d-flex">
-            <div class="header-cell">BUSINESS UNIT</div>
-            <div class="header-cell">ROLE</div>
-          </div>
-          <ng-container *ngFor="let item of poultryFarmUnitList">
-            <div class="table-row d-flex" *ngIf="item.isAdded == false">
-              <!-- BUSINESS UNIT CELL -->
-              <div class="table-cell">
-                <p-checkbox
-                  [binary]="true"
-                  [(ngModel)]="item.isChecked"
-                  (onChange)="checkedBusinessUnitCounts(item)"
-                ></p-checkbox>
-
-                <span
-                  class="business-title text-ellipsis"
-                  title="{{ item.name }}"
-                >
-                  {{ item.name }}
-                </span>
-              </div>
-
-              <!-- ROLE CELL -->
-              <div class="table-cell">
-                <select
-                  [(ngModel)]="item.userRoleId"
-                  class="table-td-input"
-                  [disabled]="!item.isChecked"
-                  (change)="isValidAssignment()"
-                >
-                  <option [ngValue]="null" disabled selected hidden>
-                    User Type
-                  </option>
-                  <option
-                    *ngFor="let option of userRoles"
-                    [ngValue]="option.id"
-                  >
-                    {{ option.type }}
-                  </option>
-                </select>
-                <span
-                  class="errorValidation"
-                  *ngIf="item.isChecked && item.userRoleId == undefined"
-                  >Please select a role.</span
-                >
-              </div>
-            </div>
-          </ng-container>
-          <app-data-not-found *ngIf="poultryFarmUnitList.length == 0" />
-        </div>
-      </div>
-      <div *ngIf="loading" class="row">
-        <div class="col-6 mb-4">
-          <p-skeleton height="100px"></p-skeleton>
-        </div>
-        <div class="col-6 mb-4">
-          <p-skeleton height="100px"></p-skeleton>
-        </div>
-      </div>
-    </div>
-    <!-- Section: Poultry Farm -->
-    <div class="section mt-4">
-      <h6 class="business-title">Storage Unit</h6>
-      <div *ngIf="!loading" class="row">
-        <div class="unit-table p-0">
-          <div class="table-header d-flex">
-            <div class="header-cell">BUSINESS UNIT</div>
-            <div class="header-cell">ROLE</div>
-          </div>
-          <ng-container *ngFor="let item of storageUnitList">
-            <div class="table-row d-flex" *ngIf="item.isAdded == false">
-              <!-- BUSINESS UNIT CELL -->
-              <div class="table-cell">
-                <p-checkbox
-                  [binary]="true"
-                  [(ngModel)]="item.isChecked"
-                  (onChange)="checkedBusinessUnitCounts(item)"
-                ></p-checkbox>
-
-                <span
-                  class="business-title text-ellipsis"
-                  title="{{ item.name }}"
-                >
-                  {{ item.name }}
-                </span>
-              </div>
-
-              <!-- ROLE CELL -->
-              <div class="table-cell">
-                <select
-                  [(ngModel)]="item.userRoleId"
-                  class="table-td-input"
-                  [disabled]="!item.isChecked"
-                  (change)="isValidAssignment()"
-                >
-                  <option [ngValue]="null" disabled selected hidden>
-                    User Type
-                  </option>
-                  <option
-                    *ngFor="let option of userRoles"
-                    [ngValue]="option.id"
-                  >
-                    {{ option.type }}
-                  </option>
-                </select>
-                <span
-                  class="errorValidation"
-                  *ngIf="item.isChecked && item.userRoleId == undefined"
-                  >Please select a role.</span
-                >
-              </div>
-            </div>
-          </ng-container>
-          <app-data-not-found *ngIf="storageUnitList.length == 0" />
+          <app-data-not-found *ngIf="dairyFarmUnitList.length == 0" />
         </div>
       </div>
       <div *ngIf="loading" class="row">
@@ -976,14 +716,13 @@
   >
     <!-- <form  > -->
     <div class="business">
-      <h6 class="business-title">Cold Store</h6>
       <div *ngIf="!loading" class="row">
         <div class="unit-table p-0">
           <div class="table-header d-flex">
             <div class="header-cell">BUSINESS UNIT</div>
             <div class="header-cell">ROLE</div>
           </div>
-          <ng-container *ngFor="let item of addedColdStoreUnitList">
+          <ng-container *ngFor="let item of addedDairyFarmUnitList">
             <div class="table-row d-flex">
               <!-- BUSINESS UNIT CELL -->
               <div class="table-cell">
@@ -1027,7 +766,7 @@
               </div>
             </div>
           </ng-container>
-          <app-data-not-found *ngIf="addedColdStoreUnitList.length == 0" />
+          <app-data-not-found *ngIf="addedDairyFarmUnitList.length == 0" />
         </div>
       </div>
       <div *ngIf="loading" class="row">
@@ -1040,136 +779,6 @@
       </div>
     </div>
 
-    <!-- Section: Poultry Farm -->
-    <div class="section mt-4">
-      <h6 class="business-title">Poultry Farm</h6>
-      <div *ngIf="!loading" class="row">
-        <div class="unit-table p-0">
-          <div class="table-header d-flex">
-            <div class="header-cell">BUSINESS UNIT</div>
-            <div class="header-cell">ROLE</div>
-          </div>
-          <ng-container *ngFor="let item of addedPoultryFarmUnitList">
-            <div class="table-row d-flex">
-              <!-- BUSINESS UNIT CELL -->
-              <div class="table-cell">
-                <p-checkbox
-                  [binary]="true"
-                  [(ngModel)]="item.isChecked"
-                  (onChange)="checkedEditBusinessUnitCounts(item)"
-                ></p-checkbox>
-
-                <span
-                  class="business-title text-ellipsis"
-                  title="{{ item.name }}"
-                >
-                  {{ item.name }}
-                </span>
-              </div>
-
-              <!-- ROLE CELL -->
-              <div class="table-cell">
-                <select
-                  [(ngModel)]="item.userRoleId"
-                  class="table-td-input"
-                  [disabled]="!item.isChecked"
-                  (change)="isEditValidAssignment()"
-                >
-                  <option [ngValue]="null" disabled selected hidden>
-                    User Type
-                  </option>
-                  <option
-                    *ngFor="let option of userRoles"
-                    [ngValue]="option.id"
-                  >
-                    {{ option.type }}
-                  </option>
-                </select>
-                <span
-                  class="errorValidation"
-                  *ngIf="item.isChecked && item.userRoleId == undefined"
-                  >Please select a role.</span
-                >
-              </div>
-            </div>
-          </ng-container>
-          <app-data-not-found *ngIf="addedPoultryFarmUnitList.length == 0" />
-        </div>
-      </div>
-      <div *ngIf="loading" class="row">
-        <div class="col-6 mb-4">
-          <p-skeleton height="100px"></p-skeleton>
-        </div>
-        <div class="col-6 mb-4">
-          <p-skeleton height="100px"></p-skeleton>
-        </div>
-      </div>
-    </div>
-    <!-- Section: Poultry Farm -->
-    <div class="section mt-4">
-      <h6 class="business-title">Storage Unit</h6>
-      <div *ngIf="!loading" class="row">
-        <div class="unit-table p-0">
-          <div class="table-header d-flex">
-            <div class="header-cell">BUSINESS UNIT</div>
-            <div class="header-cell">ROLE</div>
-          </div>
-          <ng-container *ngFor="let item of addedStorageUnitList">
-            <div class="table-row d-flex">
-              <!-- BUSINESS UNIT CELL -->
-              <div class="table-cell">
-                <p-checkbox
-                  [binary]="true"
-                  [(ngModel)]="item.isChecked"
-                  (onChange)="checkedEditBusinessUnitCounts(item)"
-                ></p-checkbox>
-
-                <span
-                  class="business-title text-ellipsis"
-                  title="{{ item.name }}"
-                >
-                  {{ item.name }}
-                </span>
-              </div>
-
-              <!-- ROLE CELL -->
-              <div class="table-cell">
-                <select
-                  [(ngModel)]="item.userRoleId"
-                  class="table-td-input"
-                  [disabled]="!item.isChecked"
-                  (change)="isEditValidAssignment()"
-                >
-                  <option [ngValue]="null" disabled selected hidden>
-                    User Type
-                  </option>
-                  <option
-                    *ngFor="let option of userRoles"
-                    [ngValue]="option.id"
-                  >
-                    {{ option.type }}
-                  </option>
-                </select>
-                <span
-                  class="errorValidation"
-                  *ngIf="item.isChecked && item.userRoleId == undefined"
-                  >Please select a role.</span
-                >
-              </div>
-            </div>
-          </ng-container>
-          <app-data-not-found *ngIf="addedStorageUnitList.length == 0" />
-        </div>
-      </div>
-      <div *ngIf="loading" class="row">
-        <div class="col-6 mb-4">
-          <p-skeleton height="100px"></p-skeleton>
-        </div>
-        <div class="col-6 mb-4">
-          <p-skeleton height="100px"></p-skeleton>
-        </div>
-      </div>
-    </div>
     <hr *ngIf="!loading" class="mt-5" />
     <div
       *ngIf="!loading"

@@ -30,40 +30,23 @@
     <div class="col-sm-6 col-lg-3 mb-5">
       <p-chart type="bar" [data]="chartData" [options]="chartOptions"></p-chart>
       
-      <div [routerLink]="isAdminExit ? ['/coldStore'] : null"  class="dashboard-card">Cold Store</div>
+      <div [routerLink]="isAdminExit ? ['/superAdmin/users'] : null"  class="dashboard-card">Users</div>
     </div>
     <div class="col-sm-6 col-lg-3  mb-5">
       <p-chart type="bar" [data]="chartData" [options]="chartOptions"></p-chart>
     <div
     
-        [routerLink]="isAdminExit ? ['/poultryFarm'] : null"
+        [routerLink]="isAdminExit ? ['/superAdmin/customers'] : null"
         class="dashboard-card"
         style="cursor: pointer"
       >
-        Poultry Farm
+        Customers
       </div>
     </div>
     <div class="col-sm-6 col-lg-3">
       <p-chart type="bar" [data]="storageUnitChartData" [options]="chartOptions"></p-chart>
-      <div [routerLink]="isAdminExit ? ['/storageUnit'] : null"  class="dashboard-card" style="cursor: pointer">Storage Unit</div>
+      <div [routerLink]="isAdminExit ? ['/superAdmin/suppliers'] : null"  class="dashboard-card" style="cursor: pointer">Suppliers</div>
     
     </div>
   </div>
-  <!-- <div class="row justify-content-between mt-5">
-    <div class="col-md-3">
-      <div class="dashboard-card">Cold Store</div>
-    </div>
-    <div class="col-md-3">
-      <div
-        [routerLink]="['/poultryFarm']"
-        class="dashboard-card"
-        style="cursor: pointer"
-      >
-        Poultry Farm
-      </div>
-    </div>
-    <div class="col-md-3">
-      <div [routerLink]="['/storageUnit']" class="dashboard-card" style="cursor: pointer">Storage Unit</div>
-    </div>
-  </div> -->
 </div>

@@ -72,15 +72,11 @@ export class UsersComponent {
   businessTypes: masterModal[] = [];
   businessUnitTypes: masterModal[] = [];
   userRoles: masterModal[] = [];
-  coldStoreUnitList: BusinessUnitModel[] = [];
-  poultryFarmUnitList: BusinessUnitModel[] = [];
-  storageUnitList: BusinessUnitModel[] = [];
-  addedColdStoreUnitList: AddedBusinessUnitModel[] = [];
-  addedPoultryFarmUnitList: AddedBusinessUnitModel[] = [];
-  addedStorageUnitList: AddedBusinessUnitModel[] = [];
+  dairyFarmUnitList: BusinessUnitModel[] = [];
+  addedDairyFarmUnitList: AddedBusinessUnitModel[] = [];
   userBusinessUnitAndRoleDtosCount: number = 0;
   userEditBusinessUnitAndRoleDtosCount: number = 0;
-  businessTypeId: any = null;
+  businessTypeId: any = 3;
   businessUnitId: any = null;
   isActive: any = null;
   userId: any = null;
@@ -122,7 +118,7 @@ export class UsersComponent {
       ],
     });
     this.initForm();
-    this.loadBusinessTypes();
+    // this.loadBusinessTypes();
   }
 
   ngAfterViewInit() {
@@ -150,7 +146,7 @@ export class UsersComponent {
           }
           let data = {
             searchKey: this.searchKey,
-            businessTypeId: this.businessTypeId,
+            businessTypeId: null,
             businessUnitId: this.businessUnitId,
             isActive: this.isActive,
             pageNumber: this.paginator.pageIndex + 1,
@@ -207,9 +203,7 @@ export class UsersComponent {
     this.loading = true;
     this.superAdminService.getAllBusinessUnitByUserId(userId).subscribe(
       (dt) => {
-        this.coldStoreUnitList = [];
-        this.poultryFarmUnitList = [];
-        this.storageUnitList = [];
+        this.dairyFarmUnitList = [];
         for (let a = 0; a < dt.length; a++) {
           let busUnit: BusinessUnitModel = {
             totalProfit: dt[a].totalProfit,
@@ -223,12 +217,8 @@ export class UsersComponent {
             isChecked: false,
             userRoleId: dt[a].userRoleId,
           };
-          if (busUnit.businessTypeId == 0) {
-            this.coldStoreUnitList.push(busUnit);
-          } else if (busUnit.businessTypeId == 1) {
-            this.poultryFarmUnitList.push(busUnit);
-          } else if (busUnit.businessTypeId == 2) {
-            this.storageUnitList.push(busUnit);
+          if (busUnit.businessTypeId == 3) {
+            this.dairyFarmUnitList.push(busUnit);
           }
         }
         this.loading = false;
@@ -251,9 +241,8 @@ export class UsersComponent {
     this.loading = true;
     this.superAdminService.getAllAddedBusinessUnitByUserId(userId).subscribe(
       (dt) => {
-        this.addedColdStoreUnitList = [];
-        this.addedPoultryFarmUnitList = [];
-        this.addedStorageUnitList = [];
+        debugger
+        this.addedDairyFarmUnitList = [];
         for (let a = 0; a < dt.length; a++) {
           let addedBusUnit: AddedBusinessUnitModel = {
             businessUnitId: dt[a].businessUnitId,
@@ -264,12 +253,8 @@ export class UsersComponent {
             userRole: dt[a].userRole,
             isChecked: true,
           };
-          if (addedBusUnit.businessTypeId == 0) {
-            this.addedColdStoreUnitList.push(addedBusUnit);
-          } else if (addedBusUnit.businessTypeId == 1) {
-            this.addedPoultryFarmUnitList.push(addedBusUnit);
-          } else if (addedBusUnit.businessTypeId == 2) {
-            this.addedStorageUnitList.push(addedBusUnit);
+          if (addedBusUnit.businessTypeId ==3) {
+            this.addedDairyFarmUnitList.push(addedBusUnit);
           }
         }
         this.checkedEditBusinessUnitCounts('dummy');
@@ -289,28 +274,29 @@ export class UsersComponent {
       }
     );
   }
-  loadBusinessTypes() {
-    this.masterService.getBusinessTypes().subscribe(
-      (res) => {
-        var dt = res;
-        this.businessTypes = [];
-        for (let a = 0; a < dt.length; a++) {
-          let _data: masterModal = {
-            id: dt[a].key,
-            type: dt[a].value,
-          };
-          this.businessTypes.push(_data);
-        }
-      },
-      (error) => {
-        if (error.status == 401) {
-          this.accountService.doLogout();
-        }
-      }
-    );
-  }
+  // loadBusinessTypes() {
+  //   this.masterService.getBusinessTypes().subscribe(
+  //     (res) => {
+  //       debugger
+  //       var dt = res;
+  //       this.businessTypes = [];
+  //       for (let a = 0; a < dt.length; a++) {
+  //         let _data: masterModal = {
+  //           id: dt[a].key,
+  //           type: dt[a].value,
+  //         };
+  //         this.businessTypes.push(_data);
+  //       }
+  //     },
+  //     (error) => {
+  //       if (error.status == 401) {
+  //         this.accountService.doLogout();
+  //       }
+  //     }
+  //   );
+  // }
   loadBusinessUnitTypes() {
-    this.masterService.getBusinessUnitTypesById(this.businessTypeId).subscribe(
+    this.masterService.getBusinessUnitTypesById(3).subscribe(
       (res) => {
         var dt = res;
         this.businessUnitTypes = [];
@@ -450,9 +436,7 @@ export class UsersComponent {
   // get all the selected businessUnitId and userRoleId from all lists
   getSelectedBusinessUnits(): any[] {
     const allUnits = [
-      ...this.coldStoreUnitList,
-      ...this.poultryFarmUnitList,
-      ...this.storageUnitList,
+      ...this.dairyFarmUnitList,
     ];
 
     return allUnits
@@ -513,9 +497,7 @@ export class UsersComponent {
 
   isValidAssignment(): boolean {
     const allSelectedItems = [
-      ...this.coldStoreUnitList,
-      ...this.poultryFarmUnitList,
-      ...this.storageUnitList,
+      ...this.dairyFarmUnitList,
     ].filter((item) => item.isChecked); // only checked items
     // Return true only if all selected items have a userRoleId
     const allHaveRoles = allSelectedItems.every(
@@ -537,9 +519,7 @@ export class UsersComponent {
   }
   isEditValidAssignment(): boolean {
     const allSelectedItems = [
-      ...this.addedColdStoreUnitList,
-      ...this.addedPoultryFarmUnitList,
-      ...this.addedStorageUnitList,
+      ...this.addedDairyFarmUnitList,
     ].filter((item) => item.isChecked); // only checked items
     // Return true only if all selected items have a userRoleId
     const allHaveRoles = allSelectedItems.every(
@@ -552,9 +532,7 @@ export class UsersComponent {
   // get all the selected businessUnitId and userRoleId from all lists
   getEditSelectedBusinessUnits(): any[] {
     const allUnits = [
-      ...this.addedColdStoreUnitList,
-      ...this.addedPoultryFarmUnitList,
-      ...this.addedStorageUnitList,
+      ...this.addedDairyFarmUnitList,
     ];
 
     return allUnits.map((item) => ({
