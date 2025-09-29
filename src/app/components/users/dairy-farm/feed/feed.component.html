@@ -1,6 +1,6 @@
 <div class="container-fluid">
   <div>
-    <span class="breadcrumb">Dairy Farm /</span>
+    <span class="breadcrumb">{{ this.businessUnitName }}/</span>
     <span class="breadcrumb-bold">&nbsp;Feed</span>
   </div>
   <span class="d-flex flex-wrap justify-content-between">
@@ -56,7 +56,7 @@
           </svg>
         </div>
       </div>
-      <span class="alarms mt-4 mb-3 mx-3">
+      <!-- <span class="alarms mt-4 mb-3 mx-3">
         <p-select
           [options]="BusinessUnits"
           [(ngModel)]="businessUnitId"
@@ -66,7 +66,7 @@
           [showClear]="true"
           placeholder="Business Unit"
         />
-      </span>
+      </span> -->
     </span>
     <div class="d-flex align-items-center gap-5">
       <span
@@ -233,7 +233,7 @@
   [draggable]="false"
   [resizable]="false"
 >
-  <form [formGroup]="addFeedModel">
+  <form [formGroup]="addFeedForm">
     <div class="row" style="row-gap: 20px">
       <div class="col-6">
         <span class="label"
@@ -245,6 +245,15 @@
           class="input-felid"
           placeholder="Enter name..."
         />
+        <span
+          class="errorValidation"
+          *ngIf="
+            addFeedForm.get('name')?.touched &&
+            addFeedForm.get('name')?.hasError('required')
+          "
+        >
+          Required field
+        </span>
       </div>
       <div class="col-6">
         <span class="label"
@@ -261,6 +270,15 @@
             placeholder="Animal "
             formControlName="animalId"
           />
+          <span
+            class="errorValidation"
+            *ngIf="
+              addFeedForm.get('animalId')?.touched &&
+              addFeedForm.get('animalId')?.hasError('required')
+            "
+          >
+            Required field
+          </span>
         </div>
       </div>
       <div class="col-6">
@@ -276,9 +294,18 @@
             placeholder="Supplier "
             formControlName="supplierId"
           />
+          <span
+            class="errorValidation"
+            *ngIf="
+              addFeedForm.get('supplierId')?.touched &&
+              addFeedForm.get('supplierId')?.hasError('required')
+            "
+          >
+            Required field
+          </span>
         </div>
       </div>
-      <div class="col-6">
+      <!-- <div class="col-6">
         <span class="label"
           >Business unit<span class="required-icon">*</span>
         </span>
@@ -295,7 +322,7 @@
             formControlName="businessUnitId"
           />
         </div>
-      </div>
+      </div> -->
       <div class="col-6">
         <span class="label">Quantity<span class="required-icon">*</span></span>
         <input
@@ -304,6 +331,15 @@
           placeholder="Enter quantity..."
           formControlName="quantity"
         />
+        <span
+          class="errorValidation"
+          *ngIf="
+            addFeedForm.get('quantity')?.touched &&
+            addFeedForm.get('quantity')?.hasError('required')
+          "
+        >
+          Required field
+        </span>
       </div>
       <div class="col-6">
         <span class="label">Feed Time<span class="required-icon">*</span></span>
@@ -313,10 +349,19 @@
           placeholder="Enter time..."
           formControlName="feedTime"
         />
+        <span
+          class="errorValidation"
+          *ngIf="
+            addFeedForm.get('feedTime')?.touched &&
+            addFeedForm.get('feedTime')?.hasError('required')
+          "
+        >
+          Required field
+        </span>
       </div>
 
       <div class="col-12">
-        <span class="label">Note<span class="required-icon">*</span></span>
+        <span class="label">Note</span>
         <input
           type="text"
           class="input-felid"
@@ -332,10 +377,10 @@
       <!-- <button type="button" class="btn-save">Save</button> -->
       <button
         type="button"
-        (click)="addFeedModel.valid && !addLoading ? addFeed() : null"
+        (click)="addFeedForm.valid && !addLoading ? addFeed() : null"
         [ngClass]="{
-          'btn-save': addFeedModel.valid && !addLoading,
-          'btn-disable': addFeedModel.invalid || addLoading
+          'btn-save': addFeedForm.valid && !addLoading,
+          'btn-disable': addFeedForm.invalid || addLoading
         }"
       >
         Save &nbsp;

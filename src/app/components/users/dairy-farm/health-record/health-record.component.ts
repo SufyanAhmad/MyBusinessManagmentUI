@@ -12,13 +12,12 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { SelectModule } from 'primeng/select';
 import { DialogModule } from 'primeng/dialog';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { catchError, map, merge, of, startWith, switchMap, tap } from 'rxjs';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { SkeletonModule } from 'primeng/skeleton';
 import { masterModal } from '../../../../models/master-model/master-model';
-import { ColdStoreServiceService } from '../../../../services/cold-store-service/cold-store-service.service';
 import { MasterService } from '../../../../services/master-service/master.service';
 import { AccountService } from '../../../../services/account-service/account.service';
 import { LoadingComponent } from '../../../loading/loading.component';
@@ -59,7 +58,6 @@ export class HealthRecordComponent {
   stockId: any = null;
   busUnitId: any = null;
   HealthVaccinationRecordList: HealthVaccinationRecordModel[] = [];
-  BusinessUnits: masterModal[] = [];
   businessUnitId: any = null;
   businessUnitName: any = '';
   bgColor: string = '#FFCE3A';
@@ -69,7 +67,7 @@ export class HealthRecordComponent {
   // for add animal popup
   addLoading: boolean = false;
   visible: boolean = false;
-  addHealthVaccinationRecordModel!: FormGroup;
+  addHealthVaccinationRecordForm!: FormGroup;
   displayedColumns: string[] = [
     'recordId',
     'animalId',
@@ -79,7 +77,6 @@ export class HealthRecordComponent {
     'nextDueDate',
   ];
   constructor(
-    private route: ActivatedRoute,
     private masterService: MasterService,
     private accountService: AccountService,
     private dairyFarmService: DairyFarmService,
@@ -88,17 +85,16 @@ export class HealthRecordComponent {
     private router: Router
   ) {}
   ngOnInit() {
-    this.busUnitId = localStorage.getItem('DF_businessUnitId');
-    this.businessUnitName = localStorage.getItem('DF_businessUnit_Name');
-    this.loadBusinessUnits();
-    this.loadAnimal();
+    this.busUnitId = this.accountService.getBusinessUnitId();
+    this.businessUnitName = this.accountService.getBusinessUnitName();
     this.initForm();
-    this.loadParties();
   }
   ngAfterViewInit() {
     setTimeout(() => {
       this.getHealthVaccinationRecordList();
     }, 0);
+    this.loadAnimal();
+    this.loadParties();
   }
 
   getHealthVaccinationRecordList() {
@@ -121,7 +117,7 @@ export class HealthRecordComponent {
 
           let data = {
             searchKey: this.searchKey ?? null,
-            businessUnitId: this.busUnitId ?? null,
+            businessUnitId: this.busUnitId,
             pageNumber: this.paginator.pageIndex + 1,
             pageSize: 10,
           };
@@ -188,13 +184,13 @@ export class HealthRecordComponent {
   addHealthVaccinationRecord() {
     this.addLoading = true;
     this.dairyFarmService
-      .addHealthVaccinationRecord(this.addHealthVaccinationRecordModel.value)
+      .addHealthVaccinationRecord(this.addHealthVaccinationRecordForm.value)
       .subscribe(
         (dt) => {
           this.addLoading = false;
           this.visible = false;
           this.getHealthVaccinationRecordList();
-          this.addHealthVaccinationRecordModel.reset();
+          this.addHealthVaccinationRecordForm.reset();
           this.messageService.add({
             severity: 'success',
             summary: 'Added',
@@ -218,13 +214,13 @@ export class HealthRecordComponent {
       );
   }
   initForm() {
-    this.addHealthVaccinationRecordModel = this.formBuilder.group({
+    this.addHealthVaccinationRecordForm = this.formBuilder.group({
       supplierId: [null, [Validators.required]],
       date: [null, [Validators.required]],
       name: [null, [Validators.required]],
       purpose: [null, [Validators.required]],
       nextDueDate: [null, [Validators.required]],
-      businessUnitId: [null, [Validators.required]],
+      businessUnitId: [this.busUnitId],
     });
   }
   addAnimal() {}
@@ -234,27 +230,6 @@ export class HealthRecordComponent {
         this.searchKey = null;
       }
     }
-  }
-
-  loadBusinessUnits() {
-    this.masterService.getBusinessUnitTypesById(3).subscribe(
-      (res) => {
-        var dt = res;
-        this.BusinessUnits = [];
-        for (let a = 0; a < dt.length; a++) {
-          let _data: masterModal = {
-            id: dt[a].businessUnitId,
-            type: dt[a].name,
-          };
-          this.BusinessUnits.push(_data);
-        }
-      },
-      (error) => {
-        if (error.status == 401) {
-          this.accountService.doLogout();
-        }
-      }
-    );
   }
   loadParties() {
     this.masterService.getParties(1).subscribe(

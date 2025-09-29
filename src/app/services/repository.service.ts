@@ -10,31 +10,60 @@ export class RepositoryService {
 
   public get = (route: string, isauth: boolean) => {
     if (!isauth) {
-      return this.http.get(this.createCompleteRoute(route, environment.apiUrl), this.generateHeaders());
+      return this.http.get(
+        this.createCompleteRoute(route, environment.apiUrl),
+        this.generateHeaders()
+      );
     } else {
-      return this.http.get(this.createCompleteRoute(route, environment.apiUrl), this.generateHeadersWithAuth());
+      return this.http.get(
+        this.createCompleteRoute(route, environment.apiUrl),
+        this.generateHeadersWithAuth()
+      );
     }
   };
 
   public post = (route: string, body: any, isauth: boolean) => {
     if (!isauth) {
-      return this.http.post(this.createCompleteRoute(route, environment.apiUrl), body, this.generateHeaders());
+      return this.http.post(
+        this.createCompleteRoute(route, environment.apiUrl),
+        body,
+        this.generateHeaders()
+      );
     } else {
-      return this.http.post(this.createCompleteRoute(route, environment.apiUrl), body, this.generateHeadersWithAuth());
+      return this.http.post(
+        this.createCompleteRoute(route, environment.apiUrl),
+        body,
+        this.generateHeadersWithAuth()
+      );
     }
   };
   public postWithFile = (route: string, body: any) => {
-    return this.http.post(this.createCompleteRoute(route, environment.apiUrl), body, this.generateHeadersForFile());
+    return this.http.post(
+      this.createCompleteRoute(route, environment.apiUrl),
+      body,
+      this.generateHeadersForFile()
+    );
   };
   public putWithOutFile = (route: string, body: any) => {
-    return this.http.put(this.createCompleteRoute(route, environment.apiUrl), body, this.generateHeadersWithAuth());
+    return this.http.put(
+      this.createCompleteRoute(route, environment.apiUrl),
+      body,
+      this.generateHeadersWithAuth()
+    );
   };
   public put = (route: string, body: any) => {
-    return this.http.put(this.createCompleteRoute(route, environment.apiUrl), body, this.generateHeadersForFile());
+    return this.http.put(
+      this.createCompleteRoute(route, environment.apiUrl),
+      body,
+      this.generateHeadersForFile()
+    );
   };
 
   public delete = (route: string) => {
-    return this.http.delete(this.createCompleteRoute(route, environment.apiUrl), this.generateHeadersWithAuth());
+    return this.http.delete(
+      this.createCompleteRoute(route, environment.apiUrl),
+      this.generateHeadersWithAuth()
+    );
   };
 
   private createCompleteRoute = (route: string, envAddress: string) => {
@@ -48,12 +77,17 @@ export class RepositoryService {
   };
   private generateHeadersWithAuth = () => {
     return {
-      headers: new HttpHeaders({ 'Content-Type': 'application/json', Authorization: 'bearer ' + localStorage.getItem('BS_access_token') }),
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        Authorization: 'bearer ' + localStorage.getItem('DF_access_token'),
+      }),
     };
   };
   private generateHeadersForFile = () => {
     return {
-      headers: new HttpHeaders({ Authorization: 'bearer ' + localStorage.getItem('BS_access_token') }),
+      headers: new HttpHeaders({
+        Authorization: 'bearer ' + localStorage.getItem('DF_access_token'),
+      }),
     };
   };
 }

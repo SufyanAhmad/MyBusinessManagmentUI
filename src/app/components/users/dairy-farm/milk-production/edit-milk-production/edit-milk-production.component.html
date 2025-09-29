@@ -1,9 +1,15 @@
 <div class="container-fluid">
   <div class="d-pointer">
     <span class="breadcrumb" style="text-transform: uppercase"
-      >Dairy Farm /
+      >{{ this.businessUnitName }} /
     </span>
-    <span class="breadcrumb-bold">&nbsp;Animal Detail</span>
+    <span
+      class="breadcrumb-bold"
+      style="cursor: pointer"
+      [routerLink]="['/dairyFarm/milk-production']"
+      >&nbsp;Milk Production /</span
+    >
+    <span class="breadcrumb-bold">&nbsp;Milk Production Detail</span>
   </div>
   <!-- User Header -->
   <div
@@ -31,13 +37,13 @@
       <button
         type="button"
         (click)="
-          editMilkProductionModel.valid && !editLoading
+          editMilkProductionForm.valid && !editLoading
             ? editLiveStockDetail()
             : null
         "
         [ngClass]="{
-          'btn-save': editMilkProductionModel.valid && !editLoading,
-          'btn-disable': editMilkProductionModel.invalid || editLoading
+          'btn-save': editMilkProductionForm.valid && !editLoading,
+          'btn-disable': editMilkProductionForm.invalid || editLoading
         }"
       >
         Save &nbsp;
@@ -50,21 +56,21 @@
       </button>
     </span>
   </div>
-  <form [formGroup]="editMilkProductionModel">
+  <form [formGroup]="editMilkProductionForm">
     <div class="row g-3 align-items-end mt-4">
       <div class="col-md-4 mb-4">
-        <span class="label1">Record id</span>
+        <span class="label">Record Id</span>
         <input
           type="text"
           class="input-felid"
           [readonly]="true"
-          placeholder="Enter breed id..."
+          placeholder="Enter record id..."
           [value]="MilkProductionDetail.milkProductionRef"
         />
       </div>
       <div class="col-md-4 mb-4 position-relative">
         <span class="label"
-          >Animal ID<span class="required-icon">*</span>
+          >Animal Id<span class="required-icon">*</span>
         </span>
         <div class="alt-dropdown" [ngClass]="{ 'input-disable': isReadOnly }">
           <p-select
@@ -76,51 +82,146 @@
             placeholder="Animal "
             formControlName="animalId"
           />
+          <span
+            class="errorValidation"
+            *ngIf="
+              editMilkProductionForm.get('animalId')?.touched &&
+              editMilkProductionForm.get('animalId')?.hasError('required')
+            "
+          >
+            Required field
+          </span>
         </div>
       </div>
       <div class="col-md-4 mb-4">
-        <span class="label1">Date</span>
+        <span class="label">Date<span class="required-icon">*</span></span>
         <input
           type="date"
-          value="NILI-RAVI"
           class="input-felid custom-date"
           [ngClass]="{ 'input-disable': isReadOnly }"
-          placeholder="Enter breed name..."
           formControlName="date"
         />
+        <span
+          class="errorValidation"
+          *ngIf="
+            editMilkProductionForm.get('date')?.touched &&
+            editMilkProductionForm.get('date')?.hasError('required')
+          "
+        >
+          Required field
+        </span>
       </div>
       <div class="col-md-4 mb-4 position-relative">
-        <span class="label1">MORNING(L)</span>
+        <span class="label"
+          >Morning(L)<span class="required-icon">*</span></span
+        >
         <input
-          type="text"
+          type="number"
           value="PAKISTAN"
           class="input-felid"
           [ngClass]="{ 'input-disable': isReadOnly }"
-          placeholder="Enter origin..."
+          placeholder="Enter quantity..."
           formControlName="morning"
         />
+        <span
+          class="errorValidation"
+          *ngIf="
+            editMilkProductionForm.get('morning')?.touched &&
+            editMilkProductionForm.get('morning')?.hasError('required')
+          "
+        >
+          Required field
+        </span>
       </div>
       <div class="col-md-4 mb-4 position-relative">
-        <span class="label1">EVENING(L)</span>
+        <span class="label"
+          >Evening(L)<span class="required-icon">*</span></span
+        >
         <input
-          type="text"
+          type="number"
           value="PAKISTAN"
           class="input-felid"
           [ngClass]="{ 'input-disable': isReadOnly }"
-          placeholder="Enter origin..."
+          placeholder="Enter quantity..."
           formControlName="evening"
         />
+
+        <span
+          class="errorValidation"
+          *ngIf="
+            editMilkProductionForm.get('evening')?.touched &&
+            editMilkProductionForm.get('evening')?.hasError('required')
+          "
+        >
+          Required field
+        </span>
       </div>
       <div class="col-md-4 mb-4">
-        <span class="label1">TOTAL(L)</span>
+        <span class="label">Total(L)<span class="required-icon">*</span></span>
         <input
-          type="text"
+          type="number"
           value="HIGH MILK YIELD"
           class="input-felid"
           [ngClass]="{ 'input-disable': isReadOnly }"
-          placeholder="Enter note..."
+          placeholder="Enter quantity..."
           formControlName="total"
         />
+        <span
+          class="errorValidation"
+          *ngIf="
+            editMilkProductionForm.get('total')?.touched &&
+            editMilkProductionForm.get('total')?.hasError('required')
+          "
+        >
+          Required field
+        </span>
+      </div>
+      <div class="col-md-4 mb-4">
+        <span class="label"> Fat %</span>
+        <input
+          type="number"
+          value="HIGH MILK YIELD"
+          class="input-felid"
+          [ngClass]="{ 'input-disable': isReadOnly }"
+          placeholder="Enter fat %..."
+          formControlName="total"
+        />
+      </div>
+      <div class="col-md-4 mb-4">
+        <span class="label">Snf %</span>
+        <input
+          type="number"
+          value="HIGH MILK YIELD"
+          class="input-felid"
+          [ngClass]="{ 'input-disable': isReadOnly }"
+          placeholder="Enter snf %..."
+          formControlName="total"
+        />
+      </div>
+      <div class="col-md-4 mb-4 position-relative">
+        <div class="d-flex gap-3 align-items-center mt-3">
+          <!-- Active -->
+          <div>
+            <span class="label">Active</span>
+            <input
+              class="form-check-input"
+              type="radio"
+              formControlName="isActive"
+              [value]="true"
+            />
+          </div>
+
+          <!-- Inactive -->
+          <div style="margin-left: 25px">
+            <span class="label">Inactive</span>
+            <input
+              class="form-check-input"
+              type="radio"
+              formControlName="isActive"
+              [value]="false"
+            />
+          </div>
+        </div>
       </div>
     </div>
   </form>

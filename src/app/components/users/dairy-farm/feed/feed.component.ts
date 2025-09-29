@@ -58,7 +58,6 @@ export class FeedComponent {
   stockId: any = null;
   busUnitId: any = null;
   feedList: FeedModel[] = [];
-  BusinessUnits: masterModal[] = [];
   AnimalList: masterModal[] = [];
   SupplierList: masterModal[] = [];
   businessUnitId: any = null;
@@ -68,7 +67,7 @@ export class FeedComponent {
   // for add feed popup
   addLoading: boolean = false;
   visible: boolean = false;
-  addFeedModel!: FormGroup;
+  addFeedForm!: FormGroup;
   displayedColumns: string[] = [
     'feedId',
     'animalId',
@@ -86,17 +85,17 @@ export class FeedComponent {
     private router: Router
   ) {}
   ngOnInit() {
-    this.busUnitId = localStorage.getItem('DF_businessUnitId');
-    this.businessUnitName = localStorage.getItem('DF_businessUnit_Name');
-    this.loadBusinessUnits();
-    this.loadParties();
-    this.loadAnimal();
+    this.busUnitId = this.accountService.getBusinessUnitId();
+    this.businessUnitName = this.accountService.getBusinessUnitName();
+
     this.initForm();
   }
   ngAfterViewInit() {
     setTimeout(() => {
       this.getFeedList();
     }, 0);
+    this.loadParties();
+    this.loadAnimal();
   }
   getFeedList() {
     this.paginator.pageIndex = 0;
@@ -116,7 +115,7 @@ export class FeedComponent {
 
           let data = {
             searchKey: this.searchKey ?? null,
-            businessUnitId: this.busUnitId ?? null,
+            businessUnitId: this.busUnitId,
             pageNumber: this.paginator.pageIndex + 1,
             pageSize: 10,
           };
@@ -176,12 +175,12 @@ export class FeedComponent {
   }
   addFeed() {
     this.addLoading = true;
-    this.dairyFarmService.addFeed(this.addFeedModel.value).subscribe(
+    this.dairyFarmService.addFeed(this.addFeedForm.value).subscribe(
       (dt) => {
         this.addLoading = false;
         this.visible = false;
         this.getFeedList();
-        this.addFeedModel.reset();
+        this.addFeedForm.reset();
         this.messageService.add({
           severity: 'success',
           summary: 'Added',
@@ -212,35 +211,15 @@ export class FeedComponent {
     }
   }
   initForm() {
-    this.addFeedModel = this.formBuilder.group({
+    this.addFeedForm = this.formBuilder.group({
       animalId: [null, [Validators.required]],
       supplierId: [null, [Validators.required]],
       name: [null, [Validators.required]],
       quantity: [, [Validators.required, Validators.pattern('^[0-9]*$')]],
       feedTime: [null, [Validators.required]],
-      note: [null, [Validators.required]],
-      businessUnitId: [null, [Validators.pattern]],
+      note: [null],
+      businessUnitId: [this.busUnitId],
     });
-  }
-  loadBusinessUnits() {
-    this.masterService.getBusinessUnitTypesById(3).subscribe(
-      (res) => {
-        var dt = res;
-        this.BusinessUnits = [];
-        for (let a = 0; a < dt.length; a++) {
-          let _data: masterModal = {
-            id: dt[a].businessUnitId,
-            type: dt[a].name,
-          };
-          this.BusinessUnits.push(_data);
-        }
-      },
-      (error) => {
-        if (error.status == 401) {
-          this.accountService.doLogout();
-        }
-      }
-    );
   }
   loadAnimal() {
     this.masterService.getAnimal().subscribe(

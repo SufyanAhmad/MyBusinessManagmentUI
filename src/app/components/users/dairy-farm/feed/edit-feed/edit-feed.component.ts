@@ -8,7 +8,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { MessageService } from 'primeng/api';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ToastModule } from 'primeng/toast';
 import { SelectModule } from 'primeng/select';
 import { AccountService } from '../../../../../services/account-service/account.service';
@@ -25,6 +25,7 @@ import { DairyFarmService } from '../../../../../services/dairy-farm.service';
     FormsModule,
     ToastModule,
     SelectModule,
+    RouterLink,
   ],
   templateUrl: './edit-feed.component.html',
   styleUrl: './edit-feed.component.scss',
@@ -37,11 +38,13 @@ export class EditFeedComponent {
   editLoading: boolean = false;
   feedId: any = null;
   businessUnitName: any = '';
+  busUnitId: any = null;
   isArchived: boolean = false;
   businessUnitTypes: masterModal[] = [];
   AnimalTypes: masterModal[] = [];
+  SupplierList: masterModal[] = [];
 
-  editFeedModel!: FormGroup;
+  editFeedForm!: FormGroup;
   FeedDetail: FeedModel = {
     feedId: '',
     feedRef: '',
@@ -81,56 +84,13 @@ export class EditFeedComponent {
   ) {}
   ngOnInit() {
     this.feedId = this.route.snapshot.params['id'];
-    this.businessUnitName = localStorage.getItem('DF_businessUnit_Name');
-
+    this.busUnitId = this.accountService.getBusinessUnitId();
+    this.businessUnitName = this.accountService.getBusinessUnitName();
+    this.getFeedDetails();
     this.initForm();
-    this.getBreedDetails();
-    this.loadAnimalTypes();
   }
-  // getLiveStockDetails() {
-  //   this.loading = true;
-  //   this.poultryFarmService.GetLiveStockDetail(this.liveStockId).subscribe(
-  //     (dt) => {
-  //       let data = dt;
-  //       this.isArchived = data.archived;
-  //       let arrDate = data.arrivalDate.split('T')[0];
-  //       this.liveStockDetail = {
-  //         livestockBatchId: data.livestockBatchId,
-  //         breed: data.breed,
-  //         quantity: data.quantity,
-  //         arrivalDate: arrDate,
-  //         ageInDays: data.ageInDays,
-  //         healthStatus: data.healthStatus,
-  //         businessUnitId: data.businessUnitId,
-  //       };
-  //       this.constLiveStockDetail = {
-  //         livestockBatchId: data.livestockBatchId,
-  //         breed: data.breed,
-  //         quantity: data.quantity,
-  //         arrivalDate: arrDate,
-  //         ageInDays: data.ageInDays,
-  //         healthStatus: data.healthStatus,
-  //         businessUnitId: data.businessUnitId,
-  //       };
-  //       this.initForm();
-  //       this.loadBusinessUnitTypes();
-  //       this.loading = false;
-  //     },
-  //     (error) => {
-  //       this.loading = false;
-  //       this.messageService.add({
-  //         severity: 'error',
-  //         summary: 'Error',
-  //         detail: error.message,
-  //         life: 4000,
-  //       });
-  //       if (error.status == 401) {
-  //         this.accountService.doLogout();
-  //       }
-  //     }
-  //   );
-  // }
-  getBreedDetails() {
+
+  getFeedDetails() {
     this.loading = true;
     this.dairyFarmService.GetFeedDetail(this.feedId).subscribe(
       (dt) => {
@@ -164,7 +124,8 @@ export class EditFeedComponent {
           businessUnitId: data.businessUnitId,
         };
         this.initForm();
-        this.loadBusinessUnitTypes();
+        this.loadAnimalTypes();
+        this.loadParties();
         this.loading = false;
       },
       (error) => {
@@ -184,7 +145,7 @@ export class EditFeedComponent {
   editFeedDetail() {
     this.editLoading = true;
     this.dairyFarmService
-      .UpdateFeedDetail(this.feedId, this.editFeedModel.value)
+      .UpdateFeedDetail(this.feedId, this.editFeedForm.value)
       .subscribe(
         (dt) => {
           this.messageService.add({
@@ -193,7 +154,7 @@ export class EditFeedComponent {
             detail: 'Feed updated successfully',
             life: 3000,
           });
-          this.getBreedDetails();
+          this.getFeedDetails();
           this.editLoading = false;
           this.isReadOnly = true;
         },
@@ -230,43 +191,20 @@ export class EditFeedComponent {
     this.initForm();
   }
   initForm() {
-    this.editFeedModel = this.formBuilder.group({
-      businessUnitId: [this.FeedDetail.businessUnitId, [Validators.required]],
+    this.editFeedForm = this.formBuilder.group({
+      businessUnitId: [this.busUnitId],
       animalId: [this.FeedDetail.animalId, [Validators.required]],
       supplierId: [this.FeedDetail.supplierId, [Validators.required]],
       name: [this.FeedDetail.name, [Validators.required]],
       quantity: [
         this.FeedDetail.quantity,
-        [
-          Validators.required,
-          Validators.pattern('^[1-9][0-9]*$'),
-          Validators.min(1),
-        ],
+        [Validators.pattern('^[1-9][0-9]*$'), Validators.min(1)],
       ],
       feedTime: [this.FeedDetail.feedTime, [Validators.required]],
-      note: [this.FeedDetail.note, [Validators.required]],
+      note: [this.FeedDetail.note],
     });
   }
-  loadBusinessUnitTypes() {
-    this.masterService.getBusinessUnitTypes().subscribe(
-      (res) => {
-        var dt = res;
-        this.businessUnitTypes = [];
-        for (let a = 0; a < dt.length; a++) {
-          let _data: masterModal = {
-            id: dt[a].businessUnitId,
-            type: dt[a].name,
-          };
-          this.businessUnitTypes.push(_data);
-        }
-      },
-      (error) => {
-        if (error.status == 401) {
-          this.accountService.doLogout();
-        }
-      }
-    );
-  }
+
   loadAnimalTypes() {
     this.masterService.getAnimalTypes().subscribe(
       (res) => {
@@ -287,11 +225,26 @@ export class EditFeedComponent {
       }
     );
   }
-  // preventDecimal(event: KeyboardEvent) {
-  //   if (event.key === '.' || event.key === ',') {
-  //     event.preventDefault();
-  //   }
-  // }
+  loadParties() {
+    this.masterService.getParties(1).subscribe(
+      (res) => {
+        var dt = res;
+        this.SupplierList = [];
+        for (let a = 0; a < dt.length; a++) {
+          let _data: masterModal = {
+            id: dt[a].partyId,
+            type: dt[a].name,
+          };
+          this.SupplierList.push(_data);
+        }
+      },
+      (error) => {
+        if (error.status == 401) {
+          this.accountService.doLogout();
+        }
+      }
+    );
+  }
   goBack() {
     this.location.back();
   }

@@ -60,7 +60,6 @@ export class PregnancyRecordComponent {
   stockId: any = null;
   busUnitId: any = null;
   pregnancyRecordList: PregnancyRecordModel[] = [];
-  BusinessUnits: masterModal[] = [];
   AnimalList: masterModal[] = [];
   Breeds: masterModal[] = [];
   businessUnitId: any = null;
@@ -71,7 +70,7 @@ export class PregnancyRecordComponent {
   // for add animal popup
   addLoading: boolean = false;
   visible: boolean = false;
-  pregnancyRecordModel!: FormGroup;
+  pregnancyRecordForm!: FormGroup;
   displayedColumns: string[] = [
     'recordId',
     'animalId',
@@ -82,7 +81,6 @@ export class PregnancyRecordComponent {
     'status',
   ];
   constructor(
-    private route: ActivatedRoute,
     private masterService: MasterService,
     private accountService: AccountService,
     private dairyFarmService: DairyFarmService,
@@ -91,17 +89,16 @@ export class PregnancyRecordComponent {
     private router: Router
   ) {}
   ngOnInit() {
-    this.busUnitId = localStorage.getItem('DF_businessUnitId');
-    this.businessUnitName = localStorage.getItem('DF_businessUnit_Name');
-    this.loadBusinessUnits();
-    this.loadAnimal();
-    this.loadBreeds();
+    this.busUnitId = this.accountService.getBusinessUnitId();
+    this.businessUnitName = this.accountService.getBusinessUnitName();
     this.initForm();
   }
   ngAfterViewInit() {
     setTimeout(() => {
       this.getPregnancyRecordList();
     }, 0);
+    this.loadAnimal();
+    this.loadBreeds();
   }
   getPregnancyRecordList() {
     this.paginator.pageIndex = 0;
@@ -121,7 +118,7 @@ export class PregnancyRecordComponent {
 
           let data = {
             searchKey: this.searchKey ?? null,
-            businessUnitId: this.busUnitId ?? null,
+            businessUnitId: this.busUnitId,
             pageNumber: this.paginator.pageIndex + 1,
             pageSize: 10,
           };
@@ -188,13 +185,13 @@ export class PregnancyRecordComponent {
   addPregnancyRecord() {
     this.addLoading = true;
     this.dairyFarmService
-      .addPregnancyRecord(this.pregnancyRecordModel.value)
+      .addPregnancyRecord(this.pregnancyRecordForm.value)
       .subscribe(
         (dt) => {
           this.addLoading = false;
           this.visible = false;
           this.getPregnancyRecordList();
-          this.pregnancyRecordModel.reset();
+          this.pregnancyRecordForm.reset();
           this.messageService.add({
             severity: 'success',
             summary: 'Added',
@@ -218,14 +215,14 @@ export class PregnancyRecordComponent {
       );
   }
   initForm() {
-    this.pregnancyRecordModel = this.formBuilder.group({
+    this.pregnancyRecordForm = this.formBuilder.group({
       animalId: [null, [Validators.required]],
       breedId: [null, [Validators.required]],
       pregnantDate: [null, [Validators.required]],
       expectedDelivery: [null, [Validators.required]],
       actualDelivery: [null, [Validators.required]],
       delivered: [null, [Validators.required]],
-      businessUnitId: [null, [Validators.pattern]],
+      businessUnitId: [this.busUnitId],
     });
   }
   SearchBySearchKey(event: any) {
@@ -236,26 +233,6 @@ export class PregnancyRecordComponent {
     }
   }
 
-  loadBusinessUnits() {
-    this.masterService.getBusinessUnitTypesById(3).subscribe(
-      (res) => {
-        var dt = res;
-        this.BusinessUnits = [];
-        for (let a = 0; a < dt.length; a++) {
-          let _data: masterModal = {
-            id: dt[a].businessUnitId,
-            type: dt[a].name,
-          };
-          this.BusinessUnits.push(_data);
-        }
-      },
-      (error) => {
-        if (error.status == 401) {
-          this.accountService.doLogout();
-        }
-      }
-    );
-  }
   loadAnimal() {
     this.masterService.getAnimal().subscribe(
       (res) => {

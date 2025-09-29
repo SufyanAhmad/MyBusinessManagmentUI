@@ -1,7 +1,7 @@
 <div class="container-fluid">
   <div>
-    <span class="breadcrumb">Dairy Farm /</span>
-    <span class="breadcrumb-bold">&nbsp;Health & Vaccination Record</span>
+    <span class="breadcrumb">{{ this.businessUnitName }} /</span>
+    <span class="breadcrumb-bold">&nbsp;Health & Vaccination Record </span>
   </div>
   <span class="d-flex flex-wrap justify-content-between">
     <span class="d-flex flex-wrap">
@@ -56,17 +56,6 @@
           </svg>
         </div>
       </div>
-      <span class="alarms mt-4 mb-3 mx-3">
-        <p-select
-          [options]="BusinessUnits"
-          [(ngModel)]="businessUnitId"
-          optionLabel="type"
-          optionValue="id"
-          (onChange)="ngAfterViewInit()"
-          [showClear]="true"
-          placeholder="Business Unit"
-        />
-      </span>
     </span>
     <div class="d-flex align-items-center gap-5">
       <span
@@ -238,14 +227,8 @@
   [draggable]="false"
   [resizable]="false"
 >
-  <form [formGroup]="addHealthVaccinationRecordModel">
+  <form [formGroup]="addHealthVaccinationRecordForm">
     <div class="row" style="row-gap: 20px">
-      <!-- <div class="col-6">
-        <span class="label"
-          >Record ID<span class="required-icon">*</span>
-        </span>
-        <input type="text"  class="input-felid" placeholder="Enter name..." />
-      </div> -->
       <div class="col-6">
         <span class="label">Supplier<span class="required-icon">*</span> </span>
         <div class="alt-dropdown">
@@ -259,24 +242,17 @@
             placeholder="Supplier "
             formControlName="supplierId"
           />
-        </div>
-      </div>
-      <div class="col-6">
-        <span class="label"
-          >Business unit<span class="required-icon">*</span>
-        </span>
-        <div class="alt-dropdown">
-          <p-select
-            [options]="BusinessUnits"
-            [(ngModel)]="key"
-            name="key"
-            optionLabel="type"
-            optionValue="id"
-            (onChange)="ngAfterViewInit()"
-            [showClear]="true"
-            placeholder="business Unit "
-            formControlName="businessUnitId"
-          />
+          <span
+            class="errorValidation"
+            *ngIf="
+              addHealthVaccinationRecordForm.get('supplierId')?.touched &&
+              addHealthVaccinationRecordForm
+                .get('supplierId')
+                ?.hasError('required')
+            "
+          >
+            Required field
+          </span>
         </div>
       </div>
       <div class="col-6">
@@ -289,6 +265,15 @@
           placeholder="Enter vaccine name..."
           formControlName="name"
         />
+        <span
+          class="errorValidation"
+          *ngIf="
+            addHealthVaccinationRecordForm.get('name')?.touched &&
+            addHealthVaccinationRecordForm.get('name')?.hasError('required')
+          "
+        >
+          Required field
+        </span>
       </div>
       <div class="col-6">
         <span class="label">Purpose<span class="required-icon">*</span></span>
@@ -298,6 +283,15 @@
           placeholder="Enter purpose..."
           formControlName="purpose"
         />
+        <span
+          class="errorValidation"
+          *ngIf="
+            addHealthVaccinationRecordForm.get('purpose')?.touched &&
+            addHealthVaccinationRecordForm.get('purpose')?.hasError('required')
+          "
+        >
+          Required field
+        </span>
       </div>
       <div class="col-6">
         <span class="label">Date<span class="required-icon">*</span> </span>
@@ -307,6 +301,15 @@
           placeholder="Enter date..."
           formControlName="date"
         />
+        <span
+          class="errorValidation"
+          *ngIf="
+            addHealthVaccinationRecordForm.get('date')?.touched &&
+            addHealthVaccinationRecordForm.get('date')?.hasError('required')
+          "
+        >
+          Required field
+        </span>
       </div>
       <div class="col-6">
         <span class="label"
@@ -318,6 +321,17 @@
           placeholder="Enter next due date..."
           formControlName="nextDueDate"
         />
+        <span
+          class="errorValidation"
+          *ngIf="
+            addHealthVaccinationRecordForm.get('nextDueDate')?.touched &&
+            addHealthVaccinationRecordForm
+              .get('nextDueDate')
+              ?.hasError('required')
+          "
+        >
+          Required field
+        </span>
       </div>
     </div>
     <div class="d-flex justify-content-end gap-4 margin-btn">
@@ -327,13 +341,13 @@
       <button
         type="button"
         (click)="
-          addHealthVaccinationRecordModel.valid && !addLoading
+          addHealthVaccinationRecordForm.valid && !addLoading
             ? addHealthVaccinationRecord()
             : null
         "
         [ngClass]="{
-          'btn-save': addHealthVaccinationRecordModel.valid && !addLoading,
-          'btn-disable': addHealthVaccinationRecordModel.invalid || addLoading
+          'btn-save': addHealthVaccinationRecordForm.valid && !addLoading,
+          'btn-disable': addHealthVaccinationRecordForm.invalid || addLoading
         }"
       >
         Save &nbsp;

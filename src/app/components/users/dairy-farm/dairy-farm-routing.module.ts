@@ -28,7 +28,7 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        redirectTo: 'businessUnit',
+        redirectTo: 'animal',
         pathMatch: 'full',
       },
       {

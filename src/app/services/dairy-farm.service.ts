@@ -138,6 +138,15 @@ export class DairyFarmService {
         })
       );
   }
+  addMilkProduction(data: any) {
+    return this.repositoryService
+      .post('MilkProduction/add-milkProduction', data, true)
+      .pipe(
+        map((response: any) => {
+          return response;
+        })
+      );
+  }
   UpdateMilkProductionDetail(id: any, data: any) {
     return this.repositoryService
       .putWithOutFile('MilkProduction/update-milkProduction/' + id, data)

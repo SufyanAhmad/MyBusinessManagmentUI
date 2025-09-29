@@ -8,7 +8,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { MessageService } from 'primeng/api';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ToastModule } from 'primeng/toast';
 import { SelectModule } from 'primeng/select';
 import { AccountService } from '../../../../../services/account-service/account.service';
@@ -25,6 +25,7 @@ import { DairyFarmService } from '../../../../../services/dairy-farm.service';
     FormsModule,
     ToastModule,
     SelectModule,
+    RouterLink,
   ],
   templateUrl: './edit-animal.component.html',
   styleUrl: './edit-animal.component.scss',
@@ -36,14 +37,16 @@ export class EditAnimalComponent {
   editLoading: boolean = false;
   animalId: any = null;
   businessUnitName: any = '';
+  busUnitId: any = null;
   isArchived: boolean = false;
   businessUnitTypes: masterModal[] = [];
   AnimalTypes: masterModal[] = [];
   isFemale: boolean = true;
   isActive: boolean = false;
   key: any = null;
+  Breeds: masterModal[] = [];
 
-  editAnimalModel!: FormGroup;
+  editAnimalForm!: FormGroup;
   AnimalDetail: AnimalModel = {
     animalId: '',
     createdBy: '',
@@ -93,17 +96,16 @@ export class EditAnimalComponent {
   ) {}
   ngOnInit() {
     this.animalId = this.route.snapshot.params['id'];
-    this.businessUnitName = localStorage.getItem('DF_businessUnit_Name');
-
-    this.initForm();
+    this.busUnitId = this.accountService.getBusinessUnitId();
+    this.businessUnitName = this.accountService.getBusinessUnitName();
     this.getAnimalDetails();
-    this.loadAnimalTypes();
   }
   getAnimalDetails() {
     this.loading = true;
     this.dairyFarmService.GetAnimalDetail(this.animalId).subscribe(
       (dt) => {
         let data = dt.data;
+        let purchaseDate = data.purchaseDate?.split('T')[0];
         this.AnimalDetail = {
           animalId: data.animalId,
           createdBy: data.createdBy,
@@ -118,7 +120,7 @@ export class EditAnimalComponent {
           age: data.age,
           isFemale: data.isFemale,
           isActive: data.isActive,
-          purchaseDate: data.purchaseDate,
+          purchaseDate: purchaseDate,
           price: data.price,
           note: data.note,
           businessUnitId: data.businessUnitId,
@@ -144,7 +146,7 @@ export class EditAnimalComponent {
           businessUnitId: data.businessUnitId,
         };
         this.initForm();
-        this.loadBusinessUnitTypes();
+        this.loadAnimalTypes();
         this.loading = false;
       },
       (error) => {
@@ -164,7 +166,7 @@ export class EditAnimalComponent {
   editAnimalDetail() {
     this.editLoading = true;
     this.dairyFarmService
-      .UpdateAnimalDetail(this.animalId, this.editAnimalModel.value)
+      .UpdateAnimalDetail(this.animalId, this.editAnimalForm.value)
       .subscribe(
         (dt) => {
           this.messageService.add({
@@ -173,7 +175,6 @@ export class EditAnimalComponent {
             detail: 'Animal updated successfully',
             life: 3000,
           });
-          // this.goBack();
           this.getAnimalDetails();
           this.editLoading = false;
           this.isReadOnly = true;
@@ -209,70 +210,19 @@ export class EditAnimalComponent {
     this.isReadOnly = true;
     this.initForm();
   }
-
-  // initForm() {
-  //   this.editLiveStockModel = this.formBuilder.group({
-  //     businessUnitId: [this.AnimalDetail.businessUnitId, [Validators.required]],
-  //     animalId: [this.AnimalDetail.animalId, [Validators.required]],
-  //     createdBy: [this.AnimalDetail.createdBy, [Validators.required]],
-  //     this.AnimalDetail.createdAt =
-  //     this.AnimalDetail.createdAt?.split('T')[0] || '',
-  //     quantity: [
-  //       this.AnimalDetail.quantity,
-  //       [
-  //         Validators.required,
-  //         Validators.pattern('^[1-9][0-9]*$'),
-  //         Validators.min(1),
-  //       ],
-  //     ],
-  //     arrivalDate: [this.AnimalDetail.arrivalDate, [Validators.required]],
-  //     ageInDays: [
-  //       this.AnimalDetail.ageInDays,
-  //       [
-  //         Validators.required,
-  //         Validators.pattern('^[1-9][0-9]*$'),
-  //         Validators.min(1),
-  //       ],
-  //     ],
-  //     healthStatus: [this.AnimalDetail.healthStatus, [Validators.required]],
-  //   });
-  // }
-
   initForm() {
-    this.AnimalDetail.purchaseDate =
-      this.AnimalDetail?.purchaseDate?.split('T')[0] ?? '';
-    this.editAnimalModel = this.formBuilder.group({
+    this.editAnimalForm = this.formBuilder.group({
       animalTypeId: [this.AnimalDetail.animalTypeId, Validators.required],
-      breedId: [this.AnimalDetail.breedId, Validators.required],
+      breedId: [this.AnimalDetail.breedId, [Validators.required]],
       animalCode: [this.AnimalDetail.animalCode, [Validators.required]],
       age: [this.AnimalDetail.age],
-      isFemale: [this.AnimalDetail.isFemale, [Validators.required]],
-      isActive: [this.AnimalDetail.isActive, [Validators.required]],
-      purchaseDate: [this.AnimalDetail.purchaseDate, [Validators.required]],
-      price: [this.AnimalDetail.price, [Validators.required]],
-      note: [this.AnimalDetail.note, [Validators.required]],
-      businessUnitId: [this.AnimalDetail.businessUnitId, [Validators.required]],
+      isFemale: [this.AnimalDetail.isFemale],
+      isActive: [this.AnimalDetail.isActive],
+      purchaseDate: [this.AnimalDetail.purchaseDate],
+      price: [this.AnimalDetail.price],
+      note: [this.AnimalDetail.note],
+      businessUnitId: [this.busUnitId],
     });
-  }
-  loadBusinessUnitTypes() {
-    this.masterService.getBusinessUnitTypes().subscribe(
-      (res) => {
-        var dt = res;
-        this.businessUnitTypes = [];
-        for (let a = 0; a < dt.length; a++) {
-          let _data: masterModal = {
-            id: dt[a].businessUnitId,
-            type: dt[a].name,
-          };
-          this.businessUnitTypes.push(_data);
-        }
-      },
-      (error) => {
-        if (error.status == 401) {
-          this.accountService.doLogout();
-        }
-      }
-    );
   }
   loadAnimalTypes() {
     this.masterService.getAnimalTypes().subscribe(
@@ -285,6 +235,7 @@ export class EditAnimalComponent {
             type: dt[a].value,
           };
           this.AnimalTypes.push(_data);
+          this.loadBreeds();
         }
       },
       (error) => {
@@ -294,36 +245,26 @@ export class EditAnimalComponent {
       }
     );
   }
-  preventDecimal(event: KeyboardEvent) {
-    if (event.key === '.' || event.key === ',') {
-      event.preventDefault();
-    }
+  loadBreeds() {
+    this.masterService.getBreeds().subscribe(
+      (res) => {
+        var dt = res.data;
+        this.Breeds = [];
+        for (let a = 0; a < dt.length; a++) {
+          let _data: masterModal = {
+            id: dt[a].breedId,
+            type: dt[a].breedRef,
+          };
+          this.Breeds.push(_data);
+        }
+      },
+      (error) => {
+        if (error.status == 401) {
+          this.accountService.doLogout();
+        }
+      }
+    );
   }
-  // editArchiveStatus() {
-  //   this.coldStoreService
-  //     .updateArchiveStatus(this.liveStockId, this.isArchived)
-  //     .subscribe(
-  //       (dt) => {
-  //         this.messageService.add({
-  //           severity: 'success',
-  //           summary: 'Update',
-  //           detail: 'Cold store shelf change archived successfully',
-  //           life: 3000,
-  //         });
-  //       },
-  //       (error) => {
-  //         this.messageService.add({
-  //           severity: 'error',
-  //           summary: 'Error',
-  //           detail: error.message,
-  //           life: 3000,
-  //         });
-  //         if (error.status == 401) {
-  //           this.accountService.doLogout();
-  //         }
-  //       }
-  //     );
-  // }
   goBack() {
     this.location.back();
   }

@@ -8,7 +8,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { MessageService } from 'primeng/api';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ToastModule } from 'primeng/toast';
 import { SelectModule } from 'primeng/select';
 import { AccountService } from '../../../../../services/account-service/account.service';
@@ -25,6 +25,7 @@ import { DairyFarmService } from '../../../../../services/dairy-farm.service';
     FormsModule,
     ToastModule,
     SelectModule,
+    RouterLink,
   ],
   templateUrl: './edit-milk-production.component.html',
   styleUrl: './edit-milk-production.component.scss',
@@ -37,11 +38,12 @@ export class EditMilkProductionComponent {
   editLoading: boolean = false;
   milkProductionId: any = null;
   businessUnitName: any = '';
+  busUnitId: any = null;
   isArchived: boolean = false;
   businessUnitTypes: masterModal[] = [];
   AnimalList: masterModal[] = [];
 
-  editMilkProductionModel!: FormGroup;
+  editMilkProductionForm!: FormGroup;
   MilkProductionDetail: MilkProductionModel = {
     updatedBy: '',
     updatedAt: '',
@@ -85,11 +87,11 @@ export class EditMilkProductionComponent {
   ) {}
   ngOnInit() {
     this.milkProductionId = this.route.snapshot.params['id'];
-    this.businessUnitName = localStorage.getItem('DF_businessUnit_Name');
+    this.busUnitId = this.accountService.getBusinessUnitId();
+    this.businessUnitName = this.accountService.getBusinessUnitName();
 
     this.initForm();
     this.getMilkProductionDetails();
-    this.loadAnimal();
   }
   getMilkProductionDetails() {
     this.loading = true;
@@ -132,7 +134,7 @@ export class EditMilkProductionComponent {
             businessUnitId: data.businessUnitId,
           };
           this.initForm();
-          this.loadBusinessUnitTypes();
+          this.loadAnimal();
           this.loading = false;
         },
         (error) => {
@@ -154,7 +156,7 @@ export class EditMilkProductionComponent {
     this.dairyFarmService
       .UpdateMilkProductionDetail(
         this.milkProductionId,
-        this.editMilkProductionModel.value
+        this.editMilkProductionForm.value
       )
       .subscribe(
         (dt) => {
@@ -196,38 +198,17 @@ export class EditMilkProductionComponent {
     this.initForm();
   }
   initForm() {
-    this.editMilkProductionModel = this.formBuilder.group({
+    this.editMilkProductionForm = this.formBuilder.group({
       animalId: [this.MilkProductionDetail.animalId, [Validators.required]],
       date: [this.MilkProductionDetail.date, [Validators.required]],
       morning: [this.MilkProductionDetail.morning, [Validators.required]],
       evening: [this.MilkProductionDetail.evening, [Validators.required]],
       total: [this.MilkProductionDetail.total, [Validators.required]],
-      businessUnitId: [
-        this.MilkProductionDetail.businessUnitId,
-        [Validators.required],
-      ],
+      // isActive: [this.MilkProductionDetail.isActive, [Validators.required]],
+      businessUnitId: [this.busUnitId],
     });
   }
-  loadBusinessUnitTypes() {
-    this.masterService.getBusinessUnitTypes().subscribe(
-      (res) => {
-        var dt = res;
-        this.businessUnitTypes = [];
-        for (let a = 0; a < dt.length; a++) {
-          let _data: masterModal = {
-            id: dt[a].businessUnitId,
-            type: dt[a].name,
-          };
-          this.businessUnitTypes.push(_data);
-        }
-      },
-      (error) => {
-        if (error.status == 401) {
-          this.accountService.doLogout();
-        }
-      }
-    );
-  }
+
   loadAnimal() {
     this.masterService.getAnimal().subscribe(
       (res) => {
@@ -248,11 +229,7 @@ export class EditMilkProductionComponent {
       }
     );
   }
-  preventDecimal(event: KeyboardEvent) {
-    if (event.key === '.' || event.key === ',') {
-      event.preventDefault();
-    }
-  }
+
   goBack() {
     this.location.back();
   }

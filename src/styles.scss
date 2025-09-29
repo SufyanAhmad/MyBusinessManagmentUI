@@ -633,3 +633,6 @@ input[readonly] {
   border-color: 1px solid #4079b080 !important;
   color: #4079b0 !important;
 }
+::placeholder {
+  color: #4079b0;
+}

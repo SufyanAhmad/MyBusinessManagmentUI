@@ -1,6 +1,6 @@
 <div class="container-fluid">
   <div>
-    <span class="breadcrumb">Dairy Farm /</span>
+    <span class="breadcrumb">{{ this.businessUnitName }} /</span>
     <span class="breadcrumb-bold">&nbsp;Animal</span>
   </div>
   <span class="d-flex flex-wrap justify-content-between">
@@ -56,7 +56,7 @@
           </svg>
         </div>
       </div>
-      <span class="alarms mt-4 mb-3 mx-3">
+      <!-- <span class="alarms mt-4 mb-3 mx-3">
         <p-select
           [options]="BusinessUnits"
           [(ngModel)]="businessUnitId"
@@ -66,7 +66,7 @@
           [showClear]="true"
           placeholder="Business Unit"
         />
-      </span>
+      </span> -->
     </span>
     <div class="d-flex align-items-center gap-5">
       <span
@@ -146,9 +146,9 @@
             mat-header-cell
             *matHeaderCellDef
             class="table-header"
-            style="min-width: 120px"
+            style="min-width: 150px"
           >
-            Breed id
+            Breed Name
           </th>
           <td mat-cell *matCellDef="let element" class="tableText-thin">
             {{ element.breedRef }}
@@ -207,7 +207,7 @@
             class="table-header"
             style="min-width: 170px !important"
           >
-            Age
+            Birth Date
           </th>
           <td mat-cell *matCellDef="let element" class="tableText-thin">
             {{ element.age }}
@@ -331,7 +331,7 @@
   [draggable]="false"
   [resizable]="false"
 >
-  <form [formGroup]="addAnimalModel">
+  <form [formGroup]="addAnimalForm">
     <div class="row" style="row-gap: 20px">
       <!-- <div class="col-6">
         <span class="label"
@@ -350,12 +350,20 @@
             name="key"
             optionLabel="type"
             optionValue="id"
-            (onChange)="ngAfterViewInit()"
             [showClear]="true"
             placeholder="Animal Type "
             formControlName="animalTypeId"
           />
         </div>
+        <span
+          class="errorValidation"
+          *ngIf="
+            addAnimalForm.get('animalTypeId')?.touched &&
+            addAnimalForm.get('animalTypeId')?.hasError('required')
+          "
+        >
+          Required field
+        </span>
       </div>
       <div class="col-6">
         <span class="label">Breed ID<span class="required-icon">*</span> </span>
@@ -366,14 +374,22 @@
             name="breedId"
             optionLabel="type"
             optionValue="id"
-            (onChange)="ngAfterViewInit()"
             [showClear]="true"
             placeholder="Breeds"
             formControlName="breedId"
           />
         </div>
+        <span
+          class="errorValidation"
+          *ngIf="
+            addAnimalForm.get('breedId')?.touched &&
+            addAnimalForm.get('breedId')?.hasError('required')
+          "
+        >
+          Required field
+        </span>
       </div>
-      <div class="col-6">
+      <!-- <div class="col-6">
         <span class="label"
           >Business Unit ID<span class="required-icon">*</span>
         </span>
@@ -390,7 +406,7 @@
             formControlName="businessUnitId"
           />
         </div>
-      </div>
+      </div> -->
       <div class="col-6">
         <span class="label"
           >Animal Code<span class="required-icon">*</span></span
@@ -401,31 +417,41 @@
           formControlName="animalCode"
           placeholder="Enter animal code..."
         />
+        <span
+          class="errorValidation"
+          *ngIf="
+            addAnimalForm.get('animalCode')?.touched &&
+            addAnimalForm.get('animalCode')?.hasError('required')
+          "
+        >
+          Required field
+        </span>
       </div>
       <div class="col-6">
-        <span class="label">Age<span class="required-icon">*</span> </span>
+        <span class="label">Birth Date</span>
         <input
-          type="text"
-          class="input-felid"
+          type="date"
+          class="input-felid custome-date"
           formControlName="age"
-          placeholder="Enter age..."
+          placeholder="Enter birth date..."
+          [max]="today"
         />
       </div>
       <div class="col-6">
-        <span class="label"
-          >Purchase Date<span class="required-icon">*</span></span
-        >
+        <span class="label">Purchase Date</span>
         <input
           type="date"
           class="input-felid custome-date"
           placeholder="Enter purchase date..."
           formControlName="purchaseDate"
+          [max]="today"
         />
       </div>
       <div class="col-6">
-        <span class="label">Price<span class="required-icon">*</span> </span>
+        <span class="label">Price</span>
         <input
           type="number"
+          min="0"
           class="input-felid"
           formControlName="price"
           placeholder="Enter price..."
@@ -469,6 +495,7 @@
             type="radio"
             formControlName="isActive"
             [value]="true"
+            [(ngModel)]="isActive"
           />
         </div>
         <div style="margin-left: 25px">
@@ -478,11 +505,12 @@
             type="radio"
             formControlName="isActive"
             [value]="false"
+            [(ngModel)]="isActive"
           />
         </div>
       </div>
       <div class="col-12">
-        <span class="label">Note<span class="required-icon">*</span></span>
+        <span class="label">Note</span>
         <input
           type="text"
           formControlName="note"
@@ -498,10 +526,10 @@
       <button
         type="button"
         (click)="onSave()"
-        [disabled]="addAnimalModel.invalid || addLoading"
+        [disabled]="addAnimalForm.invalid || addLoading"
         [ngClass]="{
-          'btn-save': addAnimalModel.valid && !addLoading,
-          'btn-disable': addAnimalModel.invalid || addLoading
+          'btn-save': addAnimalForm.valid && !addLoading,
+          'btn-disable': addAnimalForm.invalid || addLoading
         }"
       >
         Save&nbsp;

@@ -1,9 +1,17 @@
 <div class="container-fluid">
   <div class="d-pointer">
     <span class="breadcrumb" style="text-transform: uppercase"
-      >Dairy Farm /
+      >{{ this.businessUnitName }} /
     </span>
-    <span class="breadcrumb-bold">&nbsp;Health Record Detail</span>
+    <span
+      class="breadcrumb-bold"
+      style="cursor: pointer"
+      [routerLink]="['/dairyFarm/health-record']"
+      >&nbsp;Health Record /</span
+    >
+    <span class="breadcrumb-bold"
+      >&nbsp;Health & Vaccination Record Detail</span
+    >
   </div>
   <!-- User Header -->
   <div
@@ -53,7 +61,7 @@
   <form [formGroup]="editHealthVaccinationRecordModel">
     <div class="row g-3 align-items-end mt-4">
       <div class="col-md-4 mb-4">
-        <span class="label1">Record id</span>
+        <span class="label">Record id</span>
         <input
           type="text"
           [value]="HealthVaccinationRecordDetail.recordRef"
@@ -75,6 +83,17 @@
             placeholder="Supplier "
             formControlName="supplierId"
           />
+          <span
+            class="errorValidation"
+            *ngIf="
+              editHealthVaccinationRecordModel.get('supplierId')?.touched &&
+              editHealthVaccinationRecordModel
+                .get('supplierId')
+                ?.hasError('required')
+            "
+          >
+            Required field
+          </span>
         </div>
       </div>
       <div class="col-md-4 mb-4 position-relative">
@@ -83,18 +102,29 @@
         </span>
         <div class="alt-dropdown" [ngClass]="{ 'input-disable': isReadOnly }">
           <p-select
-            [options]="SupplierList"
+            [options]="AnimalList"
             name="key"
             optionLabel="type"
             optionValue="id"
             [showClear]="true"
-            placeholder="supplier"
-            formControlName="supplierId"
+            placeholder="Animal"
+            formControlName="animalId"
           />
+          <span
+            class="errorValidation"
+            *ngIf="
+              editHealthVaccinationRecordModel.get('animalId')?.touched &&
+              editHealthVaccinationRecordModel
+                .get('animalId')
+                ?.hasError('required')
+            "
+          >
+            Required field
+          </span>
         </div>
       </div>
       <div class="col-md-4 mb-4">
-        <span class="label1">DATE</span>
+        <span class="label">Date<span class="required-icon">*</span></span>
         <input
           type="date"
           value="NILI-RAVI"
@@ -103,9 +133,21 @@
           placeholder="Enter date..."
           formControlName="date"
         />
+
+        <span
+          class="errorValidation"
+          *ngIf="
+            editHealthVaccinationRecordModel.get('date')?.touched &&
+            editHealthVaccinationRecordModel.get('date')?.hasError('required')
+          "
+        >
+          Required field
+        </span>
       </div>
       <div class="col-md-4 mb-4">
-        <span class="label1">VACCINE NAME</span>
+        <span class="label1"
+          >Vaccine Name<span class="required-icon">*</span></span
+        >
         <input
           type="text"
           value="NILI-RAVI"
@@ -114,9 +156,18 @@
           placeholder="Enter vaccine name..."
           formControlName="name"
         />
+        <span
+          class="errorValidation"
+          *ngIf="
+            editHealthVaccinationRecordModel.get('name')?.touched &&
+            editHealthVaccinationRecordModel.get('name')?.hasError('required')
+          "
+        >
+          Required field
+        </span>
       </div>
       <div class="col-md-4 mb-4">
-        <span class="label1">PURPOSE</span>
+        <span class="label">Purpose<span class="required-icon">*</span></span>
         <input
           type="text"
           value="NILI-RAVI"
@@ -125,9 +176,22 @@
           placeholder="Enter purpose..."
           formControlName="purpose"
         />
+        <span
+          class="errorValidation"
+          *ngIf="
+            editHealthVaccinationRecordModel.get('purpose')?.touched &&
+            editHealthVaccinationRecordModel
+              .get('purpose')
+              ?.hasError('required')
+          "
+        >
+          Required field
+        </span>
       </div>
       <div class="col-md-4 mb-4">
-        <span class="label1">NEXT DUE DATE</span>
+        <span class="label"
+          >Next due date<span class="required-icon">*</span></span
+        >
         <input
           type="date"
           value="NILI-RAVI"
@@ -136,6 +200,17 @@
           placeholder="Enter next due date..."
           formControlName="nextDueDate"
         />
+        <span
+          class="errorValidation"
+          *ngIf="
+            editHealthVaccinationRecordModel.get('nextDueDate')?.touched &&
+            editHealthVaccinationRecordModel
+              .get('nextDueDate')
+              ?.hasError('required')
+          "
+        >
+          Required field
+        </span>
       </div>
     </div>
   </form>

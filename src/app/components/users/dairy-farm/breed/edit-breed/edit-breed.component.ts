@@ -8,7 +8,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { MessageService } from 'primeng/api';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ToastModule } from 'primeng/toast';
 import { SelectModule } from 'primeng/select';
 import { AccountService } from '../../../../../services/account-service/account.service';
@@ -25,6 +25,7 @@ import { DairyFarmService } from '../../../../../services/dairy-farm.service';
     FormsModule,
     ToastModule,
     SelectModule,
+    RouterLink,
   ],
   templateUrl: './edit-breed.component.html',
   styleUrl: './edit-breed.component.scss',
@@ -37,11 +38,12 @@ export class EditBreedComponent {
   editLoading: boolean = false;
   breedId: any = null;
   businessUnitName: any = '';
+  busUnitId: any = null;
   isArchived: boolean = false;
   businessUnitTypes: masterModal[] = [];
   AnimalTypes: masterModal[] = [];
 
-  editBreedModel!: FormGroup;
+  editBreedForm!: FormGroup;
 
   BreedDetail: BreedModel = {
     breedId: '',
@@ -76,11 +78,11 @@ export class EditBreedComponent {
   ) {}
   ngOnInit() {
     this.breedId = this.route.snapshot.params['id'];
-    this.businessUnitName = localStorage.getItem('DF_businessUnit_Name');
+    this.busUnitId = this.accountService.getBusinessUnitId();
+    this.businessUnitName = this.accountService.getBusinessUnitName();
 
     this.initForm();
     this.getBreedDetails();
-    this.loadAnimalTypes();
   }
   getBreedDetails() {
     this.loading = true;
@@ -110,7 +112,7 @@ export class EditBreedComponent {
           businessUnitId: data.businessUnitId,
         };
         this.initForm();
-        this.loadBusinessUnitTypes();
+        this.loadAnimalTypes();
         this.loading = false;
       },
       (error) => {
@@ -130,7 +132,7 @@ export class EditBreedComponent {
   editLiveStockDetail() {
     this.editLoading = true;
     this.dairyFarmService
-      .UpdateBreedDetail(this.breedId, this.editBreedModel.value)
+      .UpdateBreedDetail(this.breedId, this.editBreedForm.value)
       .subscribe(
         (dt) => {
           this.messageService.add({
@@ -174,34 +176,15 @@ export class EditBreedComponent {
     this.initForm();
   }
   initForm() {
-    this.editBreedModel = this.formBuilder.group({
-      businessUnitId: [this.BreedDetail.businessUnitId, [Validators.required]],
+    this.editBreedForm = this.formBuilder.group({
+      businessUnitId: [this.busUnitId],
       animalTypeId: [this.BreedDetail.animalTypeId, [Validators.required]],
       name: [this.BreedDetail.name, [Validators.required]],
-      origin: [this.BreedDetail.origin, [Validators.required]],
-      note: [this.BreedDetail.note, [Validators.required]],
+      origin: [this.BreedDetail.origin],
+      note: [this.BreedDetail.note],
     });
   }
-  loadBusinessUnitTypes() {
-    this.masterService.getBusinessUnitTypes().subscribe(
-      (res) => {
-        var dt = res;
-        this.businessUnitTypes = [];
-        for (let a = 0; a < dt.length; a++) {
-          let _data: masterModal = {
-            id: dt[a].businessUnitId,
-            type: dt[a].name,
-          };
-          this.businessUnitTypes.push(_data);
-        }
-      },
-      (error) => {
-        if (error.status == 401) {
-          this.accountService.doLogout();
-        }
-      }
-    );
-  }
+
   loadAnimalTypes() {
     this.masterService.getAnimalTypes().subscribe(
       (res) => {
@@ -222,36 +205,7 @@ export class EditBreedComponent {
       }
     );
   }
-  // preventDecimal(event: KeyboardEvent) {
-  //   if (event.key === '.' || event.key === ',') {
-  //     event.preventDefault();
-  //   }
-  // }
-  // editArchiveStatus() {
-  //   this.coldStoreService
-  //     .updateArchiveStatus(this.breedId, this.isArchived)
-  //     .subscribe(
-  //       (dt) => {
-  //         this.messageService.add({
-  //           severity: 'success',
-  //           summary: 'Update',
-  //           detail: 'Cold store shelf change archived successfully',
-  //           life: 3000,
-  //         });
-  //       },
-  //       (error) => {
-  //         this.messageService.add({
-  //           severity: 'error',
-  //           summary: 'Error',
-  //           detail: error.message,
-  //           life: 3000,
-  //         });
-  //         if (error.status == 401) {
-  //           this.accountService.doLogout();
-  //         }
-  //       }
-  //     );
-  // }
+
   goBack() {
     this.location.back();
   }

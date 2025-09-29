@@ -8,7 +8,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { MessageService } from 'primeng/api';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ToastModule } from 'primeng/toast';
 import { SelectModule } from 'primeng/select';
 import { AccountService } from '../../../../../services/account-service/account.service';
@@ -28,6 +28,7 @@ import { DairyFarmService } from '../../../../../services/dairy-farm.service';
     FormsModule,
     ToastModule,
     SelectModule,
+    RouterLink,
   ],
   templateUrl: './edit-health-record.component.html',
   styleUrl: './edit-health-record.component.scss',
@@ -40,6 +41,7 @@ export class EditHealthRecordComponent {
   editLoading: boolean = false;
   healthVaccinationRecordId: any = null;
   businessUnitName: any = '';
+  busUnitId: any = null;
   isArchived: boolean = false;
   BusinessUnits: masterModal[] = [];
   AnimalList: masterModal[] = [];
@@ -93,13 +95,9 @@ export class EditHealthRecordComponent {
   ) {}
   ngOnInit() {
     this.healthVaccinationRecordId = this.route.snapshot.params['id'];
-    this.businessUnitName = localStorage.getItem('DF_businessUnit_Name');
-
+    this.busUnitId = this.accountService.getBusinessUnitId();
+    this.businessUnitName = this.accountService.getBusinessUnitName();
     this.initForm();
-    // this.getHealthVaccinationRecordDetails();
-    this.loadAnimal();
-    this.loadParties();
-    this.loadBusinessUnits();
   }
   ngAfterViewInit() {
     setTimeout(() => {
@@ -151,6 +149,8 @@ export class EditHealthRecordComponent {
           };
           this.initForm();
           this.loading = false;
+          this.loadAnimal();
+          this.loadParties();
         },
         (error) => {
           this.loading = false;
@@ -227,32 +227,10 @@ export class EditHealthRecordComponent {
         this.HealthVaccinationRecordDetail.nextDueDate,
         [Validators.required],
       ],
-      businessUnitId: [
-        this.HealthVaccinationRecordDetail.businessUnitId,
-        [Validators.required],
-      ],
+      businessUnitId: [this.busUnitId],
     });
   }
-  loadBusinessUnits() {
-    this.masterService.getBusinessUnitTypesById(3).subscribe(
-      (res) => {
-        var dt = res;
-        this.BusinessUnits = [];
-        for (let a = 0; a < dt.length; a++) {
-          let _data: masterModal = {
-            id: dt[a].businessUnitId,
-            type: dt[a].name,
-          };
-          this.BusinessUnits.push(_data);
-        }
-      },
-      (error) => {
-        if (error.status == 401) {
-          this.accountService.doLogout();
-        }
-      }
-    );
-  }
+
   loadParties() {
     this.masterService.getParties(1).subscribe(
       (res) => {
@@ -294,11 +272,6 @@ export class EditHealthRecordComponent {
     );
   }
 
-  preventDecimal(event: KeyboardEvent) {
-    if (event.key === '.' || event.key === ',') {
-      event.preventDefault();
-    }
-  }
   goBack() {
     this.location.back();
   }

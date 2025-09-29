@@ -1,8 +1,14 @@
 <div class="container-fluid">
   <div class="d-pointer">
     <span class="breadcrumb" style="text-transform: uppercase"
-      >Dairy Farm /
+      >{{ this.businessUnitName }} /
     </span>
+    <span
+      class="breadcrumb-bold"
+      style="cursor: pointer"
+      [routerLink]="['/dairyFarm/animal']"
+      >&nbsp;Animal /</span
+    >
     <span class="breadcrumb-bold">&nbsp;Animal Detail</span>
   </div>
   <!-- User Header -->
@@ -31,11 +37,11 @@
       <button
         type="button"
         (click)="
-          editAnimalModel.valid && !editLoading ? editAnimalDetail() : null
+          editAnimalForm.valid && !editLoading ? editAnimalDetail() : null
         "
         [ngClass]="{
-          'btn-save': editAnimalModel.valid && !editLoading,
-          'btn-disable': editAnimalModel.invalid || editLoading
+          'btn-save': editAnimalForm.valid && !editLoading,
+          'btn-disable': editAnimalForm.invalid || editLoading
         }"
       >
         Save &nbsp;
@@ -48,39 +54,40 @@
       </button>
     </span>
   </div>
-  <form [formGroup]="editAnimalModel">
+  <form [formGroup]="editAnimalForm">
     <div class="row g-3 align-items-end mt-4">
       <div class="col-md-4 mb-4">
-        <span class="label1">Animal Id</span>
+        <span class="label">Animal Id</span>
         <input
           type="text"
           class="input-felid"
           [readonly]="true"
           [ngClass]="{ 'input-disable': isReadOnly }"
-          placeholder="Enter breed id..."
+          placeholder="Enter animal id..."
           [value]="AnimalDetail.animalRef"
         />
       </div>
-      <div class="col-md-4 mb-4">
-        <span class="label1">Breed id</span>
-        <input
-          type="text"
-          class="input-felid"
-          [readonly]="true"
-          placeholder="Enter breed id..."
-          [value]="AnimalDetail.breedRef"
-        />
+      <div class="col-md-4 mb-4 position-relative">
+        <span class="label">Breed Id<span class="required-icon">*</span> </span>
+        <div class="alt-dropdown" [ngClass]="{ 'input-disable': isReadOnly }">
+          <p-select
+            [options]="Breeds"
+            optionLabel="type"
+            optionValue="id"
+            formControlName="breedId"
+            placeholder="Breed"
+          ></p-select>
+        </div>
+        <span
+          class="errorValidation"
+          *ngIf="
+            editAnimalForm.get('breedId')?.touched &&
+            editAnimalForm.get('breedId')?.hasError('required')
+          "
+        >
+          Required field
+        </span>
       </div>
-      <!-- <div class="col-md-4 mb-4 position-relative">
-        <span class="label1">type</span>
-        <input
-          type="text"
-          class="input-felid"
-          [ngClass]="{ 'input-disable': isReadOnly }"
-          placeholder="Enter type..."
-          formControlName="animalTypeId"
-        />
-      </div> -->
       <div class="col-md-4 mb-4 position-relative">
         <span class="label"
           >Animal Type<span class="required-icon">*</span>
@@ -94,39 +101,57 @@
             placeholder="Animal Type"
           ></p-select>
         </div>
+        <span
+          class="errorValidation"
+          *ngIf="
+            editAnimalForm.get('animalTypeId')?.touched &&
+            editAnimalForm.get('animalTypeId')?.hasError('required')
+          "
+        >
+          Required field
+        </span>
       </div>
       <div class="col-md-4 mb-4">
-        <span class="label1">animal code</span>
+        <span class="label"
+          >Animal Code<span class="required-icon">*</span></span
+        >
         <input
           type="text"
           class="input-felid"
           [ngClass]="{ 'input-disable': isReadOnly }"
-          placeholder="Enter breed name..."
+          placeholder="Enter animal code..."
           formControlName="animalCode"
         />
+        <span
+          class="errorValidation"
+          *ngIf="
+            editAnimalForm.get('animalCode')?.touched &&
+            editAnimalForm.get('animalCode')?.hasError('required')
+          "
+        >
+          Required field
+        </span>
       </div>
       <div class="col-md-4 mb-4 position-relative">
-        <span class="label1">age</span>
+        <span class="label">Birth Date</span>
         <input
-          type="text"
+          type="date"
           class="input-felid"
           [ngClass]="{ 'input-disable': isReadOnly }"
-          placeholder="Enter origin..."
           formControlName="age"
         />
       </div>
       <div class="col-md-4 mb-4 position-relative">
-        <span class="label1">purchase date</span>
+        <span class="label">Purchase Date</span>
         <input
           type="date"
           class="input-felid custome-date"
           [ngClass]="{ 'input-disable': isReadOnly }"
-          placeholder="Enter purchase date..."
           formControlName="purchaseDate"
         />
       </div>
       <div class="col-md-4 mb-4 position-relative">
-        <span class="label1">price</span>
+        <span class="label">Price</span>
         <input
           type="number"
           value="PAKISTAN"
@@ -190,7 +215,7 @@
         </div>
       </div>
       <div class="col-md-12 mb-4">
-        <span class="label1">note</span>
+        <span class="label">Note</span>
         <input
           type="text"
           class="input-felid"

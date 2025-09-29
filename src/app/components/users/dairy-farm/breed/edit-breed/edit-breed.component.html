@@ -1,9 +1,15 @@
 <div class="container-fluid">
   <div class="d-pointer">
     <span class="breadcrumb" style="text-transform: uppercase"
-      >Dairy Farm /
+      >{{ this.businessUnitName }} /
     </span>
-    <span class="breadcrumb-bold">&nbsp;Animal Detail</span>
+    <span
+      class="breadcrumb-bold"
+      style="cursor: pointer"
+      [routerLink]="['/dairyFarm/breed']"
+      >&nbsp;Breed /</span
+    >
+    <span class="breadcrumb-bold">&nbsp;Breed Detail</span>
   </div>
   <!-- User Header -->
   <div
@@ -31,11 +37,11 @@
       <button
         type="button"
         (click)="
-          editBreedModel.valid && !editLoading ? editLiveStockDetail() : null
+          editBreedForm.valid && !editLoading ? editLiveStockDetail() : null
         "
         [ngClass]="{
-          'btn-save': editBreedModel.valid && !editLoading,
-          'btn-disable': editBreedModel.invalid || editLoading
+          'btn-save': editBreedForm.valid && !editLoading,
+          'btn-disable': editBreedForm.invalid || editLoading
         }"
       >
         Save &nbsp;
@@ -48,10 +54,10 @@
       </button>
     </span>
   </div>
-  <form [formGroup]="editBreedModel">
+  <form [formGroup]="editBreedForm">
     <div class="row g-3 align-items-end mt-4">
       <div class="col-md-4 mb-4">
-        <span class="label1">Breed id</span>
+        <span class="label">Breed Id</span>
         <input
           type="text"
           [value]="BreedDetail.breedRef"
@@ -62,7 +68,9 @@
       </div>
 
       <div class="col-md-4 mb-4">
-        <span class="label1">breed name</span>
+        <span class="label"
+          >Breed Name<span class="required-icon">*</span></span
+        >
         <input
           type="text"
           value="NILI-RAVI"
@@ -71,6 +79,15 @@
           placeholder="Enter breed name..."
           formControlName="name"
         />
+        <span
+          class="errorValidation"
+          *ngIf="
+            editBreedForm.get('name')?.touched &&
+            editBreedForm.get('name')?.hasError('required')
+          "
+        >
+          Required field
+        </span>
       </div>
       <div class="col-md-4 mb-4 position-relative">
         <span class="label"
@@ -84,21 +101,30 @@
             formControlName="animalTypeId"
             placeholder="Animal Type"
           ></p-select>
+          <span
+            class="errorValidation"
+            *ngIf="
+              editBreedForm.get('animalTypeId')?.touched &&
+              editBreedForm.get('animalTypeId')?.hasError('required')
+            "
+          >
+            Required field
+          </span>
         </div>
       </div>
       <div class="col-md-4 mb-4 position-relative">
-        <span class="label1">origin</span>
+        <span class="label">Origin</span>
         <input
           type="text"
           value="PAKISTAN"
           class="input-felid"
           [ngClass]="{ 'input-disable': isReadOnly }"
-          placeholder="Enter origin..."
+          placeholder="Enter location..."
           formControlName="origin"
         />
       </div>
       <div class="col-md-12 mb-4">
-        <span class="label1">note</span>
+        <span class="label">Note</span>
         <input
           type="text"
           value="HIGH MILK YIELD"

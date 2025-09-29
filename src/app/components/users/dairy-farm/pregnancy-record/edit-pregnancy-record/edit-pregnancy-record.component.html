@@ -1,9 +1,15 @@
 <div class="container-fluid">
   <div class="d-pointer">
     <span class="breadcrumb" style="text-transform: uppercase"
-      >Dairy Farm /
+      >{{ this.businessUnitName }} /
     </span>
-    <span class="breadcrumb-bold">&nbsp;Animal Detail</span>
+    <span
+      class="breadcrumb-bold"
+      style="cursor: pointer"
+      [routerLink]="['/dairyFarm/pregnancy-record']"
+      >&nbsp;Pregnancy Record /</span
+    >
+    <span class="breadcrumb-bold">&nbsp;Pregnancy Record Detail</span>
   </div>
   <!-- User Header -->
   <div
@@ -31,13 +37,13 @@
       <button
         type="button"
         (click)="
-          editPregnancyRecordModel.valid && !editLoading
+          editPregnancyRecordForm.valid && !editLoading
             ? editPregnancyRecordDetail()
             : null
         "
         [ngClass]="{
-          'btn-save': editPregnancyRecordModel.valid && !editLoading,
-          'btn-disable': editPregnancyRecordModel.invalid || editLoading
+          'btn-save': editPregnancyRecordForm.valid && !editLoading,
+          'btn-disable': editPregnancyRecordForm.invalid || editLoading
         }"
       >
         Save &nbsp;
@@ -50,10 +56,10 @@
       </button>
     </span>
   </div>
-  <form [formGroup]="editPregnancyRecordModel">
+  <form [formGroup]="editPregnancyRecordForm">
     <div class="row g-3 align-items-end mt-4">
       <div class="col-md-4 mb-4">
-        <span class="label1">Record id</span>
+        <span class="label">Record id</span>
         <input
           type="text"
           [value]="PregnancyRecordDetail.recordRef"
@@ -64,7 +70,7 @@
       </div>
       <div class="col-md-4 mb-4 position-relative">
         <span class="label"
-          >Animal ID<span class="required-icon">*</span>
+          >Animal Id<span class="required-icon">*</span>
         </span>
         <div class="alt-dropdown" [ngClass]="{ 'input-disable': isReadOnly }">
           <p-select
@@ -76,10 +82,19 @@
             placeholder="Animal "
             formControlName="animalId"
           />
+          <span
+            class="errorValidation"
+            *ngIf="
+              editPregnancyRecordForm.get('animalId')?.touched &&
+              editPregnancyRecordForm.get('animalId')?.hasError('required')
+            "
+          >
+            Required field
+          </span>
         </div>
       </div>
       <div class="col-md-4 mb-4 position-relative">
-        <span class="label">Breed ID<span class="required-icon">*</span> </span>
+        <span class="label">Breed Id<span class="required-icon">*</span> </span>
         <div class="alt-dropdown" [ngClass]="{ 'input-disable': isReadOnly }">
           <p-select
             [options]="Breeds"
@@ -92,40 +107,78 @@
             placeholder="Breeds"
             formControlName="breedId"
           />
+          <span
+            class="errorValidation"
+            *ngIf="
+              editPregnancyRecordForm.get('breedId')?.touched &&
+              editPregnancyRecordForm.get('breedId')?.hasError('required')
+            "
+          >
+            Required field
+          </span>
         </div>
       </div>
       <div class="col-md-4 mb-4">
-        <span class="label1">PREGNANT DATE</span>
+        <span class="label"
+          >Pregnant Date<span class="required-icon">*</span></span
+        >
         <input
           type="date"
-          value="NILI-RAVI"
           class="input-felid custom-date"
           [ngClass]="{ 'input-disable': isReadOnly }"
-          placeholder="Enter breed name..."
           formControlName="pregnantDate"
         />
+        <span
+          class="errorValidation"
+          *ngIf="
+            editPregnancyRecordForm.get('pregnantDate')?.touched &&
+            editPregnancyRecordForm.get('pregnantDate')?.hasError('required')
+          "
+        >
+          Required field
+        </span>
       </div>
       <div class="col-md-4 mb-4">
-        <span class="label1">EXPECTED DELIVERY</span>
+        <span class="label"
+          >Expected Delivery<span class="required-icon">*</span></span
+        >
         <input
           type="date"
-          value="NILI-RAVI"
           class="input-felid custom-date"
           [ngClass]="{ 'input-disable': isReadOnly }"
-          placeholder="Enter breed name..."
           formControlName="expectedDelivery"
         />
+        <span
+          class="errorValidation"
+          *ngIf="
+            editPregnancyRecordForm.get('expectedDelivery')?.touched &&
+            editPregnancyRecordForm
+              .get('expectedDelivery')
+              ?.hasError('required')
+          "
+        >
+          Required field
+        </span>
       </div>
       <div class="col-md-4 mb-4">
-        <span class="label1">ACTUAL DELIVERY</span>
+        <span class="label"
+          >Actual delivery<span class="required-icon">*</span></span
+        >
         <input
           type="date"
-          value="NILI-RAVI"
           class="input-felid custom-date"
           [ngClass]="{ 'input-disable': isReadOnly }"
-          placeholder="Enter breed name..."
           formControlName="actualDelivery"
         />
+        <span
+          class="errorValidation"
+          *ngIf="
+            editPregnancyRecordForm.get('actualDelivery')?.touched &&
+            editPregnancyRecordForm.get('actualDelivery')?.hasError('required')
+          "
+        >
+          Required field
+        </span>
       </div>
       <div class="col-md-4 mb-4 position-relative">
         <div class="mt-3" style="display: flex">

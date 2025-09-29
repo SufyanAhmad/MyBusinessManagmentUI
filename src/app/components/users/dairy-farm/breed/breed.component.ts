@@ -12,7 +12,7 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { SelectModule } from 'primeng/select';
 import { DialogModule } from 'primeng/dialog';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { catchError, map, merge, of, startWith, switchMap, tap } from 'rxjs';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
@@ -58,7 +58,6 @@ export class BreedComponent {
   stockId: any = null;
   busUnitId: any = null;
   BreedList: BreedModel[] = [];
-  BusinessUnits: masterModal[] = [];
   AnimalTypes: masterModal[] = [];
   businessUnitId: any = null;
   businessUnitName: any = '';
@@ -67,10 +66,15 @@ export class BreedComponent {
   // for add animal popup
   addLoading: boolean = false;
   visible: boolean = false;
-  addBreedModel!: FormGroup;
-  displayedColumns: string[] = ['breedName', 'type', 'origin', 'note'];
+  addBreedForm!: FormGroup;
+  displayedColumns: string[] = [
+    'breedId',
+    'breedName',
+    'type',
+    'origin',
+    'note',
+  ];
   constructor(
-    private route: ActivatedRoute,
     private dairyFarmService: DairyFarmService,
     private masterService: MasterService,
     private accountService: AccountService,
@@ -80,10 +84,9 @@ export class BreedComponent {
   ) {}
 
   ngOnInit() {
-    this.busUnitId = localStorage.getItem('DF_businessUnitId');
-    this.businessUnitName = localStorage.getItem('DF_businessUnit_Name');
-    this.loadBusinessUnits();
-    this.loadAnimalTypes();
+    this.busUnitId = this.accountService.getBusinessUnitId();
+    this.businessUnitName = this.accountService.getBusinessUnitName();
+
     this.initForm();
   }
   ngAfterViewInit() {
@@ -109,7 +112,7 @@ export class BreedComponent {
 
           let data = {
             searchKey: this.searchKey ?? null,
-            businessUnitId: this.busUnitId ?? null,
+            businessUnitId: this.busUnitId,
             pageNumber: this.paginator.pageIndex + 1,
             pageSize: 10,
           };
@@ -154,6 +157,7 @@ export class BreedComponent {
           }
           this.dataSource = new MatTableDataSource(this.BreedList);
           this.isLoadingResults = false;
+          this.loadAnimalTypes();
         },
         (error) => {
           this.isLoadingResults = false;
@@ -166,7 +170,7 @@ export class BreedComponent {
   }
   addBreed() {
     this.addLoading = true;
-    this.dairyFarmService.addBreed(this.addBreedModel.value).subscribe(
+    this.dairyFarmService.addBreed(this.addBreedForm.value).subscribe(
       (dt) => {
         this.addLoading = false;
         this.visible = false;
@@ -194,17 +198,17 @@ export class BreedComponent {
     );
   }
   onSave() {
-    if (this.addBreedModel.valid && !this.addLoading) {
+    if (this.addBreedForm.valid && !this.addLoading) {
       this.addBreed();
     }
   }
   initForm() {
-    this.addBreedModel = this.formBuilder.group({
+    this.addBreedForm = this.formBuilder.group({
       animalTypeId: [0, [Validators.required]],
       name: [null, [Validators.required]],
-      origin: [null, [Validators.required]],
-      note: [null, [Validators.required]],
-      businessUnitId: [null, [Validators.pattern]],
+      origin: [null],
+      note: [null],
+      businessUnitId: [this.busUnitId],
     });
   }
   SearchBySearchKey(event: any) {
@@ -214,26 +218,7 @@ export class BreedComponent {
       }
     }
   }
-  loadBusinessUnits() {
-    this.masterService.getBusinessUnitTypesById(3).subscribe(
-      (res) => {
-        var dt = res;
-        this.BusinessUnits = [];
-        for (let a = 0; a < dt.length; a++) {
-          let _data: masterModal = {
-            id: dt[a].businessUnitId,
-            type: dt[a].name,
-          };
-          this.BusinessUnits.push(_data);
-        }
-      },
-      (error) => {
-        if (error.status == 401) {
-          this.accountService.doLogout();
-        }
-      }
-    );
-  }
+
   loadAnimalTypes() {
     this.masterService.getAnimalTypes().subscribe(
       (res) => {

@@ -8,7 +8,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { MessageService } from 'primeng/api';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ToastModule } from 'primeng/toast';
 import { SelectModule } from 'primeng/select';
 import { AccountService } from '../../../../../services/account-service/account.service';
@@ -24,6 +24,7 @@ import { DairyFarmService } from '../../../../../services/dairy-farm.service';
     FormsModule,
     ToastModule,
     SelectModule,
+    RouterLink,
   ],
   templateUrl: './edit-pregnancy-record.component.html',
   styleUrl: './edit-pregnancy-record.component.scss',
@@ -36,15 +37,15 @@ export class EditPregnancyRecordComponent {
   editLoading: boolean = false;
   pregnancyBirthRecordId: any = null;
   businessUnitName: any = '';
+  busUnitId: any = null;
   isArchived: boolean = false;
-  BusinessUnits: masterModal[] = [];
   AnimalList: masterModal[] = [];
   Breeds: masterModal[] = [];
   businessUnitId: any = null;
   delivered: boolean = true;
   breedId: any = null;
 
-  editPregnancyRecordModel!: FormGroup;
+  editPregnancyRecordForm!: FormGroup;
 
   PregnancyRecordDetail: PregnancyRecordModel = {
     updatedBy: '',
@@ -93,13 +94,11 @@ export class EditPregnancyRecordComponent {
   ) {}
   ngOnInit() {
     this.pregnancyBirthRecordId = this.route.snapshot.params['id'];
-    this.businessUnitName = localStorage.getItem('DF_businessUnit_Name');
+    this.busUnitId = this.accountService.getBusinessUnitId();
+    this.businessUnitName = this.accountService.getBusinessUnitName();
 
     this.initForm();
     this.getPregnancyRecordDetails();
-    this.loadAnimal();
-    this.loadBreeds();
-    this.loadBusinessUnits();
   }
   ngAfterViewInit() {
     setTimeout(() => {
@@ -156,6 +155,8 @@ export class EditPregnancyRecordComponent {
           };
           this.initForm();
           this.loading = false;
+          this.loadAnimal();
+          this.loadBreeds();
         },
         (error) => {
           this.loading = false;
@@ -176,7 +177,7 @@ export class EditPregnancyRecordComponent {
     this.dairyFarmService
       .UpdatePregnancyRecordDetail(
         this.pregnancyBirthRecordId,
-        this.editPregnancyRecordModel.value
+        this.editPregnancyRecordForm.value
       )
       .subscribe(
         (dt) => {
@@ -218,7 +219,7 @@ export class EditPregnancyRecordComponent {
     this.initForm();
   }
   initForm() {
-    this.editPregnancyRecordModel = this.formBuilder.group({
+    this.editPregnancyRecordForm = this.formBuilder.group({
       animalId: [this.PregnancyRecordDetail.animalId, [Validators.required]],
       breedId: [this.PregnancyRecordDetail.breedId, [Validators.required]],
       pregnantDate: [
@@ -234,31 +235,8 @@ export class EditPregnancyRecordComponent {
         [Validators.required],
       ],
       delivered: [this.PregnancyRecordDetail.delivered, [Validators.required]],
-      businessUnitId: [
-        this.PregnancyRecordDetail.businessUnitId,
-        [Validators.required],
-      ],
+      businessUnitId: [this.busUnitId],
     });
-  }
-  loadBusinessUnits() {
-    this.masterService.getBusinessUnitTypesById(3).subscribe(
-      (res) => {
-        var dt = res;
-        this.BusinessUnits = [];
-        for (let a = 0; a < dt.length; a++) {
-          let _data: masterModal = {
-            id: dt[a].businessUnitId,
-            type: dt[a].name,
-          };
-          this.BusinessUnits.push(_data);
-        }
-      },
-      (error) => {
-        if (error.status == 401) {
-          this.accountService.doLogout();
-        }
-      }
-    );
   }
   loadAnimal() {
     this.masterService.getAnimal().subscribe(
@@ -299,11 +277,6 @@ export class EditPregnancyRecordComponent {
         }
       }
     );
-  }
-  preventDecimal(event: KeyboardEvent) {
-    if (event.key === '.' || event.key === ',') {
-      event.preventDefault();
-    }
   }
   goBack() {
     this.location.back();

@@ -1,6 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { Component, ViewChild } from '@angular/core';
-import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatSort, MatSortModule } from '@angular/material/sort';
@@ -12,15 +18,11 @@ import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { SkeletonModule } from 'primeng/skeleton';
 import { masterModal } from '../../../../models/master-model/master-model';
-import { ColdStoreServiceService } from '../../../../services/cold-store-service/cold-store-service.service';
 import { MasterService } from '../../../../services/master-service/master.service';
 import { AccountService } from '../../../../services/account-service/account.service';
 import { LoadingComponent } from '../../../loading/loading.component';
 import { DataNotFoundComponent } from '../../../data-not-found/data-not-found.component';
-import {
-  MilkProductionModel,
-  StockOutModel,
-} from '../../../../models/dairy-farm-model/dairy-farm-model';
+import { MilkProductionModel } from '../../../../models/dairy-farm-model/dairy-farm-model';
 import { DairyFarmService } from '../../../../services/dairy-farm.service';
 
 @Component({
@@ -56,14 +58,15 @@ export class MilkProductionComponent {
   stockId: any = null;
   busUnitId: any = null;
   MilkProductionList: MilkProductionModel[] = [];
-  BusinessUnits: masterModal[] = [];
+  AnimalList: masterModal[] = [];
   businessUnitId: any = null;
   businessUnitName: any = '';
+  isActive: boolean = true;
   bgColor: string = '#FFCE3A';
   // for add animal popup
   addLoading: boolean = false;
   visible: boolean = false;
-  addAnimalModel!: FormGroup;
+  addMilkProductionForm!: FormGroup;
   displayedColumns: string[] = [
     'recordId',
     'animalId',
@@ -77,22 +80,24 @@ export class MilkProductionComponent {
     'status',
   ];
   constructor(
-    private route: ActivatedRoute,
-    private coldStoreService: ColdStoreServiceService,
+    private messageService: MessageService,
     private masterService: MasterService,
     private accountService: AccountService,
     private dairyFarmService: DairyFarmService,
+    private formBuilder: FormBuilder,
     private router: Router
   ) {}
   ngOnInit() {
-    this.busUnitId = localStorage.getItem('DF_businessUnitId');
-    this.businessUnitName = localStorage.getItem('DF_businessUnit_Name');
-    this.loadBusinessUnits();
+    this.busUnitId = this.accountService.getBusinessUnitId();
+    this.businessUnitName = this.accountService.getBusinessUnitName();
+
+    this.initForm();
   }
   ngAfterViewInit() {
     setTimeout(() => {
       this.getMilkProductionList();
     }, 0);
+    this.loadAnimal();
   }
   getMilkProductionList() {
     this.paginator.pageIndex = 0;
@@ -175,7 +180,49 @@ export class MilkProductionComponent {
         }
       );
   }
-
+  AddMilkProduction() {
+    this.addLoading = true;
+    this.dairyFarmService
+      .addMilkProduction(this.addMilkProductionForm.value)
+      .subscribe(
+        (dt) => {
+          this.addLoading = false;
+          this.visible = false;
+          this.getMilkProductionList();
+          this.addMilkProductionForm.reset();
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Added',
+            detail: 'Milk Production added successfully',
+            life: 3000,
+          });
+        },
+        (error) => {
+          this.addLoading = false;
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: error.error.message,
+            life: 3000,
+          });
+          if (error.status == 401) {
+            this.accountService.doLogout();
+            this.router.navigateByUrl('/');
+          }
+        }
+      );
+  }
+  initForm() {
+    this.addMilkProductionForm = this.formBuilder.group({
+      animalId: [null, [Validators.required]],
+      date: [null, [Validators.required]],
+      morning: [, [Validators.pattern('^[0-9]*$')]],
+      evening: [, [Validators.pattern('^[0-9]*$')]],
+      total: [, [Validators.pattern('^[0-9]*$')]],
+      isActive: [null, [Validators.pattern]],
+      businessUnitId: [this.busUnitId],
+    });
+  }
   addAnimal() {}
   SearchBySearchKey(event: any) {
     if (event.key != 'Enter') {
@@ -184,18 +231,17 @@ export class MilkProductionComponent {
       }
     }
   }
-
-  loadBusinessUnits() {
-    this.masterService.getBusinessUnitTypes().subscribe(
+  loadAnimal() {
+    this.masterService.getAnimal().subscribe(
       (res) => {
-        var dt = res;
-        this.BusinessUnits = [];
+        let dt = res.data;
+        this.AnimalList = [];
         for (let a = 0; a < dt.length; a++) {
           let _data: masterModal = {
-            id: dt[a].businessUnitId,
-            type: dt[a].name,
+            id: dt[a].animalId,
+            type: dt[a].animalRef,
           };
-          this.BusinessUnits.push(_data);
+          this.AnimalList.push(_data);
         }
       },
       (error) => {
@@ -205,6 +251,7 @@ export class MilkProductionComponent {
       }
     );
   }
+
   ResetFilter() {
     this.searchKey = null;
     this.ngAfterViewInit();
