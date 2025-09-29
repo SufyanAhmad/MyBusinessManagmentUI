@@ -200,7 +200,8 @@ export class EditEmployeesComponent {
     this.location.back();
   }
   loadBusinessUnits() {
-    this.masterService.getBusinessUnitsById(this.busUnitId).subscribe(
+    debugger
+    this.masterService.getBusinessUnitTypesById(3).subscribe(
       (res) => {
         var dt = res;
         this.BusinessUnits = [];

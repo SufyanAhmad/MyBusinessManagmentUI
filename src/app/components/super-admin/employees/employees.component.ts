@@ -274,7 +274,7 @@ export class EmployeesComponent {
     );
   }
   loadBusinessUnits() {
-    this.masterService.getBusinessUnitTypes().subscribe(
+    this.masterService.getBusinessUnitTypesById(3).subscribe(
       (res) => {
         var dt = res;
         this.BusinessUnits = [];
