@@ -44,7 +44,7 @@ businessUnitName:any='';
   ) {}
   ngOnInit() {
     this.paymentId = this.route.snapshot.params['id'];
-    this.businessUnitName = localStorage.getItem('BS_businessUnit_Name');
+    this.businessUnitName = localStorage.getItem('DF_businessUnit_Name');
     this.checkRouteUrl = this.router.url;
       if (this.checkRouteUrl.includes('/storageUnit/ledger-transactions')) {
             this.isShowLabel = true;

@@ -89,7 +89,7 @@ export class EmployeesComponent {
   ) {}
 
   ngOnInit() {
-    this.busUnitId = localStorage.getItem('BS_businessUnitId');
+    this.busUnitId = localStorage.getItem('DF_businessUnitId');
     this.initForm();
     this.loadEmployeeTypes();
     this.loadBusinessUnits();

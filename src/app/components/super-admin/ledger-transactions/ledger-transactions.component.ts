@@ -119,8 +119,8 @@ export class LedgerTransactionsComponent {
 
   ngOnInit() {
     this.checkRouteUrl = this.router.url;
-    this._businessUnitId = localStorage.getItem('BS_businessUnitId');
-    this.businessUnitName = localStorage.getItem('BS_businessUnit_Name');
+    this._businessUnitId = localStorage.getItem('DF_businessUnitId');
+    this.businessUnitName = localStorage.getItem('DF_businessUnit_Name');
     if (this.checkRouteUrl != '/superAdmin/ledger-transactions') {
             this.isShowLabel = true;
             this.isBusinessUnitShow=false;
