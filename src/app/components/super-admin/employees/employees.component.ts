@@ -12,7 +12,7 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { CheckboxModule } from 'primeng/checkbox';
 import { SelectModule } from 'primeng/select';
 import { DialogModule } from 'primeng/dialog';
-import { Router, RouterLink, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink, RouterModule } from '@angular/router';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import {
   CustomerModel,
@@ -85,8 +85,11 @@ export class EmployeesComponent {
     private masterService: MasterService,
     private messageService: MessageService,
     private accountService: AccountService,
-    private router: Router
-  ) {}
+    private router: Router,
+    private route: ActivatedRoute,
+  ) {
+    this.businessUnitId = this.route.snapshot.params['businessUnitId'];
+  }
 
   ngOnInit() {
     this.busUnitId = localStorage.getItem('DF_businessUnitId');

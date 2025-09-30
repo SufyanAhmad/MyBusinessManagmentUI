@@ -4,7 +4,7 @@
       <div class="unit-card p-3" [routerLink]="isAdminExit ? ['/superAdmin/users'] : null">
         <div class="card-text">User</div>
         <div class="count" style="color: #e47c1c">{{ TotalCount.users }}</div>
-        <div class="label" style="font-weight: 600">Total</div>
+        <div class="label" style="font-weight: 600;color: #e47c1c">Total</div>
       </div>
     </div>
     <div class="col-md-3">
@@ -13,7 +13,7 @@
         <div class="count" style="color: #338c8e">
           {{ TotalCount.customers }}
         </div>
-        <div class="label" style="font-weight: 600">Total</div>
+        <div class="label" style="font-weight: 600;color: #338c8e">Total</div>
       </div>
     </div>
     <div class="col-md-3">
@@ -22,18 +22,18 @@
         <div class="count" style="color: #0d77bc">
           {{ TotalCount.suppliers }}
         </div>
-        <div class="label" style="font-weight: 600">Total</div>
+        <div class="label" style="font-weight: 600;color: #0d77bc">Total</div>
       </div>
     </div>
   </div>
   <div class="row justify-content-between" style="margin-top: 100px">
     <div class="col-sm-6 col-lg-3 mb-5">
-      <p-chart type="bar" [data]="chartData" [options]="chartOptions"></p-chart>
+      <p-chart type="bar" [data]="usersChartData" [options]="chartOptions"></p-chart>
       
-      <div [routerLink]="isAdminExit ? ['/superAdmin/users'] : null"  class="dashboard-card">Users</div>
+      <div [routerLink]="isAdminExit ? ['/superAdmin/users'] : null"  class="dashboard-card" style="cursor: pointer">Users</div>
     </div>
     <div class="col-sm-6 col-lg-3  mb-5">
-      <p-chart type="bar" [data]="chartData" [options]="chartOptions"></p-chart>
+      <p-chart type="bar" [data]="customersChartData" [options]="chartOptions"></p-chart>
     <div
     
         [routerLink]="isAdminExit ? ['/superAdmin/customers'] : null"
@@ -44,7 +44,7 @@
       </div>
     </div>
     <div class="col-sm-6 col-lg-3">
-      <p-chart type="bar" [data]="storageUnitChartData" [options]="chartOptions"></p-chart>
+      <p-chart type="bar" [data]="suppliersChartData" [options]="chartOptions"></p-chart>
       <div [routerLink]="isAdminExit ? ['/superAdmin/suppliers'] : null"  class="dashboard-card" style="cursor: pointer">Suppliers</div>
     
     </div>

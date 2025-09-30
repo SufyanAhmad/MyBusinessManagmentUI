@@ -12,7 +12,9 @@ import { AccountService } from '../../../services/account-service/account.servic
   styleUrl: './dashboard.component.scss',
 })
 export class DashboardComponent {
-  storageUnitChartData: any;
+  usersChartData: any; 
+  suppliersChartData: any; 
+  customersChartData: any;
   chartData: any;
   chartOptions: any;
   TotalCounts: TotalCountsModel[] = [];
@@ -25,8 +27,12 @@ export class DashboardComponent {
   };
    barGraph: BarGraphModel[] = [];
    barGraphModels: BarGraphModel[] = [];
-   storageUnitLabels: string[] = [];
-   storageUnitDataValues: number[] = [];
+   usersLabels: string[] = [];
+   usersDataValues: number[] = [];
+   suppliersLabels: string[] = [];
+   suppliersDataValues: number[] = [];
+   customersLabels: string[] = [];
+   customersDataValues: number[] = [];
    dummy : any =5;
   constructor(
     private superAdminService: SuperAdminService,
@@ -47,39 +53,48 @@ export class DashboardComponent {
         },
       ],
     };
-    this.InitStorageUnitChart();
-    this.getStorageUnitBarGraph();
-    // this.storageUnitChartData?.update();
+    this.InitDairyFarmUsersChart();
+    this.InitDairyFarmSuppliersChart();
+    this.InitDairyFarmCustomersChart();
+    this.getDairyFarmUsersBarGraph();
+    this.getDairyFarmSuppliersBarGraph();
+    this.getDairyFarmCustomersBarGraph();
     this.loadTotalCounts();
-   
+  this.chartOptions = {
+  plugins: {
+    legend: {
+      display: false,
+    },
+  },
+  scales: {
+    x: {
+      type: 'category',
+      ticks: {
+        color: '#000',
+      },
+      grid: {
+        display: false,
+      },
+    },
+    y: {
+      ticks: {
+        color: '#000',
+        stepSize: 1,   // ✅ force step of 1
+        callback: function (value:any) {
+          return value; // show only integers
+        },
+      },
+      grid: {
+        display: false,
+      },
+      beginAtZero: true, // ✅ start at 0
+    },
+  },
+  responsive: true,
+  maintainAspectRatio: false,
+};
 
-    this.chartOptions = {
-      plugins: {
-        legend: {
-          display: false,
-        },
-      },
-      scales: {
-        x: {
-          ticks: {
-            color: '#000',
-          },
-          grid: {
-            display: false,
-          },
-        },
-        y: {
-          ticks: {
-            color: '#000',
-          },
-          grid: {
-            display: false,
-          },
-        },
-      },
-      responsive: true,
-      maintainAspectRatio: false,
-    };
+
   }
   loadTotalCounts() {
     this.loading = true;
@@ -100,26 +115,76 @@ export class DashboardComponent {
       }
     );
   }
-  getStorageUnitBarGraph() {
+  getDairyFarmUsersBarGraph() {
   this.loading = true;
-  this.superAdminService.getStorageUnitBarGraph().subscribe(
+  this.superAdminService.getUsersBarGraph().subscribe(
     (dt) => {
-      this.storageUnitLabels = [];
-      this.storageUnitDataValues=[];
-      this.storageUnitChartData.datasets[0].data = [];
+      this.usersLabels = [];
+      this.usersDataValues=[];
+      this.usersChartData.datasets[0].data = [];
       this.barGraphModels = [];
       for (let a = 0; a < dt.length; a++) {
         let barGraph: BarGraphModel = {
           monthName: dt[a].monthName,
-          percentage: dt[a].percentage
+          percentage: dt[a].count
         };
-        this.storageUnitLabels.push(barGraph.monthName);
-        this.storageUnitDataValues.push(barGraph.percentage);
-      //   this.storageUnitChartData.labels.push(barGraph.monthName);
-      //  this.storageUnitChartData.datasets[0].data.push(barGraph.percentage);
+        this.usersLabels.push(barGraph.monthName);
+        this.usersDataValues.push(barGraph.percentage);
         this.barGraphModels.push(barGraph);
       }
-      this.InitStorageUnitChart();
+      this.InitDairyFarmUsersChart();
+    },
+    (error) => {
+      if (error.status === 401) {
+        this.accountService.doLogout();
+      }
+    }
+  );
+  }
+  getDairyFarmSuppliersBarGraph() {
+  this.loading = true;
+  this.superAdminService.getSuppliersBarGraph().subscribe(
+    (dt) => {
+      this.suppliersLabels = [];
+      this.suppliersDataValues=[];
+      this.suppliersChartData.datasets[0].data = [];
+      this.barGraphModels = [];
+      for (let a = 0; a < dt.length; a++) {
+        let barGraph: BarGraphModel = {
+          monthName: dt[a].monthName,
+          percentage: dt[a].count
+        };
+        this.suppliersLabels.push(barGraph.monthName);
+        this.suppliersDataValues.push(barGraph.percentage);
+        this.barGraphModels.push(barGraph);
+      }
+      this.InitDairyFarmSuppliersChart();
+    },
+    (error) => {
+      if (error.status === 401) {
+        this.accountService.doLogout();
+      }
+    }
+  );
+  }
+  getDairyFarmCustomersBarGraph() {
+  this.loading = true;
+  this.superAdminService.getCustomersBarGraph().subscribe(
+    (dt) => {
+      this.customersLabels = [];
+      this.customersDataValues=[];
+      this.customersChartData.datasets[0].data = [];
+      this.barGraphModels = [];
+      for (let a = 0; a < dt.length; a++) {
+        let barGraph: BarGraphModel = {
+          monthName: dt[a].monthName,
+          percentage: dt[a].count
+        };
+        this.customersLabels.push(barGraph.monthName);
+        this.customersDataValues.push(barGraph.percentage);
+        this.barGraphModels.push(barGraph);
+      }
+      this.InitDairyFarmCustomersChart();
     },
     (error) => {
       if (error.status === 401) {
@@ -129,14 +194,40 @@ export class DashboardComponent {
   );
   }
   // Initialize the storage unit chart data
-  InitStorageUnitChart(){
-    this.storageUnitChartData = {
-      labels: this.storageUnitLabels,
+  InitDairyFarmUsersChart(){
+    this.usersChartData = {
+      labels: this.usersLabels,
       datasets: [
         {
-          label: 'Monthly Sales',
-          backgroundColor: '#00B3B3',
-          data: this.storageUnitDataValues,
+          label: 'Monthly Users',
+          backgroundColor: '#e47c1c',
+          data: this.usersDataValues,
+        },
+      ],
+    };
+
+  } 
+  InitDairyFarmSuppliersChart(){
+    this.suppliersChartData = {
+      labels: this.suppliersLabels,
+      datasets: [
+        {
+          label: 'Monthly Suppliers',
+          backgroundColor: '#0d77bc',
+          data: this.suppliersDataValues,
+        },
+      ],
+    };
+
+  } 
+  InitDairyFarmCustomersChart(){
+    this.customersChartData = {
+      labels: this.customersLabels,
+      datasets: [
+        {
+          label: 'Monthly Customers',
+          backgroundColor: '#338c8e',
+          data: this.customersDataValues,
         },
       ],
     };

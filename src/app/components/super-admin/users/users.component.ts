@@ -13,7 +13,7 @@ import { MatSort, MatSortModule } from '@angular/material/sort';
 import { CheckboxModule } from 'primeng/checkbox';
 import { SelectModule } from 'primeng/select';
 import { DialogModule } from 'primeng/dialog';
-import { Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import {
   AddedBusinessUnitModel,
   BusinessUnitModel,
@@ -100,8 +100,11 @@ export class UsersComponent {
     private masterService: MasterService,
     private messageService: MessageService,
     private accountService: AccountService,
-    private router: Router
-  ) {}
+    private router: Router,
+    private route: ActivatedRoute
+  ) {
+    this.businessUnitId = this.route.snapshot.params['businessUnitId'];
+  }
   ngOnInit() {
     this.RestUserPasswordForm = this.formBuilder.group({
       userId: [null],

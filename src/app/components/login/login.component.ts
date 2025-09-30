@@ -80,7 +80,9 @@ export class LoginComponent {
     private router: Router,
     private accountService: AccountService,
     private messageService: MessageService
-  ) {}
+  ) {
+    this.gotoDashboard()
+  }
 
   ngOnInit() {
     this.loginForm = this.formBuilder.group({
@@ -122,5 +124,8 @@ export class LoginComponent {
   }
   showHidePassword() {
     this.showPassword = !this.showPassword;
+  }
+  gotoDashboard() {
+    this.router.navigateByUrl('/superAdmin');
   }
 }

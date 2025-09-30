@@ -101,6 +101,7 @@ initForm() {
   getBusinessCountsDetail(){
     this.superAdminService.getBusinessCounts(this.userId).subscribe(
       (dt) => {
+        debugger
         this.businessCountsDetail={
           coldStoreCoun: dt.coldStoreCount,
           poultryFarmCoun: dt.poultryFarmCount,
