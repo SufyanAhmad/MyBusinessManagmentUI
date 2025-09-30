@@ -52,9 +52,6 @@ export class BusinessUnitsComponent {
   isAdminExit: boolean = false;
 
   businessUnitId: any = null;
-  coldStoreUnitList: BusinessUnitModel[] = [];
-  poultryFarmUnitList: BusinessUnitModel[] = [];
-  storageUnitList: BusinessUnitModel[] = [];
   dairyFarmUnitList: BusinessUnitModel[] = [];
   businessTypes: masterModal[] = [];
   addBusinessUnitModel!: FormGroup;
@@ -71,6 +68,7 @@ export class BusinessUnitsComponent {
     totalEmployee: 0
   };
   type: number = 0;
+  userRole:string=''
   constructor(
     private formBuilder: FormBuilder,
     private superAdminService: SuperAdminService,
@@ -85,6 +83,9 @@ export class BusinessUnitsComponent {
     if (this.accountService.getRoles().includes("Admin")) {
       this.isAdminExit = true;
     }
+    this.userRole = this.accountService.getRoles()
+    debugger
+
     this.getBusinessUnits();
 
   }
@@ -200,11 +201,8 @@ export class BusinessUnitsComponent {
   }
   getBusinessUnits() {
     this.loading = true;
-    this.superAdminService.getBusinessUnits().subscribe(
+    this.superAdminService.getBusinessUnitsByAdminOrUser(this.userRole).subscribe(
       (dt) => {
-        this.coldStoreUnitList = [];
-        this.poultryFarmUnitList = [];
-        this.storageUnitList = [];
         this.dairyFarmUnitList=[];
         for (let a = 0; a < dt.length; a++) {
           let busUnit: BusinessUnitModel = {
@@ -224,14 +222,8 @@ export class BusinessUnitsComponent {
             totalSales:dt[a].totalSales,
             totalStorageUnitPendingItems:dt[a].totalStorageUnitPendingItems
           };
-          if (busUnit.businessTypeId == 0) {
-            this.coldStoreUnitList.push(busUnit);
-          } else if (busUnit.businessTypeId == 1) {
-            this.poultryFarmUnitList.push(busUnit);
-          } else if (busUnit.businessTypeId == 2) {
-            this.storageUnitList.push(busUnit);
-          }
-           else if (busUnit.businessTypeId == 3) {
+        
+          if (busUnit.businessTypeId == 3) {
             this.dairyFarmUnitList.push(busUnit);
           }
         }
@@ -288,21 +280,9 @@ export class BusinessUnitsComponent {
           detail: 'Business unit deleted successfully',
           life: 3000,
         });
-        for (let b = 0; b < this.coldStoreUnitList.length; b++) {
-          if (this.coldStoreUnitList[b].businessUnitId == this.businessUnitId) {
-            this.coldStoreUnitList.splice(b, 1);
-          }
-        }
-        for (let b = 0; b < this.poultryFarmUnitList.length; b++) {
-          if (
-            this.poultryFarmUnitList[b].businessUnitId == this.businessUnitId
-          ) {
-            this.poultryFarmUnitList.splice(b, 1);
-          }
-        }
-        for (let b = 0; b < this.storageUnitList.length; b++) {
-          if (this.storageUnitList[b].businessUnitId == this.businessUnitId) {
-            this.storageUnitList.splice(b, 1);
+        for (let b = 0; b < this.dairyFarmUnitList.length; b++) {
+          if (this.dairyFarmUnitList[b].businessUnitId == this.businessUnitId) {
+            this.dairyFarmUnitList.splice(b, 1);
           }
         }
       },

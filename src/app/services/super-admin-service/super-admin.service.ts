@@ -75,6 +75,19 @@ export class SuperAdminService {
         })
       );
   }
+   getBusinessUnitsByAdminOrUser(type:any) {
+    let url = 'BusinessUnit/get-all-business-unit';
+    if(type != 'Admin'){
+      url = 'BusinessUnit/get-user-all-business-unit'
+    }
+    return this.repositoryService
+      .get(url, true)
+      .pipe(
+        map((response: any) => {
+          return response;
+        })
+      );
+  }
   addBusinessUnit(data: any) {
     return this.repositoryService
       .post('BusinessUnit/add-business-unit', data, true)
@@ -346,7 +359,33 @@ export class SuperAdminService {
         })
       );
   }
-
+ getUsersBarGraph() {
+    return this.repositoryService
+      .get('Dashboard/get-users-bar-graph', true)
+      .pipe(
+        map((resource: any) => {
+          return resource;
+        })
+      );
+  }
+   getSuppliersBarGraph() {
+    return this.repositoryService
+      .get('Dashboard/get-supplier-bar-graph', true)
+      .pipe(
+        map((resource: any) => {
+          return resource;
+        })
+      );
+  }
+   getCustomersBarGraph() {
+    return this.repositoryService
+      .get('Dashboard/get-customers-bar-graph', true)
+      .pipe(
+        map((resource: any) => {
+          return resource;
+        })
+      );
+  }
   getCustomerDetailById(id: any) {
     return this.repositoryService
       .get('CustomerPayment/get-payment/' + id, true)

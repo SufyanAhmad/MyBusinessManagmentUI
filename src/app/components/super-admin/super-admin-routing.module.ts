@@ -39,6 +39,10 @@ const routes: Routes = [
         component: UsersComponent,
       },
       {
+        path: 'users/:businessUnitId',
+        component: UsersComponent,
+      },
+      {
         path: 'users/edit/:id',
         component: EditUsersComponent,
       },
@@ -72,6 +76,10 @@ const routes: Routes = [
       },
       {
         path: 'employees',
+        component: EmployeesComponent,
+      },
+      {
+        path: 'employees/:businessUnitId',
         component: EmployeesComponent,
       },
       {
