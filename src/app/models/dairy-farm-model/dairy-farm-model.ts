@@ -130,7 +130,7 @@ export interface PregnancyRecordModel {
   delivered: Boolean;
   businessUnitId: String;
 }
-export interface HealthVaccinationRecordModel {
+export interface VaccineRecordModel {
   updatedBy?: String;
   updatedAt?: String;
   healthVaccinationRecordId?: String;
@@ -145,4 +145,31 @@ export interface HealthVaccinationRecordModel {
   purpose: String;
   nextDueDate: String;
   businessUnitId: String;
+}
+export interface HealthRecordModel {
+  animalHealthId?: String;
+  animalHealthRef?: String;
+  createdBy?: String;
+  createdAt?: String;
+  animalRef?: String;
+  businessUnit?: String;
+  animalId: String;
+  businessUnitId: String;
+  weight: Number;
+  temperature: Number;
+  illnessNotes: String;
+  medicineTreatment: String;
+  lastCheckupDate: String;
+  remarks: String;
+}
+export interface VaccinationRecordModel {
+  animalHealthVaccinationMappingId: String;
+  animalHealthVaccinationStatusId: Number;
+  animalHealthVaccinationStatus: String;
+  animalRef: String;
+  name: String;
+  createdAt: String;
+  date: String;
+  animalId: String;
+  healthVaccinationRecordId: String;
 }

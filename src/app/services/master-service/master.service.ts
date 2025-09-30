@@ -207,4 +207,13 @@ export class MasterService {
       })
     );
   }
+  getHealthVaccinationRecords() {
+    return this.repositoryService
+      .get('Master/get-healthVaccinationRecords', true)
+      .pipe(
+        map((response: any) => {
+          return response;
+        })
+      );
+  }
 }

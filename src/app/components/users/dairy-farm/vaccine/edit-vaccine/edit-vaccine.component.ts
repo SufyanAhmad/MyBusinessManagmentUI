@@ -8,15 +8,15 @@ import {
   Validators,
 } from '@angular/forms';
 import { MessageService } from 'primeng/api';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ToastModule } from 'primeng/toast';
 import { SelectModule } from 'primeng/select';
 import { AccountService } from '../../../../../services/account-service/account.service';
 import { MasterService } from '../../../../../services/master-service/master.service';
 import { masterModal } from '../../../../../models/master-model/master-model';
-import { ColdStoreServiceService } from '../../../../../services/cold-store-service/cold-store-service.service';
-import { PoultryFarmService } from '../../../../../services/poultry-farm-service/poultry-farm.service';
-import { LiveStockModel } from '../../../../../models/dairy-farm-model/dairy-farm-model';
+import { VaccineRecordModel } from '../../../../../models/dairy-farm-model/dairy-farm-model';
+import { DairyFarmService } from '../../../../../services/dairy-farm.service';
+
 @Component({
   selector: 'app-edit-vaccine',
   imports: [
@@ -25,6 +25,7 @@ import { LiveStockModel } from '../../../../../models/dairy-farm-model/dairy-far
     FormsModule,
     ToastModule,
     SelectModule,
+    RouterLink,
   ],
   templateUrl: './edit-vaccine.component.html',
   styleUrl: './edit-vaccine.component.scss',
@@ -35,114 +36,125 @@ export class EditVaccineComponent {
   isActive: boolean = false;
   loading: boolean = false;
   editLoading: boolean = false;
-  liveStockId: any = null;
+  healthVaccinationRecordId: any = null;
   businessUnitName: any = '';
+  busUnitId: any = null;
   isArchived: boolean = false;
-  businessUnitTypes: masterModal[] = [];
+  BusinessUnits: masterModal[] = [];
+  AnimalList: masterModal[] = [];
+  SupplierList: masterModal[] = [];
   businessUnitId: any = null;
+  delivered: boolean = true;
+  breedId: any = null;
 
-  editLiveStockModel!: FormGroup;
-  liveStockDetail: LiveStockModel = {
-    livestockBatchId: '',
-    breed: '',
-    quantity: 0,
-    arrivalDate: '',
-    ageInDays: 0,
-    healthStatus: '',
+  editHealthVaccinationRecordModel!: FormGroup;
+
+  HealthVaccinationRecordDetail: VaccineRecordModel = {
+    updatedBy: '',
+    updatedAt: '',
+    healthVaccinationRecordId: '',
+    recordRef: '',
+    supplierName: '',
+    businessUnit: '',
+    createdBy: '',
+    createdAt: '',
+    supplierId: '',
+    date: '',
+    name: '',
+    purpose: '',
+    nextDueDate: '',
     businessUnitId: '',
   };
-  constLiveStockDetail: LiveStockModel = {
-    livestockBatchId: '',
-    breed: '',
-    quantity: 0,
-    arrivalDate: '',
-    ageInDays: 0,
-    healthStatus: '',
+  constHealthVaccinationRecord: VaccineRecordModel = {
+    updatedBy: '',
+    updatedAt: '',
+    healthVaccinationRecordId: '',
+    recordRef: '',
+    supplierName: '',
+    businessUnit: '',
+    createdBy: '',
+    createdAt: '',
+    supplierId: '',
+    date: '',
+    name: '',
+    purpose: '',
+    nextDueDate: '',
     businessUnitId: '',
   };
   constructor(
     private route: ActivatedRoute,
     private location: Location,
     private formBuilder: FormBuilder,
-    private poultryFarmService: PoultryFarmService,
     private messageService: MessageService,
     private accountService: AccountService,
-    private masterService: MasterService,
-    private coldStoreService: ColdStoreServiceService
+    private dairyFarmService: DairyFarmService,
+    private masterService: MasterService
   ) {}
   ngOnInit() {
-    this.liveStockId = this.route.snapshot.params['id'];
-    this.businessUnitName = localStorage.getItem('DF_businessUnit_Name');
-    this.loadBusinessUnitTypes();
+    this.healthVaccinationRecordId = this.route.snapshot.params['id'];
+    this.busUnitId = this.accountService.getBusinessUnitId();
+    this.businessUnitName = this.accountService.getBusinessUnitName();
     this.initForm();
-    //  this.getLiveStockDetails();
   }
-  ngAfterViewInit() {}
-  getLiveStockDetails() {
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.getHealthVaccinationRecordDetails();
+    }, 0);
+    this.loadAnimal();
+  }
+  getHealthVaccinationRecordDetails() {
     this.loading = true;
-    this.poultryFarmService.GetLiveStockDetail(this.liveStockId).subscribe(
-      (dt) => {
-        let data = dt;
-        this.isArchived = data.archived;
-        let arrDate = data.arrivalDate.split('T')[0];
-        this.liveStockDetail = {
-          livestockBatchId: data.livestockBatchId,
-          breed: data.breed,
-          quantity: data.quantity,
-          arrivalDate: arrDate,
-          ageInDays: data.ageInDays,
-          healthStatus: data.healthStatus,
-          businessUnitId: data.businessUnitId,
-        };
-        this.constLiveStockDetail = {
-          livestockBatchId: data.livestockBatchId,
-          breed: data.breed,
-          quantity: data.quantity,
-          arrivalDate: arrDate,
-          ageInDays: data.ageInDays,
-          healthStatus: data.healthStatus,
-          businessUnitId: data.businessUnitId,
-        };
-        this.initForm();
-        this.loadBusinessUnitTypes();
-        this.loading = false;
-      },
-      (error) => {
-        this.loading = false;
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: error.message,
-          life: 4000,
-        });
-        if (error.status == 401) {
-          this.accountService.doLogout();
-        }
-      }
-    );
-  }
-  editLiveStockDetail() {
-    this.editLoading = true;
-    this.poultryFarmService
-      .UpdateLiveStockDetail(this.liveStockId, this.editLiveStockModel.value)
+    this.dairyFarmService
+      .GetHealthVaccinationRecordDetail(this.healthVaccinationRecordId)
       .subscribe(
         (dt) => {
-          this.messageService.add({
-            severity: 'success',
-            summary: 'Updated',
-            detail: 'Live stock updated successfully',
-            life: 3000,
-          });
-          this.goBack();
-          this.editLoading = false;
+          let data = dt.data;
+          this.isArchived = data.archived;
+          let createdDate = data.createdAt?.split('T')[0];
+          let arrDate = data.date?.split('T')[0];
+          let nextDueDate = data.nextDueDate?.split('T')[0];
+          this.HealthVaccinationRecordDetail = {
+            updatedBy: data.updatedBy,
+            updatedAt: data.updatedAt,
+            healthVaccinationRecordId: data.healthVaccinationRecordId,
+            recordRef: data.recordRef,
+            supplierName: data.supplierName,
+            businessUnit: data.businessUnit,
+            createdBy: data.createdBy,
+            createdAt: createdDate,
+            supplierId: data.supplierId,
+            date: arrDate,
+            name: data.name,
+            purpose: data.purpose,
+            nextDueDate: nextDueDate,
+            businessUnitId: data.businessUnitId,
+          };
+          this.constHealthVaccinationRecord = {
+            updatedBy: data.updatedBy,
+            updatedAt: data.updatedAt,
+            healthVaccinationRecordId: data.healthVaccinationRecordId,
+            recordRef: data.recordRef,
+            supplierName: data.supplierName,
+            businessUnit: data.businessUnit,
+            createdBy: data.createdBy,
+            createdAt: createdDate,
+            supplierId: data.supplierId,
+            date: data.date,
+            name: data.name,
+            purpose: data.purpose,
+            nextDueDate: data.nextDueDate,
+            businessUnitId: data.businessUnitId,
+          };
+          this.initForm();
+          this.loading = false;
         },
         (error) => {
-          this.editLoading = false;
+          this.loading = false;
           this.messageService.add({
             severity: 'error',
             summary: 'Error',
             detail: error.message,
-            life: 3000,
+            life: 4000,
           });
           if (error.status == 401) {
             this.accountService.doLogout();
@@ -150,19 +162,27 @@ export class EditVaccineComponent {
         }
       );
   }
-  editArchiveStatus() {
-    this.coldStoreService
-      .updateArchiveStatus(this.liveStockId, this.isArchived)
+  editHealthVaccinationRecordDetail() {
+    this.editLoading = true;
+    this.dairyFarmService
+      .UpdateHealthVaccinationRecordDetail(
+        this.healthVaccinationRecordId,
+        this.editHealthVaccinationRecordModel.value
+      )
       .subscribe(
         (dt) => {
           this.messageService.add({
             severity: 'success',
-            summary: 'Update',
-            detail: 'Cold store shelf change archived successfully',
+            summary: 'Updated',
+            detail: 'Health Vaccination Record updated successfully',
             life: 3000,
           });
+          this.getHealthVaccinationRecordDetails();
+          this.editLoading = false;
+          this.isReadOnly = true;
         },
         (error) => {
+          this.editLoading = false;
           this.messageService.add({
             severity: 'error',
             summary: 'Error',
@@ -176,56 +196,69 @@ export class EditVaccineComponent {
       );
   }
   discardChanges() {
-    this.liveStockDetail = {
-      livestockBatchId: this.constLiveStockDetail.livestockBatchId,
-      businessUnitId: this.constLiveStockDetail.businessUnitId,
-      breed: this.constLiveStockDetail.breed,
-      quantity: this.constLiveStockDetail.quantity,
-      arrivalDate: this.constLiveStockDetail.arrivalDate,
-      ageInDays: this.constLiveStockDetail.ageInDays,
-      healthStatus: this.constLiveStockDetail.healthStatus,
+    this.HealthVaccinationRecordDetail = {
+      supplierId: this.constHealthVaccinationRecord.supplierId,
+      date: this.constHealthVaccinationRecord.date,
+      name: this.constHealthVaccinationRecord.name,
+      purpose: this.constHealthVaccinationRecord.purpose,
+      nextDueDate: this.constHealthVaccinationRecord.nextDueDate,
+      businessUnitId: this.constHealthVaccinationRecord.businessUnitId,
     };
     this.isReadOnly = true;
     this.initForm();
   }
   initForm() {
-    this.editLiveStockModel = this.formBuilder.group({
-      businessUnitId: [
-        this.liveStockDetail.businessUnitId,
+    this.editHealthVaccinationRecordModel = this.formBuilder.group({
+      supplierId: [
+        this.HealthVaccinationRecordDetail.supplierId,
         [Validators.required],
       ],
-      breed: [this.liveStockDetail.breed, [Validators.required]],
-      quantity: [
-        this.liveStockDetail.quantity,
-        [
-          Validators.required,
-          Validators.pattern('^[1-9][0-9]*$'),
-          Validators.min(1),
-        ],
+      date: [this.HealthVaccinationRecordDetail.date, [Validators.required]],
+      name: [this.HealthVaccinationRecordDetail.name, [Validators.required]],
+      purpose: [
+        this.HealthVaccinationRecordDetail.purpose,
+        [Validators.required],
       ],
-      arrivalDate: [this.liveStockDetail.arrivalDate, [Validators.required]],
-      ageInDays: [
-        this.liveStockDetail.ageInDays,
-        [
-          Validators.required,
-          Validators.pattern('^[1-9][0-9]*$'),
-          Validators.min(1),
-        ],
+      nextDueDate: [
+        this.HealthVaccinationRecordDetail.nextDueDate,
+        [Validators.required],
       ],
-      healthStatus: [this.liveStockDetail.healthStatus, [Validators.required]],
+      businessUnitId: [this.busUnitId],
     });
   }
-  loadBusinessUnitTypes() {
-    this.masterService.getBusinessUnitTypes().subscribe(
+
+  loadParties() {
+    this.masterService.getParties(1).subscribe(
       (res) => {
         var dt = res;
-        this.businessUnitTypes = [];
+        this.SupplierList = [];
         for (let a = 0; a < dt.length; a++) {
           let _data: masterModal = {
-            id: dt[a].businessUnitId,
+            id: dt[a].partyId,
             type: dt[a].name,
           };
-          this.businessUnitTypes.push(_data);
+          this.SupplierList.push(_data);
+        }
+      },
+      (error) => {
+        if (error.status == 401) {
+          this.accountService.doLogout();
+        }
+      }
+    );
+  }
+  loadAnimal() {
+    this.masterService.getAnimal().subscribe(
+      (res) => {
+        let dt = res.data;
+        this.AnimalList = [];
+        for (let a = 0; a < dt.length; a++) {
+          let _data: masterModal = {
+            id: dt[a].animalId,
+            type: dt[a].animalRef,
+          };
+          this.AnimalList.push(_data);
+          this.loadParties();
         }
       },
       (error) => {
@@ -236,11 +269,6 @@ export class EditVaccineComponent {
     );
   }
 
-  preventDecimal(event: KeyboardEvent) {
-    if (event.key === '.' || event.key === ',') {
-      event.preventDefault();
-    }
-  }
   goBack() {
     this.location.back();
   }

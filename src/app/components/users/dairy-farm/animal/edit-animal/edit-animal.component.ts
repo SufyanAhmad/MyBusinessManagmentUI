@@ -1,5 +1,7 @@
 import { CommonModule, Location } from '@angular/common';
 import { Component } from '@angular/core';
+import { HealthHistoryComponent } from '../health-history/health-history.component';
+import { VaccineRecordComponent } from '../vaccine-record/vaccine-record.component';
 import {
   FormBuilder,
   FormGroup,
@@ -26,6 +28,8 @@ import { DairyFarmService } from '../../../../../services/dairy-farm.service';
     ToastModule,
     SelectModule,
     RouterLink,
+    HealthHistoryComponent,
+    VaccineRecordComponent,
   ],
   templateUrl: './edit-animal.component.html',
   styleUrl: './edit-animal.component.scss',

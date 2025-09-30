@@ -1,6 +1,8 @@
 <div class="container-fluid">
   <div>
-    <span class="breadcrumb">{{ this.businessUnitName }} /</span>
+    <span class="breadcrumb" [routerLink]="['/superAdmin/business/units']"
+      >{{ this.businessUnitName }} /</span
+    >
     <span class="breadcrumb-bold">&nbsp;Pregnancy & Birth Record</span>
   </div>
   <span class="d-flex flex-wrap justify-content-between">
@@ -273,7 +275,6 @@
             name="key"
             optionLabel="type"
             optionValue="id"
-            (onChange)="ngAfterViewInit()"
             [showClear]="true"
             placeholder="Animal "
             formControlName="animalId"
@@ -298,7 +299,6 @@
             name="breedId"
             optionLabel="type"
             optionValue="id"
-            (onChange)="ngAfterViewInit()"
             [showClear]="true"
             placeholder="Breeds"
             formControlName="breedId"

@@ -1,6 +1,8 @@
 <div class="container-fluid">
   <div>
-    <span class="breadcrumb">{{ this.businessUnitName }} /</span>
+    <span class="breadcrumb" [routerLink]="['/superAdmin/business/units']"
+      >{{ this.businessUnitName }} /</span
+    >
     <span class="breadcrumb-bold">&nbsp;Breed</span>
   </div>
   <span class="d-flex flex-wrap justify-content-between">
@@ -56,17 +58,6 @@
           </svg>
         </div>
       </div>
-      <!-- <span class="alarms mt-4 mb-3 mx-3">
-        <p-select
-          [options]="BusinessUnits"
-          [(ngModel)]="businessUnitId"
-          optionLabel="type"
-          optionValue="id"
-          (onChange)="ngAfterViewInit()"
-          [showClear]="true"
-          placeholder="Business Unit"
-        />
-      </span> -->
     </span>
     <div class="d-flex align-items-center gap-5">
       <span
@@ -279,7 +270,6 @@
             name="key"
             optionLabel="type"
             optionValue="id"
-            (onChange)="ngAfterViewInit()"
             [showClear]="true"
             placeholder="Animal Type "
             formControlName="animalTypeId"
@@ -304,24 +294,6 @@
           formControlName="origin"
         />
       </div>
-      <!-- <div class="col-6">
-        <span class="label"
-          >Business Unit ID<span class="required-icon">*</span>
-        </span>
-        <div class="alt-dropdown">
-          <p-select
-            [options]="BusinessUnits"
-            [(ngModel)]="businessUnitId"
-            name="businessUnitId"
-            optionLabel="type"
-            optionValue="id"
-            (onChange)="ngAfterViewInit()"
-            [showClear]="true"
-            placeholder="Business Unit"
-            formControlName="businessUnitId"
-          />
-        </div>
-      </div> -->
       <div class="col-12">
         <span class="label">Note</span>
         <input
@@ -336,7 +308,6 @@
       <button (click)="visible = false" type="button" class="btn-discard">
         Discard
       </button>
-      <!-- <button type="button" class="btn-save">Save</button> -->
       <button
         type="button"
         (click)="addBreedForm.valid && !addLoading ? addBreed() : null"

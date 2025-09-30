@@ -243,4 +243,67 @@ export class DairyFarmService {
         })
       );
   }
+
+  getHealthRecordBySearchFilter(data: any) {
+    return this.repositoryService
+      .post(
+        'AnimalHealth/get-animal-health-by-search-and-filter-with-pagination',
+        data,
+        true
+      )
+      .pipe(
+        map((response: any) => {
+          return response;
+        })
+      );
+  }
+  addHealthRecord(data: any) {
+    return this.repositoryService
+      .post('AnimalHealth/add-animal-health', data, true)
+      .pipe(
+        map((response: any) => {
+          return response;
+        })
+      );
+  }
+  GetHealthRecordDetail(id: any) {
+    return this.repositoryService
+      .get('AnimalHealth/get-animal-health/' + id, true)
+      .pipe(
+        map((response: any) => {
+          return response;
+        })
+      );
+  }
+  GetHealthHistoryRecord(id: any) {
+    return this.repositoryService
+      .get('AnimalHealth/get-animal-health-history/' + id, true)
+      .pipe(
+        map((response: any) => {
+          return response;
+        })
+      );
+  }
+  getVaccinationBySearchFilter(data: any) {
+    return this.repositoryService
+      .post(
+        'AnimalHealthVaccination/get-animalHealthVaccination-by-search-and-filter-with-pagination',
+        data,
+        true
+      )
+      .pipe(
+        map((response: any) => {
+          return response;
+        })
+      );
+  }
+  addAnimalHealthVaccinationRecord(data: any) {
+    return this.repositoryService
+      .post('AnimalHealthVaccination/add-animalHealthVaccination', data, true)
+      .pipe(
+        map((response: any) => {
+          return response;
+        })
+      );
+  }
 }

@@ -1,6 +1,8 @@
 <div class="container-fluid">
   <div>
-    <span class="breadcrumb">{{ this.businessUnitName }}/</span>
+    <span class="breadcrumb" [routerLink]="['/superAdmin/business/units']"
+      >{{ this.businessUnitName }}/</span
+    >
     <span class="breadcrumb-bold">&nbsp;Feed</span>
   </div>
   <span class="d-flex flex-wrap justify-content-between">
@@ -56,17 +58,6 @@
           </svg>
         </div>
       </div>
-      <!-- <span class="alarms mt-4 mb-3 mx-3">
-        <p-select
-          [options]="BusinessUnits"
-          [(ngModel)]="businessUnitId"
-          optionLabel="type"
-          optionValue="id"
-          (onChange)="ngAfterViewInit()"
-          [showClear]="true"
-          placeholder="Business Unit"
-        />
-      </span> -->
     </span>
     <div class="d-flex align-items-center gap-5">
       <span
@@ -265,7 +256,6 @@
             name="key"
             optionLabel="type"
             optionValue="id"
-            (onChange)="ngAfterViewInit()"
             [showClear]="true"
             placeholder="Animal "
             formControlName="animalId"
@@ -289,7 +279,6 @@
             name="key"
             optionLabel="type"
             optionValue="id"
-            (onChange)="ngAfterViewInit()"
             [showClear]="true"
             placeholder="Supplier "
             formControlName="supplierId"
@@ -305,24 +294,6 @@
           </span>
         </div>
       </div>
-      <!-- <div class="col-6">
-        <span class="label"
-          >Business unit<span class="required-icon">*</span>
-        </span>
-        <div class="alt-dropdown">
-          <p-select
-            [options]="BusinessUnits"
-            [(ngModel)]="key"
-            name="key"
-            optionLabel="type"
-            optionValue="id"
-            (onChange)="ngAfterViewInit()"
-            [showClear]="true"
-            placeholder="business Unit "
-            formControlName="businessUnitId"
-          />
-        </div>
-      </div> -->
       <div class="col-6">
         <span class="label">Quantity<span class="required-icon">*</span></span>
         <input

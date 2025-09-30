@@ -1,6 +1,9 @@
 <div class="container-fluid">
   <div class="d-pointer">
-    <span class="breadcrumb" style="text-transform: uppercase"
+    <span
+      class="breadcrumb"
+      style="text-transform: uppercase"
+      [routerLink]="['/superAdmin/business/units']"
       >{{ this.businessUnitName }} /
     </span>
     <span
@@ -18,7 +21,7 @@
     class="header-card d-flex align-items-center justify-content-between mb-4"
   >
     <div class="heading mb-0" style="color: #4079b0 !important">
-      {{ HealthVaccinationRecordDetail.recordRef }}
+      {{ HealthVaccinationRecordDetail.animalHealthRef }}
     </div>
   </div>
   <!-- Customer Details -->
@@ -64,41 +67,15 @@
         <span class="label">Record id</span>
         <input
           type="text"
-          [value]="HealthVaccinationRecordDetail.recordRef"
+          [value]="HealthVaccinationRecordDetail.animalHealthRef"
           class="input-felid"
           [readonly]="true"
           placeholder="Enter breed id..."
         />
       </div>
       <div class="col-md-4 mb-4 position-relative">
-        <span class="label">Supplier<span class="required-icon">*</span> </span>
-        <div class="alt-dropdown" [ngClass]="{ 'input-disable': isReadOnly }">
-          <p-select
-            [options]="SupplierList"
-            name="key"
-            optionLabel="type"
-            optionValue="id"
-            (onChange)="ngAfterViewInit()"
-            [showClear]="true"
-            placeholder="Supplier "
-            formControlName="supplierId"
-          />
-          <span
-            class="errorValidation"
-            *ngIf="
-              editHealthVaccinationRecordModel.get('supplierId')?.touched &&
-              editHealthVaccinationRecordModel
-                .get('supplierId')
-                ?.hasError('required')
-            "
-          >
-            Required field
-          </span>
-        </div>
-      </div>
-      <div class="col-md-4 mb-4 position-relative">
         <span class="label"
-          >Animal ID<span class="required-icon">*</span>
+          >Animal Id<span class="required-icon">*</span>
         </span>
         <div class="alt-dropdown" [ngClass]="{ 'input-disable': isReadOnly }">
           <p-select
@@ -123,38 +100,15 @@
           </span>
         </div>
       </div>
-      <div class="col-md-4 mb-4">
-        <span class="label">Date<span class="required-icon">*</span></span>
-        <input
-          type="date"
-          value="NILI-RAVI"
-          class="input-felid custom-date"
-          [ngClass]="{ 'input-disable': isReadOnly }"
-          placeholder="Enter date..."
-          formControlName="date"
-        />
 
-        <span
-          class="errorValidation"
-          *ngIf="
-            editHealthVaccinationRecordModel.get('date')?.touched &&
-            editHealthVaccinationRecordModel.get('date')?.hasError('required')
-          "
-        >
-          Required field
-        </span>
-      </div>
       <div class="col-md-4 mb-4">
-        <span class="label1"
-          >Vaccine Name<span class="required-icon">*</span></span
-        >
+        <span class="label">Weight<span class="required-icon">*</span></span>
         <input
-          type="text"
-          value="NILI-RAVI"
+          type="number"
           class="input-felid"
           [ngClass]="{ 'input-disable': isReadOnly }"
-          placeholder="Enter vaccine name..."
-          formControlName="name"
+          placeholder="Enter weight..."
+          formControlName="weight"
         />
         <span
           class="errorValidation"
@@ -167,14 +121,15 @@
         </span>
       </div>
       <div class="col-md-4 mb-4">
-        <span class="label">Purpose<span class="required-icon">*</span></span>
+        <span class="label"
+          >Temperature<span class="required-icon">*</span></span
+        >
         <input
-          type="text"
-          value="NILI-RAVI"
+          type="number"
           class="input-felid custom-date"
           [ngClass]="{ 'input-disable': isReadOnly }"
-          placeholder="Enter purpose..."
-          formControlName="purpose"
+          placeholder="Enter temperature..."
+          formControlName="temperature"
         />
         <span
           class="errorValidation"
@@ -190,22 +145,86 @@
       </div>
       <div class="col-md-4 mb-4">
         <span class="label"
-          >Next due date<span class="required-icon">*</span></span
+          >Illness Notes<span class="required-icon">*</span></span
         >
         <input
-          type="date"
-          value="NILI-RAVI"
+          type="text"
           class="input-felid custom-date"
           [ngClass]="{ 'input-disable': isReadOnly }"
-          placeholder="Enter next due date..."
-          formControlName="nextDueDate"
+          placeholder="Enter illness notes..."
+          formControlName="illnessNotes"
         />
         <span
           class="errorValidation"
           *ngIf="
-            editHealthVaccinationRecordModel.get('nextDueDate')?.touched &&
+            editHealthVaccinationRecordModel.get('purpose')?.touched &&
             editHealthVaccinationRecordModel
-              .get('nextDueDate')
+              .get('purpose')
+              ?.hasError('required')
+          "
+        >
+          Required field
+        </span>
+      </div>
+      <div class="col-md-4 mb-4">
+        <span class="label"
+          >Medicine Treatment<span class="required-icon">*</span></span
+        >
+        <input
+          type="text"
+          class="input-felid custom-date"
+          [ngClass]="{ 'input-disable': isReadOnly }"
+          placeholder="Enter medicine treatment..."
+          formControlName="medicineTreatment"
+        />
+        <span
+          class="errorValidation"
+          *ngIf="
+            editHealthVaccinationRecordModel.get('purpose')?.touched &&
+            editHealthVaccinationRecordModel
+              .get('purpose')
+              ?.hasError('required')
+          "
+        >
+          Required field
+        </span>
+      </div>
+      <div class="col-md-4 mb-4">
+        <span class="label"
+          >Last Checkup Date<span class="required-icon">*</span></span
+        >
+        <input
+          type="date"
+          class="input-felid custom-date"
+          [ngClass]="{ 'input-disable': isReadOnly }"
+          placeholder="Enter  last checkup date..."
+          formControlName="lastCheckupDate"
+        />
+        <span
+          class="errorValidation"
+          *ngIf="
+            editHealthVaccinationRecordModel.get('date')?.touched &&
+            editHealthVaccinationRecordModel.get('date')?.hasError('required')
+          "
+        >
+          Required field
+        </span>
+      </div>
+      <div class="col-md-4 mb-4">
+        <span class="label">Remarks<span class="required-icon">*</span></span>
+        <input
+          type="text"
+          class="input-felid custom-date"
+          [ngClass]="{ 'input-disable': isReadOnly }"
+          placeholder="Enter remarks..."
+          formControlName="remarks"
+        />
+        <span
+          class="errorValidation"
+          *ngIf="
+            editHealthVaccinationRecordModel.get('purpose')?.touched &&
+            editHealthVaccinationRecordModel
+              .get('purpose')
               ?.hasError('required')
           "
         >

@@ -14,10 +14,7 @@ import { SelectModule } from 'primeng/select';
 import { AccountService } from '../../../../../services/account-service/account.service';
 import { MasterService } from '../../../../../services/master-service/master.service';
 import { masterModal } from '../../../../../models/master-model/master-model';
-import {
-  HealthVaccinationRecordModel,
-  PregnancyRecordModel,
-} from '../../../../../models/dairy-farm-model/dairy-farm-model';
+import { HealthRecordModel } from '../../../../../models/dairy-farm-model/dairy-farm-model';
 import { DairyFarmService } from '../../../../../services/dairy-farm.service';
 
 @Component({
@@ -39,7 +36,7 @@ export class EditHealthRecordComponent {
   isActive: boolean = false;
   loading: boolean = false;
   editLoading: boolean = false;
-  healthVaccinationRecordId: any = null;
+  animalHealthId: any = null;
   businessUnitName: any = '';
   busUnitId: any = null;
   isArchived: boolean = false;
@@ -52,37 +49,37 @@ export class EditHealthRecordComponent {
 
   editHealthVaccinationRecordModel!: FormGroup;
 
-  HealthVaccinationRecordDetail: HealthVaccinationRecordModel = {
-    updatedBy: '',
-    updatedAt: '',
-    healthVaccinationRecordId: '',
-    recordRef: '',
-    supplierName: '',
-    businessUnit: '',
+  HealthVaccinationRecordDetail: HealthRecordModel = {
+    animalHealthId: '',
+    animalHealthRef: '',
     createdBy: '',
     createdAt: '',
-    supplierId: '',
-    date: '',
-    name: '',
-    purpose: '',
-    nextDueDate: '',
+    animalRef: '',
+    businessUnit: '',
+    animalId: '',
     businessUnitId: '',
+    weight: 0,
+    temperature: 0,
+    illnessNotes: '',
+    medicineTreatment: '',
+    lastCheckupDate: '',
+    remarks: '',
   };
-  constHealthVaccinationRecord: HealthVaccinationRecordModel = {
-    updatedBy: '',
-    updatedAt: '',
-    healthVaccinationRecordId: '',
-    recordRef: '',
-    supplierName: '',
-    businessUnit: '',
+  constHealthVaccinationRecord: HealthRecordModel = {
+    animalHealthId: '',
+    animalHealthRef: '',
     createdBy: '',
     createdAt: '',
-    supplierId: '',
-    date: '',
-    name: '',
-    purpose: '',
-    nextDueDate: '',
+    animalRef: '',
+    businessUnit: '',
+    animalId: '',
     businessUnitId: '',
+    weight: 0,
+    temperature: 0,
+    illnessNotes: '',
+    medicineTreatment: '',
+    lastCheckupDate: '',
+    remarks: '',
   };
   constructor(
     private route: ActivatedRoute,
@@ -94,7 +91,7 @@ export class EditHealthRecordComponent {
     private masterService: MasterService
   ) {}
   ngOnInit() {
-    this.healthVaccinationRecordId = this.route.snapshot.params['id'];
+    this.animalHealthId = this.route.snapshot.params['id'];
     this.busUnitId = this.accountService.getBusinessUnitId();
     this.businessUnitName = this.accountService.getBusinessUnitName();
     this.initForm();
@@ -103,74 +100,69 @@ export class EditHealthRecordComponent {
     setTimeout(() => {
       this.getHealthVaccinationRecordDetails();
     }, 0);
+    this.loadAnimal();
   }
   getHealthVaccinationRecordDetails() {
     this.loading = true;
-    this.dairyFarmService
-      .GetHealthVaccinationRecordDetail(this.healthVaccinationRecordId)
-      .subscribe(
-        (dt) => {
-          let data = dt.data;
-          this.isArchived = data.archived;
-          let createdDate = data.createdAt?.split('T')[0];
-          let arrDate = data.date?.split('T')[0];
-          let nextDueDate = data.nextDueDate?.split('T')[0];
-          this.HealthVaccinationRecordDetail = {
-            updatedBy: data.updatedBy,
-            updatedAt: data.updatedAt,
-            healthVaccinationRecordId: data.healthVaccinationRecordId,
-            recordRef: data.recordRef,
-            supplierName: data.supplierName,
-            businessUnit: data.businessUnit,
-            createdBy: data.createdBy,
-            createdAt: createdDate,
-            supplierId: data.supplierId,
-            date: arrDate,
-            name: data.name,
-            purpose: data.purpose,
-            nextDueDate: nextDueDate,
-            businessUnitId: data.businessUnitId,
-          };
-          this.constHealthVaccinationRecord = {
-            updatedBy: data.updatedBy,
-            updatedAt: data.updatedAt,
-            healthVaccinationRecordId: data.healthVaccinationRecordId,
-            recordRef: data.recordRef,
-            supplierName: data.supplierName,
-            businessUnit: data.businessUnit,
-            createdBy: data.createdBy,
-            createdAt: createdDate,
-            supplierId: data.supplierId,
-            date: data.date,
-            name: data.name,
-            purpose: data.purpose,
-            nextDueDate: data.nextDueDate,
-            businessUnitId: data.businessUnitId,
-          };
-          this.initForm();
-          this.loading = false;
-          this.loadAnimal();
-          this.loadParties();
-        },
-        (error) => {
-          this.loading = false;
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Error',
-            detail: error.message,
-            life: 4000,
-          });
-          if (error.status == 401) {
-            this.accountService.doLogout();
-          }
+    this.dairyFarmService.GetHealthRecordDetail(this.animalHealthId).subscribe(
+      (dt) => {
+        let data = dt.data;
+        this.isArchived = data.archived;
+        let createdDate = data.createdAt?.split('T')[0];
+        this.HealthVaccinationRecordDetail = {
+          animalHealthId: data.animalHealthId,
+          animalHealthRef: data.animalHealthRef,
+          createdBy: data.createdBy,
+          createdAt: createdDate,
+          animalRef: data.animalRef,
+          businessUnit: data.businessUnit,
+          animalId: data.supplierId,
+          businessUnitId: data.businessUnitId,
+          weight: data.weight,
+          temperature: data.temperature,
+          illnessNotes: data.illnessNotes,
+          medicineTreatment: data.medicineTreatment,
+          lastCheckupDate: data.lastCheckupDate,
+          remarks: data.remarks,
+        };
+        this.constHealthVaccinationRecord = {
+          animalHealthId: data.animalHealthId,
+          animalHealthRef: data.animalHealthRef,
+          createdBy: data.createdBy,
+          createdAt: createdDate,
+          animalRef: data.animalRef,
+          businessUnit: data.businessUnit,
+          animalId: data.supplierId,
+          businessUnitId: data.businessUnitId,
+          weight: data.weight,
+          temperature: data.temperature,
+          illnessNotes: data.illnessNotes,
+          medicineTreatment: data.medicineTreatment,
+          lastCheckupDate: data.lastCheckupDate,
+          remarks: data.remarks,
+        };
+        this.initForm();
+        this.loading = false;
+      },
+      (error) => {
+        this.loading = false;
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: error.message,
+          life: 4000,
+        });
+        if (error.status == 401) {
+          this.accountService.doLogout();
         }
-      );
+      }
+    );
   }
   editHealthVaccinationRecordDetail() {
     this.editLoading = true;
     this.dairyFarmService
       .UpdateHealthVaccinationRecordDetail(
-        this.healthVaccinationRecordId,
+        this.animalHealthId,
         this.editHealthVaccinationRecordModel.value
       )
       .subscribe(
@@ -201,56 +193,52 @@ export class EditHealthRecordComponent {
   }
   discardChanges() {
     this.HealthVaccinationRecordDetail = {
-      supplierId: this.constHealthVaccinationRecord.supplierId,
-      date: this.constHealthVaccinationRecord.date,
-      name: this.constHealthVaccinationRecord.name,
-      purpose: this.constHealthVaccinationRecord.purpose,
-      nextDueDate: this.constHealthVaccinationRecord.nextDueDate,
+      animalId: this.constHealthVaccinationRecord.animalId,
       businessUnitId: this.constHealthVaccinationRecord.businessUnitId,
+      weight: this.constHealthVaccinationRecord.weight,
+      temperature: this.constHealthVaccinationRecord.temperature,
+      illnessNotes: this.constHealthVaccinationRecord.illnessNotes,
+      medicineTreatment: this.constHealthVaccinationRecord.medicineTreatment,
+      lastCheckupDate: this.constHealthVaccinationRecord.lastCheckupDate,
+      remarks: this.constHealthVaccinationRecord.remarks,
     };
     this.isReadOnly = true;
     this.initForm();
   }
   initForm() {
     this.editHealthVaccinationRecordModel = this.formBuilder.group({
-      supplierId: [
-        this.HealthVaccinationRecordDetail.supplierId,
+      animalId: [
+        this.HealthVaccinationRecordDetail.animalId,
         [Validators.required],
       ],
-      date: [this.HealthVaccinationRecordDetail.date, [Validators.required]],
-      name: [this.HealthVaccinationRecordDetail.name, [Validators.required]],
-      purpose: [
-        this.HealthVaccinationRecordDetail.purpose,
+      weight: [
+        this.HealthVaccinationRecordDetail.weight,
         [Validators.required],
       ],
-      nextDueDate: [
-        this.HealthVaccinationRecordDetail.nextDueDate,
+      temperature: [
+        this.HealthVaccinationRecordDetail.temperature,
+        [Validators.required],
+      ],
+      illnessNotes: [
+        this.HealthVaccinationRecordDetail.illnessNotes,
+        [Validators.required],
+      ],
+      medicineTreatment: [
+        this.HealthVaccinationRecordDetail.medicineTreatment,
+        [Validators.required],
+      ],
+      lastCheckupDate: [
+        this.HealthVaccinationRecordDetail.lastCheckupDate,
+        [Validators.required],
+      ],
+      remarks: [
+        this.HealthVaccinationRecordDetail.remarks,
         [Validators.required],
       ],
       businessUnitId: [this.busUnitId],
     });
   }
 
-  loadParties() {
-    this.masterService.getParties(1).subscribe(
-      (res) => {
-        var dt = res;
-        this.SupplierList = [];
-        for (let a = 0; a < dt.length; a++) {
-          let _data: masterModal = {
-            id: dt[a].partyId,
-            type: dt[a].name,
-          };
-          this.SupplierList.push(_data);
-        }
-      },
-      (error) => {
-        if (error.status == 401) {
-          this.accountService.doLogout();
-        }
-      }
-    );
-  }
   loadAnimal() {
     this.masterService.getAnimal().subscribe(
       (res) => {
