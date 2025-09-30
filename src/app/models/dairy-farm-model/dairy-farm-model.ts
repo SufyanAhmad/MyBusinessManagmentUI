@@ -162,7 +162,7 @@ export interface HealthRecordModel {
   lastCheckupDate: String;
   remarks: String;
 }
-export interface VaccinationRecordModel {
+export interface AnimalHealthVaccination {
   animalHealthVaccinationMappingId: String;
   animalHealthVaccinationStatusId: Number;
   animalHealthVaccinationStatus: String;
