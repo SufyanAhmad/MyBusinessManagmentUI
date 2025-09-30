@@ -106,11 +106,7 @@ export class LoginComponent {
             life: 3000,
           });
           this.loginLoading = false;
-          localStorage.setItem(
-            'DF_businessUnitId',
-            '7eb54104-53ba-4634-8d53-1046418b30d6'
-          );
-          localStorage.setItem('DF_businessUnit_Name', 'Malik Dairy Farm');
+        
         },
         (error) => {
           this.loginLoading = false;

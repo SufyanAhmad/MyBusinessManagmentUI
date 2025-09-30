@@ -273,8 +273,10 @@ export class BusinessUnitsComponent {
     );
   }
   setBusinessUnitId(id: any, name: any) {
-    localStorage.setItem('BS_businessUnitId', id);
-    localStorage.setItem('BS_businessUnit_Name', name);
+    localStorage.setItem('DF_businessUnitId', id);
+    localStorage.setItem('DF_businessUnit_Name', name);
+    localStorage.setItem('DF_businessUnitId',id );
+    localStorage.setItem('DF_businessUnit_Name', name);
   }
   deleteBusinessUnit() {
     this.showConfirmDialog = false;
