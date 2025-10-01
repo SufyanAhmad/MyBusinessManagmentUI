@@ -40,7 +40,7 @@
             style="
               margin-top: 6px !important;
               margin-right: 10px !important;
-              color: #ed5d25;
+              color: #4079b0;
             "
             xmlns="http://www.w3.org/2000/svg"
             width="18"
@@ -216,14 +216,14 @@
               *ngIf="element.delivered"
               [style.background-color]="'#46A22B'"
             >
-              delivered
+              Not Pending
             </div>
             <div
               class="mat_table_btn"
               *ngIf="!element.delivered"
               [style.background-color]="'#E40F06'"
             >
-              Pendings
+              Pending
             </div>
           </td>
         </ng-container>
@@ -337,6 +337,7 @@
           class="input-felid custom-date"
           placeholder="Enter expected delivery..."
           formControlName="expectedDelivery"
+          [min]="getNextDate()"
         />
         <span
           class="errorValidation"
@@ -357,6 +358,7 @@
           class="input-felid custom-date"
           placeholder="Enter actual delivery..."
           formControlName="actualDelivery"
+          [min]="getNextDate()"
         />
         <span
           class="errorValidation"
@@ -383,7 +385,7 @@
             /></span>
           </div>
           <div style="display: flex">
-            <span class="label" style="margin-left: 25px">Delivered</span>
+            <span class="label" style="margin-left: 25px">Not Pending</span>
             <span
               ><input
                 class="form-check-input"

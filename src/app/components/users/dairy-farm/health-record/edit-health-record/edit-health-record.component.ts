@@ -109,6 +109,7 @@ export class EditHealthRecordComponent {
         let data = dt.data;
         this.isArchived = data.archived;
         let createdDate = data.createdAt?.split('T')[0];
+        let CheckupDate = data.lastCheckupDate?.split('T')[0];
         this.HealthVaccinationRecordDetail = {
           animalHealthId: data.animalHealthId,
           animalHealthRef: data.animalHealthRef,
@@ -116,13 +117,13 @@ export class EditHealthRecordComponent {
           createdAt: createdDate,
           animalRef: data.animalRef,
           businessUnit: data.businessUnit,
-          animalId: data.supplierId,
+          animalId: data.animalId,
           businessUnitId: data.businessUnitId,
           weight: data.weight,
           temperature: data.temperature,
           illnessNotes: data.illnessNotes,
           medicineTreatment: data.medicineTreatment,
-          lastCheckupDate: data.lastCheckupDate,
+          lastCheckupDate: CheckupDate,
           remarks: data.remarks,
         };
         this.constHealthVaccinationRecord = {
@@ -132,13 +133,13 @@ export class EditHealthRecordComponent {
           createdAt: createdDate,
           animalRef: data.animalRef,
           businessUnit: data.businessUnit,
-          animalId: data.supplierId,
+          animalId: data.animalId,
           businessUnitId: data.businessUnitId,
           weight: data.weight,
           temperature: data.temperature,
           illnessNotes: data.illnessNotes,
           medicineTreatment: data.medicineTreatment,
-          lastCheckupDate: data.lastCheckupDate,
+          lastCheckupDate: CheckupDate,
           remarks: data.remarks,
         };
         this.initForm();
@@ -237,6 +238,7 @@ export class EditHealthRecordComponent {
       ],
       businessUnitId: [this.busUnitId],
     });
+    console.log('Form Value: ', this.editHealthVaccinationRecordModel.value);
   }
 
   loadAnimal() {

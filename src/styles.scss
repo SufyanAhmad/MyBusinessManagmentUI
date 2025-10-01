@@ -648,3 +648,8 @@ input[readonly] {
 .my-input {
   padding-top: 10px;
 }
+input[type="time"]::-webkit-calendar-picker-indicator {
+  filter: invert(37%) sepia(91%) saturate(373%) hue-rotate(162deg)
+    brightness(91%) contrast(92%);
+  cursor: pointer;
+}

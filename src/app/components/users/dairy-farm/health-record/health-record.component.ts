@@ -60,10 +60,10 @@ export class HealthRecordComponent {
   HealthRecordList: HealthRecordModel[] = [];
   businessUnitId: any = null;
   businessUnitName: any = '';
-  bgColor: string = '#FFCE3A';
   AnimalList: masterModal[] = [];
   SupplierList: masterModal[] = [];
   key: any = null;
+  today: string = new Date().toISOString().split('T')[0];
   // for add animal popup
   addLoading: boolean = false;
   visible: boolean = false;

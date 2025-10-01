@@ -277,4 +277,11 @@ export class VaccineComponent {
     this.searchKey = null;
     this.ngAfterViewInit();
   }
+  getNextDate(): string | null {
+    const date = this.addHealthVaccinationRecordForm.get('date')?.value;
+    if (!date) return null;
+    const d = new Date(date);
+    d.setDate(d.getDate() + 1);
+    return d.toISOString().split('T')[0];
+  }
 }

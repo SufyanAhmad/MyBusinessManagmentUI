@@ -100,9 +100,11 @@ export class EditAnimalComponent {
   ) {}
   ngOnInit() {
     this.animalId = this.route.snapshot.params['id'];
+    debugger;
     this.busUnitId = this.accountService.getBusinessUnitId();
     this.businessUnitName = this.accountService.getBusinessUnitName();
     this.getAnimalDetails();
+    this.initForm();
   }
   getAnimalDetails() {
     this.loading = true;
@@ -110,6 +112,7 @@ export class EditAnimalComponent {
       (dt) => {
         let data = dt.data;
         let purchaseDate = data.purchaseDate?.split('T')[0];
+
         this.AnimalDetail = {
           animalId: data.animalId,
           createdBy: data.createdBy,
@@ -167,6 +170,7 @@ export class EditAnimalComponent {
       }
     );
   }
+
   editAnimalDetail() {
     this.editLoading = true;
     this.dairyFarmService

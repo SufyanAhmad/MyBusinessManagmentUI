@@ -40,7 +40,7 @@
             style="
               margin-top: 6px !important;
               margin-right: 10px !important;
-              color: #ed5d25;
+              color: #4079b0;
             "
             xmlns="http://www.w3.org/2000/svg"
             width="18"
@@ -326,6 +326,7 @@
           class="input-felid custom-date"
           placeholder="Enter next due date..."
           formControlName="nextDueDate"
+          [min]="getNextDate()"
         />
         <span
           class="errorValidation"

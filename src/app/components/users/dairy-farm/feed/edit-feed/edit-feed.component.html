@@ -71,14 +71,14 @@
             [options]="AnimalTypes"
             optionLabel="type"
             optionValue="id"
-            formControlName="animalTypeId"
+            formControlName="animalId"
             placeholder="Animal Type"
           ></p-select>
           <span
             class="errorValidation"
             *ngIf="
-              editFeedForm.get('animalTypeId')?.touched &&
-              editFeedForm.get('animalTypeId')?.hasError('required')
+              editFeedForm.get('animalId')?.touched &&
+              editFeedForm.get('animalId')?.hasError('required')
             "
           >
             Required field

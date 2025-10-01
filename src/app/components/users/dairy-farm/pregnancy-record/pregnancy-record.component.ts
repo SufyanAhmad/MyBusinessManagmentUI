@@ -228,6 +228,18 @@ export class PregnancyRecordComponent {
   onDialogHide() {
     this.pregnancyRecordForm.reset();
   }
+  getNextDate = () =>
+    this.pregnancyRecordForm.get('pregnantDate')?.value
+      ? new Date(
+          new Date(this.pregnancyRecordForm.get('pregnantDate')?.value).setDate(
+            new Date(
+              this.pregnancyRecordForm.get('pregnantDate')?.value
+            ).getDate() + 1
+          )
+        )
+          .toISOString()
+          .split('T')[0]
+      : null;
   SearchBySearchKey(event: any) {
     if (event.key != 'Enter') {
       if (this.searchKey == '' || this.searchKey == null) {
