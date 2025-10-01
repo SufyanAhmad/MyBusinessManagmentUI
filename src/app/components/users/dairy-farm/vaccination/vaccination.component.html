@@ -171,7 +171,25 @@
             Status
           </th>
           <td mat-cell *matCellDef="let element">
-            <div class="mat_table_btn" [style.background-color]="'#FFCE3A'">
+            <div
+              class="mat_table_btn"
+              *ngIf="element.animalHealthVaccinationStatusId === 1"
+              [style.background-color]="'#FFCE3A'"
+            >
+              {{ element.animalHealthVaccinationStatus }}
+            </div>
+            <div
+              class="mat_table_btn"
+              *ngIf="element.animalHealthVaccinationStatusId === 2"
+              [style.background-color]="'#7C9052'"
+            >
+              {{ element.animalHealthVaccinationStatus }}
+            </div>
+            <div
+              class="mat_table_btn"
+              *ngIf="element.animalHealthVaccinationStatusId === 3"
+              [style.background-color]="'#FF5C40'"
+            >
               {{ element.animalHealthVaccinationStatus }}
             </div>
           </td>

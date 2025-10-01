@@ -163,13 +163,13 @@ export interface HealthRecordModel {
   remarks: String;
 }
 export interface AnimalHealthVaccination {
-  animalHealthVaccinationMappingId: String;
+  animalHealthVaccinationMappingId?: String;
   animalHealthVaccinationStatusId: Number;
-  animalHealthVaccinationStatus: String;
-  animalRef: String;
+  animalHealthVaccinationStatus?: String;
+  animalRef?: String;
   name: String;
-  createdAt: String;
+  createdAt?: String;
   date: String;
   animalId: String;
-  healthVaccinationRecordId: String;
+  healthVaccinationRecordId?: String;
 }

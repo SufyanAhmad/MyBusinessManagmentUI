@@ -1,8 +1,13 @@
 <div class="container-fluid">
   <div class="d-pointer">
     <span class="breadcrumb" [routerLink]="['/superAdmin/business/units']"
-      >Dairy Farm /
+      >{{ businessUnitName }} /
     </span>
+    <span
+      class="breadcrumb-bold d-pointer"
+      [routerLink]="['/dairyFarm/vaccination']"
+      >&nbsp;Animal Vaccination /</span
+    >
     <span class="breadcrumb-bold">&nbsp;Animal Vaccination Detail</span>
   </div>
   <!-- User Header -->
@@ -31,13 +36,13 @@
       <button
         type="button"
         (click)="
-          editLiveStockModel.valid && !editLoading
-            ? editLiveStockDetail()
+          editVaccinationForm.valid && !editLoading
+            ? editAnimalHealthVaccination()
             : null
         "
         [ngClass]="{
-          'btn-save': editLiveStockModel.valid && !editLoading,
-          'btn-disable': editLiveStockModel.invalid || editLoading
+          'btn-save': editVaccinationForm.valid && !editLoading,
+          'btn-disable': editVaccinationForm.invalid || editLoading
         }"
       >
         Save &nbsp;
@@ -50,57 +55,96 @@
       </button>
     </span>
   </div>
-  <form>
+  <form [formGroup]="editVaccinationForm">
     <div class="row g-3 align-items-end mt-4">
       <div class="col-md-4 mb-4 position-relative">
-        <span class="label1">ANIMAL ID</span>
+        <span class="label"
+          >Animal Id<span class="required-icon">*</span>
+        </span>
         <div class="alt-dropdown" [ngClass]="{ 'input-disable': isReadOnly }">
           <p-select
-            [options]="businessUnitTypes"
-            [(ngModel)]="businessUnitId"
-            name="businessUnitId"
+            [options]="AnimalList"
+            name="key"
             optionLabel="type"
             optionValue="id"
             [showClear]="true"
-            placeholder="Animal "
+            placeholder="Animal"
+            formControlName="animalId"
           />
+          <span
+            class="errorValidation"
+            *ngIf="
+              editVaccinationForm.get('animalId')?.touched &&
+              editVaccinationForm.get('animalId')?.hasError('required')
+            "
+          >
+            Required field
+          </span>
         </div>
       </div>
       <div class="col-md-4 mb-4 position-relative">
-        <span class="label1">VACCINE NAME</span>
+        <span class="label">Vaccine Name</span>
         <input
           type="text"
           class="input-felid"
           [ngClass]="{ 'input-disable': isReadOnly }"
           placeholder="Enter vaccine name..."
+          formControlName="name"
         />
+        <span
+          class="errorValidation"
+          *ngIf="
+            editVaccinationForm.get('name')?.touched &&
+            editVaccinationForm.get('name')?.hasError('required')
+          "
+        >
+          Required field
+        </span>
       </div>
       <div class="col-md-4 mb-4">
-        <span class="label1">DATE GIVEN</span>
+        <span class="label">Date</span>
         <input
           type="date"
           class="input-felid custom-date"
           [ngClass]="{ 'input-disable': isReadOnly }"
           placeholder="Enter date given..."
+          formControlName="date"
         />
+        <span
+          class="errorValidation"
+          *ngIf="
+            editVaccinationForm.get('date')?.touched &&
+            editVaccinationForm.get('date')?.hasError('required')
+          "
+        >
+          Required field
+        </span>
       </div>
-      <div class="col-md-4 mb-4">
-        <span class="label1">NEXT DUE DATE</span>
-        <input
-          type="date"
-          class="input-felid custom-date"
-          [ngClass]="{ 'input-disable': isReadOnly }"
-          placeholder="Enter next due date..."
-        />
-      </div>
-      <div class="col-md-12 mb-12">
-        <span class="label1">NOTE</span>
-        <textarea
-          type="text"
-          class="input-felid my-input"
-          [ngClass]="{ 'input-disable': isReadOnly }"
-          placeholder="Enter note..."
-        ></textarea>
+      <div class="col-md-4 mb-4 position-relative">
+        <span class="label">Status<span class="required-icon">*</span> </span>
+        <div class="alt-dropdown" [ngClass]="{ 'input-disable': isReadOnly }">
+          <p-select
+            [options]="AnimalHealthVaccinationList"
+            name="key"
+            optionLabel="type"
+            optionValue="id"
+            [showClear]="true"
+            placeholder="Status"
+            formControlName="animalHealthVaccinationStatusId"
+          />
+          <span
+            class="errorValidation"
+            *ngIf="
+              editVaccinationForm.get('animalHealthVaccinationStatusId')
+                ?.touched &&
+              editVaccinationForm
+                .get('animalHealthVaccinationStatusId')
+                ?.hasError('required')
+            "
+          >
+            Required field
+          </span>
+        </div>
       </div>
     </div>
   </form>

@@ -216,4 +216,13 @@ export class MasterService {
         })
       );
   }
+  getAnimalHealthVaccinationStatus() {
+    return this.repositoryService
+      .get('Master/get-animalHealthVaccination-status', true)
+      .pipe(
+        map((response: any) => {
+          return response;
+        })
+      );
+  }
 }

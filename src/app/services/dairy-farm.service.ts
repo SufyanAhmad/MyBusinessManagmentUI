@@ -306,4 +306,25 @@ export class DairyFarmService {
         })
       );
   }
+  getAnimalHealthVaccinationDetail(id: any) {
+    return this.repositoryService
+      .get('AnimalHealthVaccination/get-animalHealthVaccination/' + id, true)
+      .pipe(
+        map((response: any) => {
+          return response;
+        })
+      );
+  }
+  UpdateAnimalHealthVaccinationDetail(id: any, data: any) {
+    return this.repositoryService
+      .putWithOutFile(
+        'AnimalHealthVaccination/complete-animal-vaccination/' + id,
+        data
+      )
+      .pipe(
+        map((response: any) => {
+          return response;
+        })
+      );
+  }
 }

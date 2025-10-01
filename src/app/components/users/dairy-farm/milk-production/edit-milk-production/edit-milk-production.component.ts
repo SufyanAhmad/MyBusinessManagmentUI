@@ -151,7 +151,7 @@ export class EditMilkProductionComponent {
         }
       );
   }
-  editLiveStockDetail() {
+  editMilkProduction() {
     this.editLoading = true;
     this.dairyFarmService
       .UpdateMilkProductionDetail(
