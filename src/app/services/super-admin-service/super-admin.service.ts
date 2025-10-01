@@ -343,7 +343,7 @@ export class SuperAdminService {
   }
   getTotalCounts() {
     return this.repositoryService
-      .get('Dashboard/get-total-user-customer-supplier', true)
+      .get('Dashboard/get-total-user-customer-supplier-businessUnit', true)
       .pipe(
         map((response: any) => {
           return response;

@@ -18,7 +18,7 @@ import { BankLedgerComponent } from './bank-ledger/bank-ledger.component';
 import { EditBankLedgerComponent } from './bank-ledger/edit-bank-ledger/edit-bank-ledger.component';
 import { ExpansesComponent } from './expanses/expanses.component';
 import { EditExpansesComponent } from './expanses/edit-expanses/edit-expanses.component';
-import { SuperAdminSettingComponent } from './super-admin-setting/super-admin-setting.component';
+import { SettingsComponent } from './settings/settings.component';
 
 const routes: Routes = [
   {
@@ -108,7 +108,7 @@ const routes: Routes = [
       },
       {
         path: 'settings',
-        component:SuperAdminSettingComponent,
+        component:SettingsComponent,
       }
     ],
   },

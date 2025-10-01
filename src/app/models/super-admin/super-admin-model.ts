@@ -29,7 +29,8 @@ export interface BusinessUnitModel {
   totalPendingItems?: number;
   totalInventoryItems?: number;
   totalSales?: number;
-  totalStorageUnitPendingItems?: number
+  totalStorageUnitPendingItems?: number;
+  totalAnimalCount?:number
 }
 export interface AddedBusinessUnitModel {
   businessUnitId: string;

@@ -203,6 +203,7 @@ export class BusinessUnitsComponent {
     this.loading = true;
     this.superAdminService.getBusinessUnitsByAdminOrUser(this.userRole).subscribe(
       (dt) => {
+        debugger
         this.dairyFarmUnitList=[];
         for (let a = 0; a < dt.length; a++) {
           let busUnit: BusinessUnitModel = {
@@ -220,7 +221,8 @@ export class BusinessUnitsComponent {
             totalPendingItems: dt[a].totalPendingItems,
             totalInventoryItems:dt[a].totalInventoryItems,
             totalSales:dt[a].totalSales,
-            totalStorageUnitPendingItems:dt[a].totalStorageUnitPendingItems
+            totalStorageUnitPendingItems:dt[a].totalStorageUnitPendingItems,
+            totalAnimalCount:dt[a].totalAnimalCount
           };
         
           if (busUnit.businessTypeId == 3) {

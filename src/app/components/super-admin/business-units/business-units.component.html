@@ -18,7 +18,7 @@
             <div class="profit-sales">Total Stock Out : {{item.totalStockOut}}</div>
           </div>-->
           <div class="d-flex justify-content-center mb-2">
-            <div class="profit-sales">Total Animals : {{item.totalPendingItems}}</div>
+            <div class="profit-sales d-pointer" (click)="setBusinessUnitId(item.businessUnitId,item.name)" [routerLink]="['/dairyFarm/animal']">Total Animals : {{item.totalAnimalCount}}</div>
           </div> 
           <div class="d-flex justify-content-between mt-3">
             <div (click)="setBusinessUnitId(item.businessUnitId,item.name)" [routerLink]="['/dairyFarm/animal']" class="profit-sales" style="font-size: 20px;cursor:pointer;max-width:250px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="{{item.name}}">{{ item.name }}</div>
