@@ -43,8 +43,8 @@
               color: #ed5d25;
             "
             xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
+            width="18"
+            height="18"
             viewBox="0 0 24 24"
           >
             <g fill="currentColor" fill-rule="evenodd" clip-rule="evenodd">
@@ -206,7 +206,11 @@
           >
             Note
           </th>
-          <td mat-cell *matCellDef="let element" class="tableText-thin">
+          <td
+            mat-cell
+            *matCellDef="let element"
+            class="tableText-thin one-line-text"
+          >
             {{ element.note }}
           </td>
         </ng-container>
@@ -236,6 +240,7 @@
   [style]="{ width: '60vw' }"
   [draggable]="false"
   [resizable]="false"
+  (onHide)="onDialogHide()"
 >
   <form [formGroup]="addBreedForm">
     <div class="row" style="row-gap: 20px">
@@ -296,12 +301,11 @@
       </div>
       <div class="col-12">
         <span class="label">Note</span>
-        <input
-          type="text"
-          class="input-felid"
-          placeholder="Enter note..."
+        <textarea
           formControlName="note"
-        />
+          class="input-felid my-input"
+          placeholder="Enter note..."
+        ></textarea>
       </div>
     </div>
     <div class="d-flex justify-content-end gap-4 margin-btn">

@@ -43,8 +43,8 @@
               color: #ed5d25;
             "
             xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
+            width="18"
+            height="18"
             viewBox="0 0 24 24"
           >
             <g fill="currentColor" fill-rule="evenodd" clip-rule="evenodd">
@@ -167,7 +167,11 @@
           >
             Madicine Treatment
           </th>
-          <td mat-cell *matCellDef="let element" class="tableText-thin">
+          <td
+            mat-cell
+            *matCellDef="let element"
+            class="tableText-thin one-line-text"
+          >
             {{ element.medicineTreatment }}
           </td>
         </ng-container>
@@ -238,6 +242,7 @@
   [style]="{ width: '60vw' }"
   [draggable]="false"
   [resizable]="false"
+  (onHide)="onDialogHide()"
 >
   <form [formGroup]="addHealthVaccinationRecordForm">
     <div class="row" style="row-gap: 20px">
@@ -299,8 +304,10 @@
         <span
           class="errorValidation"
           *ngIf="
-            addHealthVaccinationRecordForm.get('purpose')?.touched &&
-            addHealthVaccinationRecordForm.get('purpose')?.hasError('required')
+            addHealthVaccinationRecordForm.get('temperature')?.touched &&
+            addHealthVaccinationRecordForm
+              .get('temperature')
+              ?.hasError('required')
           "
         >
           Required field

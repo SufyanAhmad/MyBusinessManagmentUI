@@ -211,6 +211,9 @@ export class BreedComponent {
       businessUnitId: [this.busUnitId],
     });
   }
+  onDialogHide() {
+    this.addBreedForm.reset();
+  }
   SearchBySearchKey(event: any) {
     if (event.key != 'Enter') {
       if (this.searchKey == '' || this.searchKey == null) {

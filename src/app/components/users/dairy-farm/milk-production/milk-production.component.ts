@@ -222,7 +222,9 @@ export class MilkProductionComponent {
       businessUnitId: [this.busUnitId],
     });
   }
-  addAnimal() {}
+  onDialogHide() {
+    this.addMilkProductionForm.reset();
+  }
   SearchBySearchKey(event: any) {
     if (event.key != 'Enter') {
       if (this.searchKey == '' || this.searchKey == null) {

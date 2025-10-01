@@ -226,13 +226,16 @@ export class AnimalComponent {
       animalCode: [null, [Validators.required]],
       age: [null, [Validators.required]],
       address: [null],
-      isFemale: [false, [Validators.pattern]],
-      isActive: [false, [Validators.pattern]],
+      isFemale: [true, [Validators.pattern]],
+      isActive: [true, [Validators.pattern]],
       purchaseDate: [null],
       price: [0],
       note: [null],
       businessUnitId: [this.busUnitId],
     });
+  }
+  onDialogHide() {
+    this.addAnimalForm.reset();
   }
   SearchBySearchKey(event: any) {
     if (event.key != 'Enter') {

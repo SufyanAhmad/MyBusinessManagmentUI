@@ -225,6 +225,9 @@ export class PregnancyRecordComponent {
       businessUnitId: [this.busUnitId],
     });
   }
+  onDialogHide() {
+    this.pregnancyRecordForm.reset();
+  }
   SearchBySearchKey(event: any) {
     if (event.key != 'Enter') {
       if (this.searchKey == '' || this.searchKey == null) {

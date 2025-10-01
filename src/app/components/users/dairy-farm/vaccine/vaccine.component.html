@@ -43,8 +43,8 @@
               color: #ed5d25;
             "
             xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
+            width="18"
+            height="18"
             viewBox="0 0 24 24"
           >
             <g fill="currentColor" fill-rule="evenodd" clip-rule="evenodd">
@@ -183,7 +183,11 @@
           >
             Purpose
           </th>
-          <td mat-cell *matCellDef="let element" class="tableText-thin">
+          <td
+            mat-cell
+            *matCellDef="let element"
+            class="tableText-thin one-line-text"
+          >
             {{ element.purpose }}
           </td>
         </ng-container>
@@ -228,6 +232,7 @@
   [style]="{ width: '60vw' }"
   [draggable]="false"
   [resizable]="false"
+  (onHide)="onDialogHide()"
 >
   <form [formGroup]="addHealthVaccinationRecordForm">
     <div class="row" style="row-gap: 20px">

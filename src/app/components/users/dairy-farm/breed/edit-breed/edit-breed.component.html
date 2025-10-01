@@ -125,14 +125,12 @@
       </div>
       <div class="col-md-12 mb-4">
         <span class="label">Note</span>
-        <input
-          type="text"
-          value="HIGH MILK YIELD"
-          class="input-felid"
-          [ngClass]="{ 'input-disable': isReadOnly }"
+        <textarea
           placeholder="Enter note..."
           formControlName="note"
-        />
+          class="input-felid my-input"
+          [ngClass]="{ 'input-disable': isReadOnly }"
+        ></textarea>
       </div>
     </div>
   </form>
