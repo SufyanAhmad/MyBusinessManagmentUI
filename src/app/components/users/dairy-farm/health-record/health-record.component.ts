@@ -219,6 +219,9 @@ export class HealthRecordComponent {
       remarks: [null, [Validators.required]],
     });
   }
+  onDialogHide() {
+    this.addHealthVaccinationRecordForm.reset();
+  }
   SearchBySearchKey(event: any) {
     if (event.key != 'Enter') {
       if (this.searchKey == '' || this.searchKey == null) {

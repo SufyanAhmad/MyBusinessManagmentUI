@@ -43,7 +43,7 @@
             </path>
           </g>
         </svg>
-        New Health Record
+        New Vaccination Record
       </button>
     </div>
   </span>
@@ -119,7 +119,11 @@
           >
             Purpose
           </th>
-          <td mat-cell *matCellDef="let element" class="tableText-thin">
+          <td
+            mat-cell
+            *matCellDef="let element"
+            class="tableText-thin one-line-text"
+          >
             {{ element.purpose }}
           </td>
         </ng-container>
@@ -164,6 +168,7 @@
   [style]="{ width: '60vw' }"
   [draggable]="false"
   [resizable]="false"
+  (onHide)="onDialogHide()"
 >
   <form [formGroup]="addHealthVaccinationRecordForm">
     <div class="row" style="row-gap: 20px">
@@ -175,7 +180,6 @@
             name="key"
             optionLabel="type"
             optionValue="id"
-            (onChange)="ngAfterViewInit()"
             [showClear]="true"
             placeholder="Supplier "
             formControlName="supplierId"

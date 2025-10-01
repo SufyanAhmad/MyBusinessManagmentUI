@@ -221,6 +221,9 @@ export class FeedComponent {
       businessUnitId: [this.busUnitId],
     });
   }
+  onDialogHide() {
+    this.addFeedForm.reset();
+  }
   loadAnimal() {
     this.masterService.getAnimal().subscribe(
       (res) => {

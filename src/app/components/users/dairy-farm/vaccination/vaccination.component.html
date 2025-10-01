@@ -43,8 +43,8 @@
               color: #ed5d25;
             "
             xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
+            width="18"
+            height="18"
             viewBox="0 0 24 24"
           >
             <g fill="currentColor" fill-rule="evenodd" clip-rule="evenodd">
@@ -204,6 +204,7 @@
   [style]="{ width: '60vw' }"
   [draggable]="false"
   [resizable]="false"
+  (onHide)="onDialogHide()"
 >
   <form [formGroup]="addVaccinationForm">
     <div class="row" style="row-gap: 20px">

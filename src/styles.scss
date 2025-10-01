@@ -636,6 +636,15 @@ input[readonly] {
 ::placeholder {
   color: #4079b0;
 }
-.d-pointer{
+.d-pointer {
   cursor: pointer;
+}
+.one-line-text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 200px;
+}
+.my-input {
+  padding-top: 10px;
 }

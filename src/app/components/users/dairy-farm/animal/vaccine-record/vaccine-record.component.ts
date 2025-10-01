@@ -224,7 +224,9 @@ export class VaccineRecordComponent {
       businessUnitId: [this.busUnitId],
     });
   }
-  addAnimal() {}
+  onDialogHide() {
+    this.addHealthVaccinationRecordForm.reset();
+  }
   SearchBySearchKey(event: any) {
     if (event.key != 'Enter') {
       if (this.searchKey == '' || this.searchKey == null) {

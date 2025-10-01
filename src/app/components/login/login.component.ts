@@ -81,7 +81,7 @@ export class LoginComponent {
     private accountService: AccountService,
     private messageService: MessageService
   ) {
-    this.gotoDashboard()
+    // this.gotoDashboard();
   }
 
   ngOnInit() {
@@ -100,7 +100,7 @@ export class LoginComponent {
       this.accountService.login(this.loginForm.value).subscribe(
         (dt) => {
           // this.router.navigateByUrl('/dairyFarm/animal');
-           this.router.navigateByUrl('/superAdmin');
+          this.router.navigateByUrl('/superAdmin');
           this.messageService.add({
             severity: 'success',
             summary: 'Success',
@@ -108,7 +108,6 @@ export class LoginComponent {
             life: 3000,
           });
           this.loginLoading = false;
-        
         },
         (error) => {
           this.loginLoading = false;

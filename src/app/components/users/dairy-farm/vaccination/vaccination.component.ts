@@ -206,6 +206,9 @@ export class VaccinationComponent {
       date: [null, [Validators.required]],
     });
   }
+  onDialogHide() {
+    this.addVaccinationForm.reset();
+  }
   SearchBySearchKey(event: any) {
     if (event.key != 'Enter') {
       if (this.searchKey == '' || this.searchKey == null) {

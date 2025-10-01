@@ -216,13 +216,12 @@
       </div>
       <div class="col-md-12 mb-4">
         <span class="label">Note</span>
-        <input
-          type="text"
-          class="input-felid"
-          [ngClass]="{ 'input-disable': isReadOnly }"
-          placeholder="Enter note..."
+        <textarea
           formControlName="note"
-        />
+          [ngClass]="{ 'input-disable': isReadOnly }"
+          class="input-felid my-input"
+          placeholder="Enter note..."
+        ></textarea>
       </div>
     </div>
   </form>
