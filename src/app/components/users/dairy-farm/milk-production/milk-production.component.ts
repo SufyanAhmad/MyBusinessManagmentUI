@@ -77,7 +77,6 @@ export class MilkProductionComponent {
     'totalL',
     'fat',
     'snf',
-    'status',
   ];
   constructor(
     private messageService: MessageService,
@@ -216,10 +215,10 @@ export class MilkProductionComponent {
     this.addMilkProductionForm = this.formBuilder.group({
       animalId: [null, [Validators.required]],
       date: [null, [Validators.required]],
-      morning: [, [Validators.pattern('^[0-9]*$')]],
-      evening: [, [Validators.pattern('^[0-9]*$')]],
-      total: [, [Validators.pattern('^[0-9]*$')]],
-      isActive: [null, [Validators.pattern]],
+      morning: ['', [Validators.required, Validators.pattern('^[0-9]*$')]],
+      evening: ['', [Validators.required, Validators.pattern('^[0-9]*$')]],
+      total: ['', [Validators.required, Validators.pattern('^[0-9]*$')]],
+      isActive: [true],
       businessUnitId: [this.busUnitId],
     });
   }

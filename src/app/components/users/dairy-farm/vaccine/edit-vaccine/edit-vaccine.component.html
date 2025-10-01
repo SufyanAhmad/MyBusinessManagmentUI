@@ -1,9 +1,6 @@
 <div class="container-fluid">
   <div class="d-pointer">
-    <span
-      class="breadcrumb"
-      style="text-transform: uppercase"
-      [routerLink]="['/superAdmin/business/units']"
+    <span class="breadcrumb" [routerLink]="['/superAdmin/business/units']"
       >{{ this.businessUnitName }} /
     </span>
     <span
@@ -92,33 +89,6 @@
               editHealthVaccinationRecordModel.get('supplierId')?.touched &&
               editHealthVaccinationRecordModel
                 .get('supplierId')
-                ?.hasError('required')
-            "
-          >
-            Required field
-          </span>
-        </div>
-      </div>
-      <div class="col-md-4 mb-4 position-relative">
-        <span class="label"
-          >Animal ID<span class="required-icon">*</span>
-        </span>
-        <div class="alt-dropdown" [ngClass]="{ 'input-disable': isReadOnly }">
-          <p-select
-            [options]="AnimalList"
-            name="key"
-            optionLabel="type"
-            optionValue="id"
-            [showClear]="true"
-            placeholder="Animal"
-            formControlName="animalId"
-          />
-          <span
-            class="errorValidation"
-            *ngIf="
-              editHealthVaccinationRecordModel.get('animalId')?.touched &&
-              editHealthVaccinationRecordModel
-                .get('animalId')
                 ?.hasError('required')
             "
           >

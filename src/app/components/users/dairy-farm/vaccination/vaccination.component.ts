@@ -12,18 +12,17 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { SelectModule } from 'primeng/select';
 import { DialogModule } from 'primeng/dialog';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { catchError, map, merge, of, startWith, switchMap, tap } from 'rxjs';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { SkeletonModule } from 'primeng/skeleton';
 import { masterModal } from '../../../../models/master-model/master-model';
-import { ColdStoreServiceService } from '../../../../services/cold-store-service/cold-store-service.service';
 import { MasterService } from '../../../../services/master-service/master.service';
 import { AccountService } from '../../../../services/account-service/account.service';
 import { LoadingComponent } from '../../../loading/loading.component';
 import { DataNotFoundComponent } from '../../../data-not-found/data-not-found.component';
-import { VaccinationRecordModel } from '../../../../models/dairy-farm-model/dairy-farm-model';
+import { AnimalHealthVaccination } from '../../../../models/dairy-farm-model/dairy-farm-model';
 import { DairyFarmService } from '../../../../services/dairy-farm.service';
 
 @Component({
@@ -50,7 +49,7 @@ import { DairyFarmService } from '../../../../services/dairy-farm.service';
 export class VaccinationComponent {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
-  dataSource!: MatTableDataSource<VaccinationRecordModel>;
+  dataSource!: MatTableDataSource<AnimalHealthVaccination>;
   isRateLimitReached = false;
   isLoadingResults: any = false;
   loading: boolean = false;
@@ -59,24 +58,17 @@ export class VaccinationComponent {
   animalId: any = null;
   stockId: any = null;
   busUnitId: any = null;
-  HealthRecordList: VaccinationRecordModel[] = [];
+  HealthRecordList: AnimalHealthVaccination[] = [];
   AnimalList: masterModal[] = [];
-  HealthVaccinationRecordsList: masterModal[] = [];
+  HealthVaccinationList: masterModal[] = [];
   BusinessUnits: masterModal[] = [];
   businessUnitId: any = null;
   businessUnitName: any = '';
-  bgColor: string = '#FFCE3A';
   // for add animal popup
   addLoading: boolean = false;
   visible: boolean = false;
   addVaccinationForm!: FormGroup;
-  displayedColumns: string[] = [
-    'animalId',
-    'animalName',
-    'breedId',
-    'praDate',
-    'status',
-  ];
+  displayedColumns: string[] = ['cell2', 'cell3', 'cell4', 'cell5'];
   constructor(
     private masterService: MasterService,
     private accountService: AccountService,
@@ -145,7 +137,7 @@ export class VaccinationComponent {
           if (list && list.length > 0) {
             this.dataSource.data = list;
             for (let a = 0; a < list.length; a++) {
-              let feed: VaccinationRecordModel = {
+              let feed: AnimalHealthVaccination = {
                 animalHealthVaccinationMappingId:
                   list[a].animalHealthVaccinationMappingId,
                 animalHealthVaccinationStatusId:
@@ -188,7 +180,7 @@ export class VaccinationComponent {
           this.messageService.add({
             severity: 'success',
             summary: 'Added',
-            detail: 'Vaccination Record added successfully',
+            detail: 'Health Vaccination Record added successfully',
             life: 3000,
           });
         },
@@ -242,18 +234,17 @@ export class VaccinationComponent {
       }
     );
   }
-
   loadHealthVaccinationRecords() {
     this.masterService.getHealthVaccinationRecords().subscribe(
       (res) => {
         let dt = res.data;
-        this.HealthVaccinationRecordsList = [];
+        this.HealthVaccinationList = [];
         for (let a = 0; a < dt.length; a++) {
           let _data: masterModal = {
             id: dt[a].healthVaccinationRecordId,
             type: dt[a].name,
           };
-          this.HealthVaccinationRecordsList.push(_data);
+          this.HealthVaccinationList.push(_data);
         }
       },
       (error) => {

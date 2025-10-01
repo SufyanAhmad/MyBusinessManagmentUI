@@ -201,7 +201,7 @@
             Birth Date
           </th>
           <td mat-cell *matCellDef="let element" class="tableText-thin">
-            {{ element.age }}
+            {{ element.age | date : "dd/MM/yyyy" }}
           </td>
         </ng-container>
         <ng-container matColumnDef="gender">

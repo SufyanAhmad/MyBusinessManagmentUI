@@ -1,9 +1,6 @@
 <div class="container-fluid">
   <div class="d-pointer">
-    <span
-      class="breadcrumb"
-      style="text-transform: uppercase"
-      [routerLink]="['/superAdmin/business/units']"
+    <span class="breadcrumb" [routerLink]="['/superAdmin/business/units']"
       >{{ this.businessUnitName }} /
     </span>
     <span
@@ -201,9 +198,8 @@
           formControlName="total"
         />
       </div>
-      <div class="col-md-4 mb-4 position-relative">
+      <!-- <div class="col-md-4 mb-4 position-relative">
         <div class="d-flex gap-3 align-items-center mt-3">
-          <!-- Active -->
           <div>
             <span class="label">Active</span>
             <input
@@ -213,8 +209,6 @@
               [value]="true"
             />
           </div>
-
-          <!-- Inactive -->
           <div style="margin-left: 25px">
             <span class="label">Inactive</span>
             <input
@@ -225,7 +219,7 @@
             />
           </div>
         </div>
-      </div>
+      </div> -->
     </div>
   </form>
 </div>
