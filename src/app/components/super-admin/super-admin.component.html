@@ -321,7 +321,7 @@
       </li> -->
       <hr [ngStyle]="{ 'margin-top': isAdminExit ? '1rem' : '19rem' }" />
       <!-- <hr class="mt-5" /> -->
-      <li [routerLink]="['/login']">
+      <li (click)="logout()">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="24"

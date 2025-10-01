@@ -46,11 +46,9 @@ export class AccountService {
     return authToken !== null ? true : false;
   }
   doLogout() {
-    let removeToken = localStorage.removeItem('DF_access_token');
-
-    if (removeToken == null) {
-      this.router.navigateByUrl('/');
-    }
+      localStorage.removeItem('DF_access_token');
+      this.router.navigateByUrl('/login');
+    
   }
   getBusinessUnitId() {
     return localStorage.getItem('DF_businessUnitId');

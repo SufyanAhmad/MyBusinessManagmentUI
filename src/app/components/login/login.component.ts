@@ -126,6 +126,9 @@ export class LoginComponent {
     this.showPassword = !this.showPassword;
   }
   gotoDashboard() {
-    this.router.navigateByUrl('/superAdmin');
+    if(this.accountService.isLoggedIn){
+this.router.navigateByUrl('/superAdmin');
+    }
+    
   }
 }
