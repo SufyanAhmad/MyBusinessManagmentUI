@@ -24,7 +24,6 @@ export class SuperAdminComponent {
     this.chevron = this.chevron == 'chevron-right' ? 'chevron-left' : 'chevron-right';
   }
   logout(){
-    debugger
     this.accountService.doLogout();
   }
 }
