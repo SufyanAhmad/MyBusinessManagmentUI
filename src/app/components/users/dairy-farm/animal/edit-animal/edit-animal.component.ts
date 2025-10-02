@@ -2,6 +2,7 @@ import { CommonModule, Location } from '@angular/common';
 import { Component } from '@angular/core';
 import { HealthHistoryComponent } from '../health-history/health-history.component';
 import { VaccineRecordComponent } from '../vaccine-record/vaccine-record.component';
+import { AnimalBreedComponent } from '../animal-breed/animal-breed.component';
 import {
   FormBuilder,
   FormGroup,
@@ -30,6 +31,7 @@ import { DairyFarmService } from '../../../../../services/dairy-farm.service';
     RouterLink,
     HealthHistoryComponent,
     VaccineRecordComponent,
+    AnimalBreedComponent,
   ],
   templateUrl: './edit-animal.component.html',
   styleUrl: './edit-animal.component.scss',
@@ -100,7 +102,6 @@ export class EditAnimalComponent {
   ) {}
   ngOnInit() {
     this.animalId = this.route.snapshot.params['id'];
-    debugger;
     this.busUnitId = this.accountService.getBusinessUnitId();
     this.businessUnitName = this.accountService.getBusinessUnitName();
     this.getAnimalDetails();

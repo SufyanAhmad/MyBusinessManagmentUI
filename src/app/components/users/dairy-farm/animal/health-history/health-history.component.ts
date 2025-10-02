@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   FormBuilder,
@@ -12,14 +12,13 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { SelectModule } from 'primeng/select';
 import { DialogModule } from 'primeng/dialog';
-import { Router, RouterLink } from '@angular/router';
-import { catchError, map, merge, of, startWith, switchMap, tap } from 'rxjs';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { SkeletonModule } from 'primeng/skeleton';
 import { LoadingComponent } from '../../../../loading/loading.component';
 import { DataNotFoundComponent } from '../../../../data-not-found/data-not-found.component';
-import { VaccineRecordModel } from '../../../../../models/dairy-farm-model/dairy-farm-model';
+import { HealthRecordModel } from '../../../../../models/dairy-farm-model/dairy-farm-model';
 import { masterModal } from '../../../../../models/master-model/master-model';
 import { MasterService } from '../../../../../services/master-service/master.service';
 import { AccountService } from '../../../../../services/account-service/account.service';
@@ -35,7 +34,6 @@ import { DairyFarmService } from '../../../../../services/dairy-farm.service';
     FormsModule,
     ReactiveFormsModule,
     DialogModule,
-    CommonModule,
     SelectModule,
     SkeletonModule,
     ToastModule,
@@ -48,9 +46,9 @@ import { DairyFarmService } from '../../../../../services/dairy-farm.service';
   providers: [MessageService],
 })
 export class HealthHistoryComponent {
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
-  @ViewChild(MatSort) sort!: MatSort;
-  dataSource!: MatTableDataSource<VaccineRecordModel>;
+  // @ViewChild(MatPaginator) paginator!: MatPaginator;
+  // @ViewChild(MatSort) sort!: MatSort;
+  dataSource!: MatTableDataSource<HealthRecordModel>;
   isRateLimitReached = false;
   isLoadingResults: any = false;
   loading: boolean = false;
@@ -58,27 +56,29 @@ export class HealthHistoryComponent {
   searchKey: any = null;
   stockId: any = null;
   busUnitId: any = null;
-  HealthVaccinationRecordList: VaccineRecordModel[] = [];
+  HealthRecordList: HealthRecordModel[] = [];
   businessUnitId: any = null;
   businessUnitName: any = '';
-  bgColor: string = '#FFCE3A';
+  animalId: any = null;
   AnimalList: masterModal[] = [];
   SupplierList: masterModal[] = [];
+  today: string = new Date().toISOString().split('T')[0];
   key: any = null;
   // for add animal popup
   addLoading: boolean = false;
   visible: boolean = false;
   addHealthVaccinationRecordForm!: FormGroup;
   displayedColumns: string[] = [
-    'recordId',
-    'animalId',
-    'date',
-    'vacName',
-    'pur',
-    'nextDueDate',
+    'cell1',
+    'cell2',
+    'cell3',
+    'cell4',
+    'cell5',
+    'cell6',
+    'cell7',
   ];
   constructor(
-    private masterService: MasterService,
+    private route: ActivatedRoute,
     private accountService: AccountService,
     private dairyFarmService: DairyFarmService,
     private messageService: MessageService,
@@ -86,111 +86,64 @@ export class HealthHistoryComponent {
     private router: Router
   ) {}
   ngOnInit() {
+    this.animalId = this.route.snapshot.params['id'];
     this.busUnitId = this.accountService.getBusinessUnitId();
     this.businessUnitName = this.accountService.getBusinessUnitName();
     this.initForm();
-  }
-  ngAfterViewInit() {
-    setTimeout(() => {
-      this.getHealthVaccinationRecordList();
-    }, 0);
-    this.loadAnimal();
-    this.loadParties();
+    this.getHealthHistoryRecordList();
   }
 
-  getHealthVaccinationRecordList() {
-    this.paginator.pageIndex = 0;
-    this.paginator.page.observers = [];
-    this.HealthVaccinationRecordList = [];
-    this.dataSource = new MatTableDataSource(this.HealthVaccinationRecordList);
+  getHealthHistoryRecordList() {
+    this.isLoadingResults = true;
+    this.HealthRecordList = [];
+    this.dataSource = new MatTableDataSource(this.HealthRecordList);
 
-    this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
-
-    merge(this.paginator.page)
-      .pipe(
-        startWith({}),
-        switchMap(() => {
-          this.isLoadingResults = true;
-          this.HealthVaccinationRecordList = [];
-          this.dataSource = new MatTableDataSource(
-            this.HealthVaccinationRecordList
-          );
-
-          let data = {
-            searchKey: this.searchKey ?? null,
-            businessUnitId: this.busUnitId,
-            pageNumber: this.paginator.pageIndex + 1,
-            pageSize: 10,
-          };
-
-          return this.dairyFarmService
-            .getHealthVaccinationRecordBySearchFilter(data)
-            .pipe(
-              catchError((resp: any) => {
-                if (resp.status == 401) {
-                  this.accountService.doLogout();
-                  this.router.navigateByUrl('/');
-                }
-                return of({ data: { totalCount: 0, list: [] } });
-              })
-            );
-        }),
-        map((resp: any) => {
-          if (!resp || !resp.data) {
-            return [];
-          }
-          this.resultsLength = resp.data.totalCount;
-          return resp.data.list;
-        })
-      )
-      .subscribe(
-        (list) => {
-          this.HealthVaccinationRecordList = [];
-          if (list && list.length > 0) {
-            this.dataSource.data = list;
-            for (let a = 0; a < list.length; a++) {
-              let feed: VaccineRecordModel = {
-                updatedBy: list[a].updatedBy,
-                updatedAt: list[a].updatedAt,
-                healthVaccinationRecordId: list[a].healthVaccinationRecordId,
-                recordRef: list[a].recordRef,
-                supplierName: list[a].supplierName,
-                businessUnit: list[a].businessUnit,
-                createdBy: list[a].createdBy,
-                createdAt: list[a].createdAt,
-                supplierId: list[a].supplierId,
-                date: list[a].date,
-                name: list[a].name,
-                purpose: list[a].purpose,
-                nextDueDate: list[a].nextDueDate,
-                businessUnitId: list[a].businessUnitId,
-              };
-              this.HealthVaccinationRecordList.push(feed);
-            }
-          }
-          this.dataSource = new MatTableDataSource(
-            this.HealthVaccinationRecordList
-          );
-          this.isLoadingResults = false;
-        },
-        (error) => {
-          this.isLoadingResults = false;
-          if (error.status == 401) {
-            this.accountService.doLogout();
-            this.router.navigateByUrl('/');
-          }
+    this.dairyFarmService.GetHealthRecordByAnimalId(this.animalId).subscribe(
+      (resp: any) => {
+        this.HealthRecordList = [];
+        if (resp && resp.data && resp.data.length > 0) {
+          this.HealthRecordList = resp.data.map((item: any) => {
+            let record: HealthRecordModel = {
+              animalHealthId: item.animalHealthId,
+              animalHealthRef: item.animalHealthRef,
+              createdBy: item.createdBy,
+              createdAt: item.createdAt,
+              animalRef: item.animalRef,
+              businessUnit: item.businessUnit,
+              animalId: item.animalId,
+              weight: item.weight,
+              temperature: item.temperature,
+              illnessNotes: item.illnessNotes,
+              medicineTreatment: item.medicineTreatment,
+              businessUnitId: item.businessUnitId,
+              lastCheckupDate: item.lastCheckupDate,
+              remarks: item.remarks,
+            };
+            return record;
+          });
         }
-      );
+
+        this.dataSource = new MatTableDataSource(this.HealthRecordList);
+        this.isLoadingResults = false;
+      },
+      (error) => {
+        this.isLoadingResults = false;
+        if (error.status == 401) {
+          this.accountService.doLogout();
+          this.router.navigateByUrl('/');
+        }
+      }
+    );
   }
   addHealthVaccinationRecord() {
     this.addLoading = true;
     this.dairyFarmService
-      .addHealthVaccinationRecord(this.addHealthVaccinationRecordForm.value)
+      .addHealthRecord(this.addHealthVaccinationRecordForm.value)
       .subscribe(
         (dt) => {
           this.addLoading = false;
           this.visible = false;
-          this.getHealthVaccinationRecordList();
+          this.getHealthHistoryRecordList();
           this.addHealthVaccinationRecordForm.reset();
           this.messageService.add({
             severity: 'success',
@@ -216,18 +169,19 @@ export class HealthHistoryComponent {
   }
   initForm() {
     this.addHealthVaccinationRecordForm = this.formBuilder.group({
-      supplierId: [null, [Validators.required]],
-      date: [null, [Validators.required]],
-      name: [null, [Validators.required]],
-      purpose: [null, [Validators.required]],
-      nextDueDate: [null, [Validators.required]],
+      animalId: [this.animalId],
       businessUnitId: [this.busUnitId],
+      weight: [null, [Validators.required]],
+      temperature: [null, [Validators.required]],
+      illnessNotes: [null, [Validators.required]],
+      medicineTreatment: [null, [Validators.required]],
+      lastCheckupDate: [null, [Validators.required]],
+      remarks: [null, [Validators.required]],
     });
   }
   onDialogHide() {
     this.addHealthVaccinationRecordForm.reset();
   }
-  addAnimal() {}
   SearchBySearchKey(event: any) {
     if (event.key != 'Enter') {
       if (this.searchKey == '' || this.searchKey == null) {
@@ -235,48 +189,8 @@ export class HealthHistoryComponent {
       }
     }
   }
-  loadParties() {
-    this.masterService.getParties(1).subscribe(
-      (res) => {
-        var dt = res;
-        this.SupplierList = [];
-        for (let a = 0; a < dt.length; a++) {
-          let _data: masterModal = {
-            id: dt[a].partyId,
-            type: dt[a].name,
-          };
-          this.SupplierList.push(_data);
-        }
-      },
-      (error) => {
-        if (error.status == 401) {
-          this.accountService.doLogout();
-        }
-      }
-    );
-  }
-  loadAnimal() {
-    this.masterService.getAnimal().subscribe(
-      (res) => {
-        let dt = res.data;
-        this.AnimalList = [];
-        for (let a = 0; a < dt.length; a++) {
-          let _data: masterModal = {
-            id: dt[a].animalId,
-            type: dt[a].animalRef,
-          };
-          this.AnimalList.push(_data);
-        }
-      },
-      (error) => {
-        if (error.status == 401) {
-          this.accountService.doLogout();
-        }
-      }
-    );
-  }
+
   ResetFilter() {
     this.searchKey = null;
-    this.ngAfterViewInit();
   }
 }

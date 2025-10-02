@@ -75,6 +75,15 @@ export class DairyFarmService {
       })
     );
   }
+  GetBreedByAnimalId(id: any) {
+    return this.repositoryService
+      .get('Breed/get-animal-bread/' + id, true)
+      .pipe(
+        map((response: any) => {
+          return response;
+        })
+      );
+  }
   UpdateBreedDetail(id: any, data: any) {
     return this.repositoryService
       .putWithOutFile('Breed/update-breed/' + id, data)
@@ -231,6 +240,18 @@ export class DairyFarmService {
         })
       );
   }
+  GetHealthVaccinationRecordByAnimalId(id: any) {
+    return this.repositoryService
+      .get(
+        'HealthVaccinationRecord/get-health-vaccination-records-by/' + id,
+        true
+      )
+      .pipe(
+        map((response: any) => {
+          return response;
+        })
+      );
+  }
   UpdateHealthVaccinationRecordDetail(id: any, data: any) {
     return this.repositoryService
       .putWithOutFile(
@@ -275,6 +296,15 @@ export class DairyFarmService {
         })
       );
   }
+  GetHealthRecordByAnimalId(id: any) {
+    return this.repositoryService
+      .get('AnimalHealth/get-animal-health-history/' + id, true)
+      .pipe(
+        map((response: any) => {
+          return response;
+        })
+      );
+  }
   GetHealthHistoryRecord(id: any) {
     return this.repositoryService
       .get('AnimalHealth/get-animal-health-history/' + id, true)
@@ -300,6 +330,15 @@ export class DairyFarmService {
   addAnimalHealthVaccinationRecord(data: any) {
     return this.repositoryService
       .post('AnimalHealthVaccination/add-animalHealthVaccination', data, true)
+      .pipe(
+        map((response: any) => {
+          return response;
+        })
+      );
+  }
+  GetVaccinationByAnimalId(id: any) {
+    return this.repositoryService
+      .get('AnimalHealthVaccination/get-animalHealthVaccinations/' + id, true)
       .pipe(
         map((response: any) => {
           return response;

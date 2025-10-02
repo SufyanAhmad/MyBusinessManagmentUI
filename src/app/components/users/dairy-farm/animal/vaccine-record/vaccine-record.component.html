@@ -1,9 +1,17 @@
-<div class="container-fluid mt-5">
-  <span class="d-flex flex-wrap justify-content-between">
+<div class="container-fluid">
+  <span class="d-flex flex-wrap justify-content-between mt-4">
     <span class="heading mt-4" style="color: #4079b0 !important">
-      Vaccination Record
+      Vaccination Records
     </span>
     <div class="d-flex align-items-center gap-5">
+      <span
+        (click)="ResetFilter()"
+        *ngIf="searchKey != null"
+        class="tableText-bold mt-2"
+        style="color: #12557e; font-weight: 700"
+      >
+        Reset Filter
+      </span>
       <button
         (click)="visible = true"
         class="btn mt-4 mb-3"
@@ -50,28 +58,7 @@
   <div class="mat-elevation-z8 mt-4 rounded-table">
     <div class="table-responsive">
       <table mat-table matSort [dataSource]="dataSource">
-        <ng-container matColumnDef="recordId">
-          <th
-            mat-header-cell
-            *matHeaderCellDef
-            class="table-header"
-            style="min-width: 120px"
-          >
-            Record
-          </th>
-          <td
-            mat-cell
-            *matCellDef="let element"
-            class="tableText-bold"
-            [routerLink]="[
-              '/dairyFarm/health-record/',
-              element.healthVaccinationRecordId
-            ]"
-          >
-            {{ element.recordRef }}
-          </td>
-        </ng-container>
-        <ng-container matColumnDef="animalId">
+        <ng-container matColumnDef="cell2">
           <th
             mat-header-cell
             *matHeaderCellDef
@@ -80,11 +67,19 @@
           >
             Animal ID
           </th>
-          <td mat-cell *matCellDef="let element" class="tableText-thin">
-            {{ element.recordRef }}
+          <td
+            mat-cell
+            *matCellDef="let element"
+            class="tableText-bold"
+            [routerLink]="[
+              '/dairyFarm/vaccination/',
+              element.animalHealthVaccinationMappingId
+            ]"
+          >
+            {{ element.animalRef }}
           </td>
         </ng-container>
-        <ng-container matColumnDef="date">
+        <ng-container matColumnDef="cell3">
           <th
             mat-header-cell
             *matHeaderCellDef
@@ -97,7 +92,7 @@
             {{ element.date | date : "dd/MM/yyyy" }}
           </td>
         </ng-container>
-        <ng-container matColumnDef="vacName">
+        <ng-container matColumnDef="cell4">
           <th
             mat-header-cell
             *matHeaderCellDef
@@ -110,34 +105,37 @@
             {{ element.name }}
           </td>
         </ng-container>
-        <ng-container matColumnDef="pur">
+        <ng-container matColumnDef="cell5">
           <th
             mat-header-cell
             *matHeaderCellDef
             class="table-header"
-            style="min-width: 150px !important"
+            style="min-width: 100px !important"
           >
-            Purpose
+            Status
           </th>
-          <td
-            mat-cell
-            *matCellDef="let element"
-            class="tableText-thin one-line-text"
-          >
-            {{ element.purpose }}
-          </td>
-        </ng-container>
-        <ng-container matColumnDef="nextDueDate">
-          <th
-            mat-header-cell
-            *matHeaderCellDef
-            class="table-header"
-            style="min-width: 170px !important"
-          >
-            Next Due Date
-          </th>
-          <td mat-cell *matCellDef="let element" class="tableText-thin">
-            {{ element.nextDueDate | date : "dd/MM/yyyy" }}
+          <td mat-cell *matCellDef="let element">
+            <div
+              class="mat_table_btn"
+              *ngIf="element.animalHealthVaccinationStatusId === 1"
+              [style.background-color]="'#FFCE3A'"
+            >
+              {{ element.animalHealthVaccinationStatus }}
+            </div>
+            <div
+              class="mat_table_btn"
+              *ngIf="element.animalHealthVaccinationStatusId === 2"
+              [style.background-color]="'#7C9052'"
+            >
+              {{ element.animalHealthVaccinationStatus }}
+            </div>
+            <div
+              class="mat_table_btn"
+              *ngIf="element.animalHealthVaccinationStatusId === 3"
+              [style.background-color]="'#FF5C40'"
+            >
+              {{ element.animalHealthVaccinationStatus }}
+            </div>
           </td>
         </ng-container>
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
@@ -146,23 +144,23 @@
     </div>
   </div>
   <app-data-not-found
-    *ngIf="HealthVaccinationRecordList.length == 0 && !isLoadingResults"
+    *ngIf="HealthRecordList.length == 0 && !isLoadingResults"
   />
   <div class="skelton" *ngIf="isLoadingResults">
     <app-loading></app-loading>
   </div>
-  <mat-paginator
+  <!-- <mat-paginator
     pageSize="10"
-    [length]="HealthVaccinationRecordList.length"
+    [length]="HealthRecordList.length"
     showFirstLastButtons
     aria-label="Select page of periodic elements"
   >
-  </mat-paginator>
+  </mat-paginator> -->
 </div>
-<!-- Add Dairy Business -->
+<!-- Add Vaccination  -->
 
 <p-dialog
-  header="Add Health & Vaccination Record"
+  header="Add Vaccine "
   [modal]="true"
   [(visible)]="visible"
   [style]="{ width: '60vw' }"
@@ -170,70 +168,34 @@
   [resizable]="false"
   (onHide)="onDialogHide()"
 >
-  <form [formGroup]="addHealthVaccinationRecordForm">
+  <form [formGroup]="addVaccinationForm">
     <div class="row" style="row-gap: 20px">
       <div class="col-6">
-        <span class="label">Supplier<span class="required-icon">*</span> </span>
+        <span class="label"
+          >Health Vaccination<span class="required-icon">*</span>
+        </span>
         <div class="alt-dropdown">
           <p-select
-            [options]="SupplierList"
+            [options]="HealthVaccinationList"
             name="key"
             optionLabel="type"
             optionValue="id"
             [showClear]="true"
-            placeholder="Supplier "
-            formControlName="supplierId"
+            placeholder="Health Vaccination"
+            formControlName="healthVaccinationRecordId"
           />
           <span
             class="errorValidation"
             *ngIf="
-              addHealthVaccinationRecordForm.get('supplierId')?.touched &&
-              addHealthVaccinationRecordForm
-                .get('supplierId')
+              addVaccinationForm.get('healthVaccinationRecordId')?.touched &&
+              addVaccinationForm
+                .get('healthVaccinationRecordId')
                 ?.hasError('required')
             "
           >
             Required field
           </span>
         </div>
-      </div>
-      <div class="col-6">
-        <span class="label"
-          >Vaccine Name<span class="required-icon">*</span></span
-        >
-        <input
-          type="text"
-          class="input-felid"
-          placeholder="Enter vaccine name..."
-          formControlName="name"
-        />
-        <span
-          class="errorValidation"
-          *ngIf="
-            addHealthVaccinationRecordForm.get('name')?.touched &&
-            addHealthVaccinationRecordForm.get('name')?.hasError('required')
-          "
-        >
-          Required field
-        </span>
-      </div>
-      <div class="col-6">
-        <span class="label">Purpose<span class="required-icon">*</span></span>
-        <input
-          type="text"
-          class="input-felid"
-          placeholder="Enter purpose..."
-          formControlName="purpose"
-        />
-        <span
-          class="errorValidation"
-          *ngIf="
-            addHealthVaccinationRecordForm.get('purpose')?.touched &&
-            addHealthVaccinationRecordForm.get('purpose')?.hasError('required')
-          "
-        >
-          Required field
-        </span>
       </div>
       <div class="col-6">
         <span class="label">Date<span class="required-icon">*</span> </span>
@@ -246,30 +208,8 @@
         <span
           class="errorValidation"
           *ngIf="
-            addHealthVaccinationRecordForm.get('date')?.touched &&
-            addHealthVaccinationRecordForm.get('date')?.hasError('required')
-          "
-        >
-          Required field
-        </span>
-      </div>
-      <div class="col-6">
-        <span class="label"
-          >Next Due Date<span class="required-icon">*</span></span
-        >
-        <input
-          type="date"
-          class="input-felid custom-date"
-          placeholder="Enter next due date..."
-          formControlName="nextDueDate"
-        />
-        <span
-          class="errorValidation"
-          *ngIf="
-            addHealthVaccinationRecordForm.get('nextDueDate')?.touched &&
-            addHealthVaccinationRecordForm
-              .get('nextDueDate')
-              ?.hasError('required')
+            addVaccinationForm.get('date')?.touched &&
+            addVaccinationForm.get('date')?.hasError('required')
           "
         >
           Required field
@@ -283,13 +223,13 @@
       <button
         type="button"
         (click)="
-          addHealthVaccinationRecordForm.valid && !addLoading
+          addVaccinationForm.valid && !addLoading
             ? addHealthVaccinationRecord()
             : null
         "
         [ngClass]="{
-          'btn-save': addHealthVaccinationRecordForm.valid && !addLoading,
-          'btn-disable': addHealthVaccinationRecordForm.invalid || addLoading
+          'btn-save': addVaccinationForm.valid && !addLoading,
+          'btn-disable': addVaccinationForm.invalid || addLoading
         }"
       >
         Save &nbsp;

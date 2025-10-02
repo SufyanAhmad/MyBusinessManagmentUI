@@ -1,9 +1,5 @@
-import { Component, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MessageService } from 'primeng/api';
-import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
-import { MatSort, MatSortModule } from '@angular/material/sort';
-import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { Component } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -11,16 +7,19 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { DialogModule } from 'primeng/dialog';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { MatSort, MatSortModule } from '@angular/material/sort';
 import { SelectModule } from 'primeng/select';
-import { SkeletonModule } from 'primeng/skeleton';
+import { DialogModule } from 'primeng/dialog';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
+import { SkeletonModule } from 'primeng/skeleton';
 import { LoadingComponent } from '../../../../loading/loading.component';
 import { DataNotFoundComponent } from '../../../../data-not-found/data-not-found.component';
-import { Router, RouterLink } from '@angular/router';
+import { AnimalHealthVaccination } from '../../../../../models/dairy-farm-model/dairy-farm-model';
 import { masterModal } from '../../../../../models/master-model/master-model';
-import { VaccineRecordModel } from '../../../../../models/dairy-farm-model/dairy-farm-model';
-import { catchError, map, merge, of, startWith, switchMap } from 'rxjs';
 import { MasterService } from '../../../../../services/master-service/master.service';
 import { AccountService } from '../../../../../services/account-service/account.service';
 import { DairyFarmService } from '../../../../../services/dairy-farm.service';
@@ -28,7 +27,6 @@ import { DairyFarmService } from '../../../../../services/dairy-farm.service';
 @Component({
   selector: 'app-vaccine-record',
   imports: [
-    CommonModule,
     MatPaginatorModule,
     MatSortModule,
     MatTableModule,
@@ -48,150 +46,177 @@ import { DairyFarmService } from '../../../../../services/dairy-farm.service';
   providers: [MessageService],
 })
 export class VaccineRecordComponent {
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
-  @ViewChild(MatSort) sort!: MatSort;
-  dataSource!: MatTableDataSource<VaccineRecordModel>;
+  // @ViewChild(MatPaginator) paginator!: MatPaginator;
+  // @ViewChild(MatSort) sort!: MatSort;
+  dataSource!: MatTableDataSource<AnimalHealthVaccination>;
   isRateLimitReached = false;
   isLoadingResults: any = false;
   loading: boolean = false;
   resultsLength: any = 0;
   searchKey: any = null;
+  animalId: any = null;
   stockId: any = null;
   busUnitId: any = null;
-  HealthVaccinationRecordList: VaccineRecordModel[] = [];
+  HealthRecordList: AnimalHealthVaccination[] = [];
+  AnimalList: masterModal[] = [];
+  HealthVaccinationList: masterModal[] = [];
+  BusinessUnits: masterModal[] = [];
   businessUnitId: any = null;
   businessUnitName: any = '';
-  bgColor: string = '#FFCE3A';
-  AnimalList: masterModal[] = [];
-  SupplierList: masterModal[] = [];
-  key: any = null;
   // for add animal popup
   addLoading: boolean = false;
   visible: boolean = false;
-  addHealthVaccinationRecordForm!: FormGroup;
-  displayedColumns: string[] = [
-    'recordId',
-    'animalId',
-    'date',
-    'vacName',
-    'pur',
-    'nextDueDate',
-  ];
+  addVaccinationForm!: FormGroup;
+  displayedColumns: string[] = ['cell2', 'cell3', 'cell4', 'cell5'];
   constructor(
+    private route: ActivatedRoute,
     private masterService: MasterService,
     private accountService: AccountService,
     private dairyFarmService: DairyFarmService,
-    private messageService: MessageService,
     private formBuilder: FormBuilder,
+    private messageService: MessageService,
     private router: Router
   ) {}
   ngOnInit() {
+    this.animalId = this.route.snapshot.params['id'];
     this.busUnitId = this.accountService.getBusinessUnitId();
     this.businessUnitName = this.accountService.getBusinessUnitName();
     this.initForm();
   }
   ngAfterViewInit() {
     setTimeout(() => {
-      this.getHealthVaccinationRecordList();
+      this.getVaccinationRecordList();
     }, 0);
     this.loadAnimal();
-    this.loadParties();
   }
+  // getVaccinationRecordList() {
+  //   this.paginator.pageIndex = 0;
+  //   this.paginator.page.observers = [];
+  //   this.HealthRecordList = [];
+  //   this.dataSource = new MatTableDataSource(this.HealthRecordList);
 
-  getHealthVaccinationRecordList() {
-    this.paginator.pageIndex = 0;
-    this.paginator.page.observers = [];
-    this.HealthVaccinationRecordList = [];
-    this.dataSource = new MatTableDataSource(this.HealthVaccinationRecordList);
+  //   this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
 
-    this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
+  //   merge(this.paginator.page)
+  //     .pipe(
+  //       startWith({}),
+  //       switchMap(() => {
+  //         this.isLoadingResults = true;
+  //         this.HealthRecordList = [];
+  //         this.dataSource = new MatTableDataSource(this.HealthRecordList);
 
-    merge(this.paginator.page)
-      .pipe(
-        startWith({}),
-        switchMap(() => {
-          this.isLoadingResults = true;
-          this.HealthVaccinationRecordList = [];
-          this.dataSource = new MatTableDataSource(
-            this.HealthVaccinationRecordList
-          );
+  //         let data = {
+  //           searchKey: this.searchKey ?? null,
+  //           businessUnitId: this.busUnitId,
+  //           pageNumber: this.paginator.pageIndex + 1,
+  //           pageSize: 10,
+  //         };
 
-          let data = {
-            searchKey: this.searchKey ?? null,
-            businessUnitId: this.busUnitId,
-            pageNumber: this.paginator.pageIndex + 1,
-            pageSize: 10,
-          };
+  //         return this.dairyFarmService.getVaccinationBySearchFilter(data).pipe(
+  //           catchError((resp: any) => {
+  //             if (resp.status == 401) {
+  //               this.accountService.doLogout();
+  //               this.router.navigateByUrl('/');
+  //             }
+  //             return of({ data: { totalCount: 0, list: [] } });
+  //           })
+  //         );
+  //       }),
+  //       map((resp: any) => {
+  //         if (!resp || !resp.data) {
+  //           return [];
+  //         }
+  //         if (resp.data.list) {
+  //           this.resultsLength = resp.data.totalCount ?? resp.data.list.length;
+  //           return resp.data.list;
+  //         }
+  //       })
+  //     )
+  //     .subscribe(
+  //       (list) => {
+  //         this.HealthRecordList = [];
+  //         if (list && list.length > 0) {
+  //           this.dataSource.data = list;
+  //           for (let a = 0; a < list.length; a++) {
+  //             let feed: AnimalHealthVaccination = {
+  //               animalHealthVaccinationMappingId:
+  //                 list[a].animalHealthVaccinationMappingId,
+  //               animalHealthVaccinationStatusId:
+  //                 list[a].animalHealthVaccinationStatusId,
+  //               animalHealthVaccinationStatus:
+  //                 list[a].animalHealthVaccinationStatus,
+  //               createdAt: list[a].createdAt,
+  //               animalRef: list[a].animalRef,
+  //               animalId: list[a].animalId,
+  //               name: list[a].name,
+  //               date: list[a].date,
+  //               healthVaccinationRecordId: list[a].healthVaccinationRecordId,
+  //             };
+  //             this.HealthRecordList.push(feed);
+  //           }
+  //         }
+  //         this.dataSource = new MatTableDataSource(this.HealthRecordList);
+  //         this.isLoadingResults = false;
+  //       },
+  //       (error) => {
+  //         this.isLoadingResults = false;
+  //         if (error.status == 401) {
+  //           this.accountService.doLogout();
+  //           this.router.navigateByUrl('/');
+  //         }
+  //       }
+  //     );
+  // }
+  getVaccinationRecordList() {
+    this.isLoadingResults = true;
+    this.HealthRecordList = [];
+    this.dataSource = new MatTableDataSource(this.HealthRecordList);
 
-          return this.dairyFarmService
-            .getHealthVaccinationRecordBySearchFilter(data)
-            .pipe(
-              catchError((resp: any) => {
-                if (resp.status == 401) {
-                  this.accountService.doLogout();
-                  this.router.navigateByUrl('/');
-                }
-                return of({ data: { totalCount: 0, list: [] } });
-              })
-            );
-        }),
-        map((resp: any) => {
-          if (!resp || !resp.data) {
-            return [];
-          }
-          this.resultsLength = resp.data.totalCount;
-          return resp.data.list;
-        })
-      )
-      .subscribe(
-        (list) => {
-          this.HealthVaccinationRecordList = [];
-          if (list && list.length > 0) {
-            this.dataSource.data = list;
-            for (let a = 0; a < list.length; a++) {
-              let feed: VaccineRecordModel = {
-                updatedBy: list[a].updatedBy,
-                updatedAt: list[a].updatedAt,
-                healthVaccinationRecordId: list[a].healthVaccinationRecordId,
-                recordRef: list[a].recordRef,
-                supplierName: list[a].supplierName,
-                businessUnit: list[a].businessUnit,
-                createdBy: list[a].createdBy,
-                createdAt: list[a].createdAt,
-                supplierId: list[a].supplierId,
-                date: list[a].date,
-                name: list[a].name,
-                purpose: list[a].purpose,
-                nextDueDate: list[a].nextDueDate,
-                businessUnitId: list[a].businessUnitId,
-              };
-              this.HealthVaccinationRecordList.push(feed);
-            }
-          }
-          this.dataSource = new MatTableDataSource(
-            this.HealthVaccinationRecordList
-          );
-          this.isLoadingResults = false;
-        },
-        (error) => {
-          this.isLoadingResults = false;
-          if (error.status == 401) {
-            this.accountService.doLogout();
-            this.router.navigateByUrl('/');
-          }
+    this.dairyFarmService.GetVaccinationByAnimalId(this.animalId).subscribe(
+      (resp: any) => {
+        this.HealthRecordList = [];
+        if (resp && resp.data && resp.data.length > 0) {
+          this.HealthRecordList = resp.data.map((item: any) => {
+            let record: AnimalHealthVaccination = {
+              animalHealthVaccinationMappingId:
+                item.animalHealthVaccinationMappingId,
+              animalHealthVaccinationStatusId:
+                item.animalHealthVaccinationStatusId,
+              animalHealthVaccinationStatus: item.animalHealthVaccinationStatus,
+              createdAt: item.createdAt,
+              animalRef: item.animalRef,
+              animalId: item.animalId,
+              name: item.name,
+              date: item.date,
+              healthVaccinationRecordId: item.healthVaccinationRecordId,
+            };
+            return record;
+          });
         }
-      );
+
+        this.dataSource = new MatTableDataSource(this.HealthRecordList);
+        this.isLoadingResults = false;
+      },
+      (error) => {
+        this.isLoadingResults = false;
+        if (error.status == 401) {
+          this.accountService.doLogout();
+          this.router.navigateByUrl('/');
+        }
+      }
+    );
   }
+
   addHealthVaccinationRecord() {
     this.addLoading = true;
     this.dairyFarmService
-      .addHealthVaccinationRecord(this.addHealthVaccinationRecordForm.value)
+      .addAnimalHealthVaccinationRecord(this.addVaccinationForm.value)
       .subscribe(
         (dt) => {
           this.addLoading = false;
           this.visible = false;
-          this.getHealthVaccinationRecordList();
-          this.addHealthVaccinationRecordForm.reset();
+          this.getVaccinationRecordList();
+          this.addVaccinationForm.reset();
           this.messageService.add({
             severity: 'success',
             summary: 'Added',
@@ -215,17 +240,14 @@ export class VaccineRecordComponent {
       );
   }
   initForm() {
-    this.addHealthVaccinationRecordForm = this.formBuilder.group({
-      supplierId: [null, [Validators.required]],
+    this.addVaccinationForm = this.formBuilder.group({
+      animalId: [this.animalId],
+      healthVaccinationRecordId: [null, [Validators.required]],
       date: [null, [Validators.required]],
-      name: [null, [Validators.required]],
-      purpose: [null, [Validators.required]],
-      nextDueDate: [null, [Validators.required]],
-      businessUnitId: [this.busUnitId],
     });
   }
   onDialogHide() {
-    this.addHealthVaccinationRecordForm.reset();
+    this.addVaccinationForm.reset();
   }
   SearchBySearchKey(event: any) {
     if (event.key != 'Enter') {
@@ -233,26 +255,6 @@ export class VaccineRecordComponent {
         this.searchKey = null;
       }
     }
-  }
-  loadParties() {
-    this.masterService.getParties(1).subscribe(
-      (res) => {
-        var dt = res;
-        this.SupplierList = [];
-        for (let a = 0; a < dt.length; a++) {
-          let _data: masterModal = {
-            id: dt[a].partyId,
-            type: dt[a].name,
-          };
-          this.SupplierList.push(_data);
-        }
-      },
-      (error) => {
-        if (error.status == 401) {
-          this.accountService.doLogout();
-        }
-      }
-    );
   }
   loadAnimal() {
     this.masterService.getAnimal().subscribe(
@@ -265,6 +267,27 @@ export class VaccineRecordComponent {
             type: dt[a].animalRef,
           };
           this.AnimalList.push(_data);
+        }
+        this.loadHealthVaccinationRecords();
+      },
+      (error) => {
+        if (error.status == 401) {
+          this.accountService.doLogout();
+        }
+      }
+    );
+  }
+  loadHealthVaccinationRecords() {
+    this.masterService.getHealthVaccinationRecords().subscribe(
+      (res) => {
+        let dt = res.data;
+        this.HealthVaccinationList = [];
+        for (let a = 0; a < dt.length; a++) {
+          let _data: masterModal = {
+            id: dt[a].healthVaccinationRecordId,
+            type: dt[a].name,
+          };
+          this.HealthVaccinationList.push(_data);
         }
       },
       (error) => {

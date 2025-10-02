@@ -1,0 +1,252 @@
+<div class="container-fluid">
+  <!-- Breed Details -->
+  <div
+    class="d-flex justify-content-between align-items-center"
+    style="margin-top: 20px"
+  >
+    <span class="heading" style="color: #4079b0 !important">
+      Animal Breed
+    </span>
+    <span>
+      <button
+        class="btn mt-4"
+        style="min-width: 120px"
+        (click)="onAddBreedClick()"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="25"
+          height="25"
+          viewBox="0 0 24 24"
+        >
+          <g
+            fill="none"
+            stroke="currentColor"
+            stroke-dasharray="16"
+            stroke-dashoffset="16"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+          >
+            <path d="M5 12h14">
+              <animate
+                fill="freeze"
+                attributeName="stroke-dashoffset"
+                dur="0.48s"
+                values="16;0"
+              />
+            </path>
+            <path d="M12 5v14">
+              <animate
+                fill="freeze"
+                attributeName="stroke-dashoffset"
+                begin="0.48s"
+                dur="0.48s"
+                values="16;0"
+              />
+            </path>
+          </g>
+        </svg>
+        Add Breed
+      </button>
+    </span>
+  </div>
+  <!-- Edit Button -->
+  <div class="mt-4" style="display: flex; justify-content: flex-end">
+    <span *ngIf="isReadOnly" (click)="isReadOnly = false">
+      <button class="edit-btn">EDIT</button>
+    </span>
+    <span *ngIf="!isReadOnly" class="d-flex justify-content-end gap-4">
+      <button (click)="discardChanges()" type="button" class="btn-discard">
+        Discard
+      </button>
+      <button
+        type="button"
+        (click)="editBreedForm.valid && !editLoading ? editBreed() : null"
+        [ngClass]="{
+          'btn-save': editBreedForm.valid && !editLoading,
+          'btn-disable': editBreedForm.invalid || editLoading
+        }"
+      >
+        Save &nbsp;
+        <span
+          *ngIf="editLoading"
+          class="spinner-border spinner-border-sm"
+          role="status"
+          aria-hidden="true"
+        ></span>
+      </button>
+    </span>
+  </div>
+  <!-----Edit Breed------>
+  <form [formGroup]="editBreedForm">
+    <div class="row g-3 align-items-end mt-4">
+      <div class="col-md-4 mb-4">
+        <span class="label">Breed Name</span>
+        <input
+          type="text"
+          [value]="BreedDetail.name"
+          class="input-felid"
+          [readonly]="true"
+          placeholder="Breed name..."
+        />
+      </div>
+      <!-- <div class="col-md-4 mb-4">
+        <span class="label"
+          >Breed Name<span class="required-icon">*</span></span
+        >
+        <input
+          type="text"
+          value="NILI-RAVI"
+          class="input-felid"
+          [ngClass]="{ 'input-disable': isReadOnly }"
+          placeholder="Enter breed name..."
+          formControlName="name"
+        />
+        <span
+          class="errorValidation"
+          *ngIf="
+            editBreedForm.get('name')?.touched &&
+            editBreedForm.get('name')?.hasError('required')
+          "
+        >
+          Required field
+        </span>
+      </div> -->
+      <div class="col-md-4 mb-4 position-relative">
+        <span class="label"
+          >Animal Type<span class="required-icon">*</span>
+        </span>
+        <div class="alt-dropdown" [ngClass]="{ 'input-disable': isReadOnly }">
+          <p-select
+            [options]="AnimalTypes"
+            optionLabel="type"
+            optionValue="id"
+            formControlName="animalTypeId"
+            placeholder="Animal Type"
+          ></p-select>
+          <span
+            class="errorValidation"
+            *ngIf="
+              editBreedForm.get('animalTypeId')?.touched &&
+              editBreedForm.get('animalTypeId')?.hasError('required')
+            "
+          >
+            Required field
+          </span>
+        </div>
+      </div>
+      <div class="col-md-4 mb-4 position-relative">
+        <span class="label">Origin</span>
+        <input
+          type="text"
+          value="PAKISTAN"
+          class="input-felid"
+          [ngClass]="{ 'input-disable': isReadOnly }"
+          placeholder="Enter location..."
+          formControlName="origin"
+        />
+      </div>
+    </div>
+  </form>
+  <!-- Add Breed -->
+  <p-dialog
+    header="Add Breed"
+    [modal]="true"
+    [(visible)]="visible"
+    [style]="{ width: '60vw' }"
+    [draggable]="false"
+    [resizable]="false"
+    (onHide)="onDialogHide()"
+  >
+    <form [formGroup]="addBreedForm">
+      <div class="row" style="row-gap: 20px">
+        <div class="col-6">
+          <span class="label"
+            >Breed Name<span class="required-icon">*</span>
+          </span>
+          <input
+            type="text"
+            formControlName="name"
+            class="input-felid"
+            placeholder="Enter name..."
+          />
+          <span
+            class="errorValidation"
+            *ngIf="
+              addBreedForm.get('name')?.touched &&
+              addBreedForm.get('name')?.hasError('required')
+            "
+          >
+            Required field
+          </span>
+        </div>
+        <div class="col-6">
+          <span class="label"
+            >Animal Type<span class="required-icon">*</span>
+          </span>
+          <div class="alt-dropdown">
+            <p-select
+              [options]="AnimalTypes"
+              [(ngModel)]="key"
+              name="key"
+              optionLabel="type"
+              optionValue="id"
+              [showClear]="true"
+              placeholder="Animal Type "
+              formControlName="animalTypeId"
+            />
+            <span
+              class="errorValidation"
+              *ngIf="
+                addBreedForm.get('animalTypeId')?.touched &&
+                addBreedForm.get('animalTypeId')?.hasError('required')
+              "
+            >
+              Required field
+            </span>
+          </div>
+        </div>
+        <div class="col-6">
+          <span class="label">Origin</span>
+          <input
+            type="text"
+            class="input-felid"
+            placeholder="Enter location..."
+            formControlName="origin"
+          />
+        </div>
+        <div class="col-12">
+          <span class="label">Note</span>
+          <textarea
+            formControlName="note"
+            class="input-felid my-input"
+            placeholder="Enter note..."
+          ></textarea>
+        </div>
+      </div>
+      <div class="d-flex justify-content-end gap-4 margin-btn">
+        <button (click)="visible = false" type="button" class="btn-discard">
+          Discard
+        </button>
+        <button
+          type="button"
+          (click)="addBreedForm.valid && !addLoading ? addBreed() : null"
+          [ngClass]="{
+            'btn-save': addBreedForm.valid && !addLoading,
+            'btn-disable': addBreedForm.invalid || addLoading
+          }"
+        >
+          Save &nbsp;
+          <span
+            *ngIf="addLoading"
+            class="spinner-border spinner-border-sm"
+            role="status"
+            aria-hidden="true"
+          ></span>
+        </button>
+      </div>
+    </form>
+  </p-dialog>
+</div>
+<p-toast />

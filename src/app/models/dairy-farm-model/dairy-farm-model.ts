@@ -79,7 +79,7 @@ export interface BreedModel {
   animalTypeId: number;
   name: String;
   origin: String;
-  note: String;
+  note?: String;
   businessUnitId: String;
 }
 export interface FeedModel {

@@ -36,9 +36,7 @@
       </button>
       <button
         type="button"
-        (click)="
-          editBreedForm.valid && !editLoading ? editLiveStockDetail() : null
-        "
+        (click)="editBreedForm.valid && !editLoading ? editBreed() : null"
         [ngClass]="{
           'btn-save': editBreedForm.valid && !editLoading,
           'btn-disable': editBreedForm.invalid || editLoading

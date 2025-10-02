@@ -81,11 +81,8 @@ export class EditVaccinationComponent {
     this.animalHealthVaccinationMappingId = this.route.snapshot.params['id'];
     this.busUnitId = this.accountService.getBusinessUnitId();
     this.businessUnitName = this.accountService.getBusinessUnitName();
-    this.initForm();
     this.getVaccinationDetails();
-  }
-  ngAfterViewInit() {
-    this.loadAnimal();
+    this.initForm();
   }
   getVaccinationDetails() {
     this.loading = true;

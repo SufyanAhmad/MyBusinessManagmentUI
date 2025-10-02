@@ -356,7 +356,7 @@
         </span>
       </div>
       <div class="col-6">
-        <span class="label">Breed ID<span class="required-icon">*</span> </span>
+        <span class="label">Breed ID</span>
         <div class="alt-dropdown">
           <p-select
             [options]="Breeds"
@@ -400,7 +400,9 @@
         </span>
       </div>
       <div class="col-6">
-        <span class="label">Birth Date</span>
+        <span class="label"
+          >Birth Date<span class="required-icon">*</span></span
+        >
         <input
           type="date"
           class="input-felid custome-date"
@@ -410,7 +412,9 @@
         />
       </div>
       <div class="col-6">
-        <span class="label">Purchase Date</span>
+        <span class="label"
+          >Purchase Date<span class="required-icon">*</span></span
+        >
         <input
           type="date"
           class="input-felid custome-date"
@@ -418,6 +422,15 @@
           formControlName="purchaseDate"
           [max]="today"
         />
+        <span
+          class="errorValidation"
+          *ngIf="
+            addAnimalForm.get('purchaseDate')?.touched &&
+            addAnimalForm.get('purchaseDate')?.hasError('required')
+          "
+        >
+          Required field
+        </span>
       </div>
       <div class="col-6">
         <span class="label">Price</span>

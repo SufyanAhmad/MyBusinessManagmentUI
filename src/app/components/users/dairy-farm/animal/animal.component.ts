@@ -228,7 +228,7 @@ export class AnimalComponent {
       address: [null],
       isFemale: [true, [Validators.pattern]],
       isActive: [true, [Validators.pattern]],
-      purchaseDate: [null],
+      purchaseDate: [null, [Validators.pattern]],
       price: [0],
       note: [null],
       businessUnitId: [this.busUnitId],
