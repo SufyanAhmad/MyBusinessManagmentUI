@@ -5,6 +5,7 @@ export interface UserModel {
   email: string;
   imageLink: string;
   isActive?: boolean;
+  userRoleId: string;
 }
 export interface BusinessCountModel {
   coldStoreCoun: number;
@@ -30,7 +31,7 @@ export interface BusinessUnitModel {
   totalInventoryItems?: number;
   totalSales?: number;
   totalStorageUnitPendingItems?: number;
-  totalAnimalCount?:number
+  totalAnimalCount?: number;
 }
 export interface AddedBusinessUnitModel {
   businessUnitId: string;
@@ -76,7 +77,7 @@ export interface LedgerTransactionModel {
   paymentId: string;
   clientId: string;
   client: string;
-  account?:string;
+  account?: string;
   productTypeId: number;
   productType: string;
   date: string;
@@ -85,9 +86,9 @@ export interface LedgerTransactionModel {
   remainingBalance: number;
   isCredit: boolean;
   reference: string;
-  isReturned?:boolean;
-  businessUnitId?:string;
-  businessUnit?:string;
+  isReturned?: boolean;
+  businessUnitId?: string;
+  businessUnit?: string;
 }
 export interface EmployeeModel {
   employeeId: string;
@@ -129,32 +130,30 @@ export interface CustomerPaymentDetailModel {
   isCredit: boolean;
   businessUnitId: string;
 }
-export interface bankLedgerModel
-{
-    bankLedgerId: string,
-    createdBy: string,
-    createdAt: string,
-    accountTitle: string,
-    accountNumber: number,
-    bankName: string,
-    branchCode: string,
-    city: string
+export interface bankLedgerModel {
+  bankLedgerId: string;
+  createdBy: string;
+  createdAt: string;
+  accountTitle: string;
+  accountNumber: number;
+  bankName: string;
+  branchCode: string;
+  city: string;
 }
-export interface expenseModel 
-{
-updatedBy: string,
-updatedAt: string,
-expenseId: string,
-party: string,
-expenseStatus: string,
-createdBy: string,
-createdAt: string,
-date: string,
-name: string,
-amount: number,
-paymentMethod: string,
-description: string,
-partyId: string,
-attachment: string,
-expenseStatusId: number
+export interface expenseModel {
+  updatedBy: string;
+  updatedAt: string;
+  expenseId: string;
+  party: string;
+  expenseStatus: string;
+  createdBy: string;
+  createdAt: string;
+  date: string;
+  name: string;
+  amount: number;
+  paymentMethod: string;
+  description: string;
+  partyId: string;
+  attachment: string;
+  expenseStatusId: number;
 }

@@ -70,6 +70,11 @@ export interface AnimalModel {
   price: number;
   note: String;
   businessUnitId: String;
+  guardian1: String;
+  guardian2: String;
+  placeOfBirth: String;
+  weight: String;
+  animalStatusId: number;
 }
 export interface BreedModel {
   breedId: String;

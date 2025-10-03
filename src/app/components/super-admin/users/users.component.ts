@@ -64,7 +64,7 @@ export class UsersComponent {
   isLoadingResults: any = false;
   assignLoading: boolean = false;
   editLoading: boolean = false;
-
+  UserRoles: masterModal[] = [];
   loading: boolean = false;
   resultsLength: any = 0;
   type: string = '';
@@ -92,8 +92,16 @@ export class UsersComponent {
   showResetPassword: boolean = false;
   showConfirmDialog: boolean = false;
   addUserModel!: FormGroup;
+  userRoleId: any = null;
   RestUserPasswordForm!: FormGroup;
-  displayedColumns: string[] = ['img', 'name', 'email', 'actions', 'forget'];
+  displayedColumns: string[] = [
+    'img',
+    'name',
+    'email',
+    'userRole',
+    'actions',
+    'forget',
+  ];
   constructor(
     private formBuilder: FormBuilder,
     private superAdminService: SuperAdminService,
@@ -116,7 +124,7 @@ export class UsersComponent {
           Validators.minLength(8),
           Validators.pattern(
             '^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$@!%*?&#])[A-Za-z\\d$@!%*?&#]{8,}$'
-          )
+          ),
         ],
       ],
     });
@@ -186,6 +194,7 @@ export class UsersComponent {
               email: data.list[a].email,
               imageLink: data.list[a].imageLink,
               isActive: data.list[a].isActive,
+              userRoleId: data.list[a].userRoleId,
             };
             this.usersList.push(user);
           }
@@ -244,7 +253,7 @@ export class UsersComponent {
     this.loading = true;
     this.superAdminService.getAllAddedBusinessUnitByUserId(userId).subscribe(
       (dt) => {
-        debugger
+        debugger;
         this.addedDairyFarmUnitList = [];
         for (let a = 0; a < dt.length; a++) {
           let addedBusUnit: AddedBusinessUnitModel = {
@@ -256,7 +265,7 @@ export class UsersComponent {
             userRole: dt[a].userRole,
             isChecked: true,
           };
-          if (addedBusUnit.businessTypeId ==3) {
+          if (addedBusUnit.businessTypeId == 3) {
             this.addedDairyFarmUnitList.push(addedBusUnit);
           }
         }
@@ -330,6 +339,7 @@ export class UsersComponent {
           };
           this.userRoles.push(_data);
         }
+        this.getDairyUserRoles();
       },
       (error) => {
         if (error.status == 401) {
@@ -341,7 +351,17 @@ export class UsersComponent {
   initForm() {
     this.addUserModel = this.formBuilder.group({
       fullName: [null, [Validators.required]],
-      email: [null, [Validators.required,Validators.pattern('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$')]],
+      email: [
+        null,
+        [
+          Validators.required,
+          Validators.pattern(
+            '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$'
+          ),
+        ],
+      ],
+
+      userRoleId: [null, [Validators.required]],
       password: [
         '',
         [
@@ -438,9 +458,7 @@ export class UsersComponent {
 
   // get all the selected businessUnitId and userRoleId from all lists
   getSelectedBusinessUnits(): any[] {
-    const allUnits = [
-      ...this.dairyFarmUnitList,
-    ];
+    const allUnits = [...this.dairyFarmUnitList];
 
     return allUnits
       .filter((item) => item.isChecked)
@@ -499,9 +517,9 @@ export class UsersComponent {
   }
 
   isValidAssignment(): boolean {
-    const allSelectedItems = [
-      ...this.dairyFarmUnitList,
-    ].filter((item) => item.isChecked); // only checked items
+    const allSelectedItems = [...this.dairyFarmUnitList].filter(
+      (item) => item.isChecked
+    ); // only checked items
     // Return true only if all selected items have a userRoleId
     const allHaveRoles = allSelectedItems.every(
       (item) => item.userRoleId != null && item.userRoleId !== undefined
@@ -521,9 +539,9 @@ export class UsersComponent {
     this.isEditValidAssignment();
   }
   isEditValidAssignment(): boolean {
-    const allSelectedItems = [
-      ...this.addedDairyFarmUnitList,
-    ].filter((item) => item.isChecked); // only checked items
+    const allSelectedItems = [...this.addedDairyFarmUnitList].filter(
+      (item) => item.isChecked
+    ); // only checked items
     // Return true only if all selected items have a userRoleId
     const allHaveRoles = allSelectedItems.every(
       (item) => item.userRoleId != null && item.userRoleId !== undefined
@@ -534,9 +552,7 @@ export class UsersComponent {
   }
   // get all the selected businessUnitId and userRoleId from all lists
   getEditSelectedBusinessUnits(): any[] {
-    const allUnits = [
-      ...this.addedDairyFarmUnitList,
-    ];
+    const allUnits = [...this.addedDairyFarmUnitList];
 
     return allUnits.map((item) => ({
       businessUnitId: item.businessUnitId,
@@ -634,6 +650,28 @@ export class UsersComponent {
           detail: error.error?.message,
           life: 3000,
         });
+        if (error.status == 401) {
+          this.accountService.doLogout();
+        }
+      }
+    );
+  }
+
+  getDairyUserRoles() {
+    this.masterService.getUserRoles().subscribe(
+      (res: any) => {
+        let dt = res; // response is directly an array
+        this.UserRoles = [];
+
+        for (let a = 0; a < dt.length; a++) {
+          let _data: masterModal = {
+            id: dt[a].key,
+            type: dt[a].value,
+          };
+          this.UserRoles.push(_data);
+        }
+      },
+      (error) => {
         if (error.status == 401) {
           this.accountService.doLogout();
         }

@@ -10,7 +10,7 @@
     <div class="heading">Welcome!</div>
     <form [formGroup]="registerForm" (ngSubmit)="onSubmitLogin()">
       <div class="row col-12">
-        <div class="heading1">Personal Information</div>
+        <div class="heading1">PERSONAL INFORMATION</div>
         <div class="col-6">
           <div class="lable mb-1">Owner Name</div>
           <div class="position-relative">
@@ -23,7 +23,7 @@
               autocomplete="new-email"
             />
           </div>
-          <div style="margin-top: 10px">
+          <div style="margin-bottom: 12px">
             <span
               class="errorValidation"
               *ngIf="registerForm.controls['name'].touched && registerForm.controls['name'].errors?.['required']"
@@ -69,7 +69,7 @@
               autocomplete="new-email"
             />
           </div>
-          <div style="margin-top: 10px">
+          <div style="margin-bottom: 12px">
             <span
               class="errorValidation"
               *ngIf="registerForm.controls['email'].touched && registerForm.controls['email'].errors?.['required']"
@@ -95,7 +95,7 @@
               autocomplete="new-email"
             />
           </div>
-          <div style="margin-top: 10px">
+          <div style="margin-bottom: 12px">
             <span
               class="errorValidation"
               *ngIf="registerForm.controls['email'].touched && registerForm.controls['email'].errors?.['required']"
@@ -135,7 +135,7 @@
         </div>
       </div>
       <div class="row col-12 mt-3">
-        <div class="heading1">Address</div>
+        <div class="heading1">ADDRESS</div>
         <div class="col-6">
           <div class="lable mb-1">Province</div>
           <div class="position-relative">
@@ -187,7 +187,7 @@
               autocomplete="new-email"
             />
           </div>
-          <div style="margin-top: 10px">
+          <div style="margin-bottom: 12px">
             <span
               class="errorValidation"
               *ngIf="registerForm.controls['email'].touched && registerForm.controls['email'].errors?.['required']"
@@ -202,9 +202,10 @@
           </div>
         </div>
       </div>
-      <div class="row col-12">
+      <div class="row col-12 mt-3">
+        <div class="heading1">LOGIN CREDENTIALS</div>
         <div class="col-6">
-          <div class="lable mb-1 mt-4">Password</div>
+          <div class="lable mb-1">Password</div>
           <div style="position: relative">
             <input
               [type]="showPassword ? 'text' : 'password'"
@@ -263,7 +264,7 @@
               />
             </svg>
           </div>
-          <div style="margin-top: 10px">
+          <div style="margin-bottom: 12px">
             <span
               class="errorValidation"
               *ngIf="registerForm.controls['password'].touched && registerForm.controls['password'].errors?.['required']"
@@ -274,7 +275,7 @@
         </div>
         <!-- Confirm Password  -->
         <div class="col-6">
-          <div class="lable mb-1 mt-4">Confirm Password</div>
+          <div class="lable mb-1">Confirm Password</div>
           <div style="position: relative">
             <input
               [type]="showConfirmPassword ? 'text' : 'password'"
@@ -331,6 +332,23 @@
                 d="M942.2 486.2Q889.4 375 816.51 304.85L672.37 449A176.08 176.08 0 0 1 445 676.37L322.74 798.63Q407.82 838 512 838q288.3 0 430.2-300.3a60.29 60.29 0 0 0 0-51.5"
               />
             </svg>
+          </div>
+          <div style="margin-bottom: 12px">
+            <span
+              class="errorValidation"
+              *ngIf="registerForm.controls['confirmPassword'].touched && registerForm.controls['confirmPassword'].errors?.['required']"
+            >
+              Confirm Password is required.
+            </span>
+            <span
+              class="errorValidation"
+              *ngIf="
+                registerForm.controls['confirmPassword'].touched &&
+                registerForm.controls['confirmPassword'].hasError('mismatch')
+              "
+            >
+              Confirm Password must match Password.
+            </span>
           </div>
         </div>
       </div>

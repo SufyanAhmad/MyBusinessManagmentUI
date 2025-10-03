@@ -193,6 +193,13 @@ export class MasterService {
       })
     );
   }
+  getAnimalStatus() {
+    return this.repositoryService.get('Master/get-animal-statuses', true).pipe(
+      map((response: any) => {
+        return response;
+      })
+    );
+  }
   getAnimal() {
     return this.repositoryService.get('Master/get-animals', true).pipe(
       map((response: any) => {
@@ -224,5 +231,12 @@ export class MasterService {
           return response;
         })
       );
+  }
+  getUserRoles() {
+    return this.repositoryService.get('Master/get-user-roles', true).pipe(
+      map((response: any) => {
+        return response;
+      })
+    );
   }
 }

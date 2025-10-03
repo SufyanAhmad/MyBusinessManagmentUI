@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { HealthHistoryComponent } from '../health-history/health-history.component';
 import { VaccineRecordComponent } from '../vaccine-record/vaccine-record.component';
 import { AnimalBreedComponent } from '../animal-breed/animal-breed.component';
+import { PregnancyRecordComponent } from '../pregnancy-record/pregnancy-record.component';
 import {
   FormBuilder,
   FormGroup,
@@ -32,6 +33,7 @@ import { DairyFarmService } from '../../../../../services/dairy-farm.service';
     HealthHistoryComponent,
     VaccineRecordComponent,
     AnimalBreedComponent,
+    PregnancyRecordComponent,
   ],
   templateUrl: './edit-animal.component.html',
   styleUrl: './edit-animal.component.scss',
@@ -47,6 +49,7 @@ export class EditAnimalComponent {
   isArchived: boolean = false;
   businessUnitTypes: masterModal[] = [];
   AnimalTypes: masterModal[] = [];
+  AnimalStatus: masterModal[] = [];
   isFemale: boolean = true;
   isActive: boolean = false;
   key: any = null;
@@ -71,7 +74,13 @@ export class EditAnimalComponent {
     price: 0,
     note: '',
     businessUnitId: '',
+    guardian1: '',
+    guardian2: '',
+    placeOfBirth: '',
+    weight: '',
+    animalStatusId: 0,
   };
+
   constAnimalDetail: AnimalModel = {
     animalId: '',
     createdBy: '',
@@ -90,6 +99,11 @@ export class EditAnimalComponent {
     price: 0,
     note: '',
     businessUnitId: '',
+    guardian1: '',
+    guardian2: '',
+    placeOfBirth: '',
+    weight: '',
+    animalStatusId: 0,
   };
   constructor(
     private route: ActivatedRoute,
@@ -132,6 +146,11 @@ export class EditAnimalComponent {
           price: data.price,
           note: data.note,
           businessUnitId: data.businessUnitId,
+          guardian1: data.guardian1,
+          guardian2: data.guardian2,
+          placeOfBirth: data.placeOfBirth,
+          weight: data.weight,
+          animalStatusId: data.animalStatusId,
         };
 
         this.constAnimalDetail = {
@@ -152,6 +171,11 @@ export class EditAnimalComponent {
           price: data.price,
           note: data.note,
           businessUnitId: data.businessUnitId,
+          guardian1: data.guardian1,
+          guardian2: data.guardian2,
+          placeOfBirth: data.placeOfBirth,
+          weight: data.weight,
+          animalStatusId: data.animalStatusId,
         };
         this.initForm();
         this.loadAnimalTypes();
@@ -215,14 +239,20 @@ export class EditAnimalComponent {
       price: this.constAnimalDetail.price,
       note: this.constAnimalDetail.note,
       businessUnitId: this.constAnimalDetail.businessUnitId,
+      guardian1: this.constAnimalDetail.guardian1,
+      guardian2: this.constAnimalDetail.guardian2,
+      placeOfBirth: this.constAnimalDetail.placeOfBirth,
+      weight: this.constAnimalDetail.weight,
+      animalStatusId: this.constAnimalDetail.animalStatusId,
     };
     this.isReadOnly = true;
     this.initForm();
   }
+
   initForm() {
     this.editAnimalForm = this.formBuilder.group({
       animalTypeId: [this.AnimalDetail.animalTypeId, Validators.required],
-      breedId: [this.AnimalDetail.breedId, [Validators.required]],
+      breedId: [this.AnimalDetail.breedId],
       animalCode: [this.AnimalDetail.animalCode, [Validators.required]],
       age: [this.AnimalDetail.age],
       isFemale: [this.AnimalDetail.isFemale],
@@ -231,6 +261,11 @@ export class EditAnimalComponent {
       price: [this.AnimalDetail.price],
       note: [this.AnimalDetail.note],
       businessUnitId: [this.busUnitId],
+      guardian1: [this.AnimalDetail.guardian1],
+      guardian2: [this.AnimalDetail.guardian2],
+      placeOfBirth: [this.AnimalDetail.placeOfBirth],
+      weight: [this.AnimalDetail.weight],
+      animalStatusId: [this.AnimalDetail.animalStatusId],
     });
   }
   loadAnimalTypes() {
@@ -265,6 +300,27 @@ export class EditAnimalComponent {
             type: dt[a].breedRef,
           };
           this.Breeds.push(_data);
+        }
+        this.loadAnimalStatus();
+      },
+      (error) => {
+        if (error.status == 401) {
+          this.accountService.doLogout();
+        }
+      }
+    );
+  }
+  loadAnimalStatus() {
+    this.masterService.getAnimalStatus().subscribe(
+      (res) => {
+        let dt = res.data;
+        this.AnimalStatus = [];
+        for (let a = 0; a < dt.length; a++) {
+          let _data: masterModal = {
+            id: dt[a].key,
+            type: dt[a].value,
+          };
+          this.AnimalStatus.push(_data);
         }
       },
       (error) => {

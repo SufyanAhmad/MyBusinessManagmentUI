@@ -268,18 +268,107 @@
           <td mat-cell *matCellDef="let element" class="tableText-thin">
             <div
               class="mat_table_btn"
-              *ngIf="element.isActive == true"
+              *ngIf="element.animalStatusId == 1"
               [style.background-color]="'#50B595'"
             >
-              Active
+              Milking
             </div>
             <div
               class="mat_table_btn"
-              *ngIf="element.isActive == false"
+              *ngIf="element.animalStatusId == 2"
               [style.background-color]="'#FD9808'"
             >
-              Inactive
+              NonMilking
             </div>
+            <div
+              class="mat_table_btn"
+              *ngIf="element.animalStatusId == 3"
+              [style.background-color]="'#FD9808'"
+            >
+              Pregnent
+            </div>
+            <div
+              class="mat_table_btn"
+              *ngIf="element.animalStatusId == 4"
+              [style.background-color]="'#50B595'"
+            >
+              Child
+            </div>
+            <div
+              class="mat_table_btn"
+              *ngIf="element.animalStatusId == 5"
+              [style.background-color]="'#FFCE3A'"
+            >
+              Expired
+            </div>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="guardian1">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            class="table-header"
+            style="min-width: 170px !important"
+          >
+            Guardian 1
+          </th>
+          <td
+            mat-cell
+            *matCellDef="let element"
+            class="tableText-thin one-line-text"
+          >
+            {{ element.guardian1 }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="guardian2">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            class="table-header"
+            style="min-width: 170px !important"
+          >
+            Guardian 2
+          </th>
+          <td
+            mat-cell
+            *matCellDef="let element"
+            class="tableText-thin one-line-text"
+          >
+            {{ element.guardian2 }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="placeOfBirth">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            class="table-header"
+            style="min-width: 170px !important"
+          >
+            Place Of Birth
+          </th>
+          <td
+            mat-cell
+            *matCellDef="let element"
+            class="tableText-thin one-line-text"
+          >
+            {{ element.placeOfBirth }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="weight">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            class="table-header"
+            style="min-width: 170px !important"
+          >
+            Weight
+          </th>
+          <td
+            mat-cell
+            *matCellDef="let element"
+            class="tableText-thin one-line-text"
+          >
+            {{ element.weight }}
           </td>
         </ng-container>
         <ng-container matColumnDef="note">
@@ -316,8 +405,8 @@
   >
   </mat-paginator>
 </div>
-<!-- Add Dairy Business -->
 
+<!-- Add Animal -->
 <p-dialog
   header="Add Animal"
   [modal]="true"
@@ -374,6 +463,30 @@
           *ngIf="
             addAnimalForm.get('breedId')?.touched &&
             addAnimalForm.get('breedId')?.hasError('required')
+          "
+        >
+          Required field
+        </span>
+      </div>
+      <div class="col-6">
+        <span class="label">Animal Status</span>
+        <div class="alt-dropdown">
+          <p-select
+            [options]="AnimalStatus"
+            [(ngModel)]="animalStatusId"
+            name="animalStatusId"
+            optionLabel="type"
+            optionValue="id"
+            [showClear]="true"
+            placeholder="Animal Status"
+            formControlName="animalStatusId"
+          />
+        </div>
+        <span
+          class="errorValidation"
+          *ngIf="
+            addAnimalForm.get('animalStatusId')?.touched &&
+            addAnimalForm.get('animalStatusId')?.hasError('required')
           "
         >
           Required field
@@ -442,8 +555,44 @@
           placeholder="Enter price..."
         />
       </div>
+      <div class="col-6">
+        <span class="label">Place Of Birth</span>
+        <input
+          type="text"
+          class="input-felid"
+          formControlName="placeOfBirth"
+          placeholder="Enter place of birth..."
+        />
+      </div>
+      <div class="col-6">
+        <span class="label">Guardian 1</span>
+        <input
+          type="text"
+          class="input-felid"
+          formControlName="guardian1"
+          placeholder="Enter guardian 1..."
+        />
+      </div>
+      <div class="col-6">
+        <span class="label">Guardian 2</span>
+        <input
+          type="text"
+          class="input-felid"
+          formControlName="guardian2"
+          placeholder="Enter guardian 2..."
+        />
+      </div>
+      <div class="col-6">
+        <span class="label">Weight (KG)</span>
+        <input
+          type="text"
+          class="input-felid"
+          formControlName="weight"
+          placeholder="Enter weight..."
+        />
+      </div>
       <div class="col-6 d-flex gap-5 align-items-center">
-        <!-- for Jins -->
+        <!-- for gender -->
         <div class="mt-3" style="display: flex">
           <div style="display: flex">
             <span class="label">Male</span>
@@ -471,27 +620,32 @@
           </div>
         </div>
       </div>
-      <!-- for status -->
-      <div class="col-6 d-flex gap-5 align-items-center mt-3">
-        <div>
-          <span class="label">Active</span>
-          <input
-            class="form-check-input"
-            type="radio"
-            formControlName="isActive"
-            [value]="true"
-            [(ngModel)]="isActive"
-          />
-        </div>
-        <div style="margin-left: 25px">
-          <span class="label">Inactive</span>
-          <input
-            class="form-check-input"
-            type="radio"
-            formControlName="isActive"
-            [value]="false"
-            [(ngModel)]="isActive"
-          />
+      <div class="col-6 d-flex gap-5 align-items-center">
+        <div class="mt-3" style="display: flex">
+          <div style="display: flex">
+            <span class="label">In Active</span>
+            <span
+              ><input
+                class="form-check-input"
+                type="radio"
+                name="isActive"
+                [value]="false"
+                [(ngModel)]="isActive"
+                formControlName="isActive"
+            /></span>
+          </div>
+          <div style="display: flex">
+            <span class="label" style="margin-left: 25px">Active</span>
+            <span
+              ><input
+                class="form-check-input"
+                type="radio"
+                name="isActive"
+                [value]="true"
+                [(ngModel)]="isActive"
+                formControlName="isActive"
+            /></span>
+          </div>
         </div>
       </div>
       <div class="col-12">

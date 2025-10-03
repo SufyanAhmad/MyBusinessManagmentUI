@@ -24,6 +24,7 @@ export class RegisterComponent {
   showPassword: boolean = false;
   showConfirmPassword: boolean = false;
   loginLoading: boolean = false;
+  isFemale: boolean = true;
   constructor(
     private formBuilder: FormBuilder,
     private router: Router,
@@ -49,21 +50,34 @@ export class RegisterComponent {
         district: [''],
         city: [''],
         postal: [''],
+        isFemale: [true],
       },
       {
-        validator: this.passwordMatchValidator,
+        validators: this.passwordMatchValidator,
       }
     );
   }
-  passwordMatchValidator(formGroup: FormGroup) {
-    const password = formGroup.get('password')?.value;
-    const confirmPassword = formGroup.get('confirmPassword')?.value;
+  passwordMatchValidator(form: FormGroup) {
+    const password = form.get('password')?.value;
+    const confirmPassword = form.get('confirmPassword')?.value;
 
-    if (password !== confirmPassword) {
-      formGroup.get('confirmPassword')?.setErrors({ mismatch: true });
+    if (password && confirmPassword && password !== confirmPassword) {
+      form.get('confirmPassword')?.setErrors({
+        ...(form.get('confirmPassword')?.errors || {}),
+        mismatch: true,
+      });
     } else {
-      formGroup.get('confirmPassword')?.setErrors(null);
+      const errors = form.get('confirmPassword')?.errors;
+      if (errors) {
+        delete errors['mismatch'];
+        if (Object.keys(errors).length === 0) {
+          form.get('confirmPassword')?.setErrors(null);
+        } else {
+          form.get('confirmPassword')?.setErrors(errors);
+        }
+      }
     }
+    return null;
   }
 
   onSubmitLogin() {

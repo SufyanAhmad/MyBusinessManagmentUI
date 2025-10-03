@@ -12,22 +12,23 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { SelectModule } from 'primeng/select';
 import { DialogModule } from 'primeng/dialog';
-import { Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { catchError, map, merge, of, startWith, switchMap, tap } from 'rxjs';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { SkeletonModule } from 'primeng/skeleton';
-import { masterModal } from '../../../../models/master-model/master-model';
-import { MasterService } from '../../../../services/master-service/master.service';
-import { AccountService } from '../../../../services/account-service/account.service';
-import { LoadingComponent } from '../../../loading/loading.component';
-import { DataNotFoundComponent } from '../../../data-not-found/data-not-found.component';
-import { PregnancyRecordModel } from '../../../../models/dairy-farm-model/dairy-farm-model';
-import { DairyFarmService } from '../../../../services/dairy-farm.service';
+import { LoadingComponent } from '../../../../loading/loading.component';
+import { DataNotFoundComponent } from '../../../../data-not-found/data-not-found.component';
+import { PregnancyRecordModel } from '../../../../../models/dairy-farm-model/dairy-farm-model';
+import { masterModal } from '../../../../../models/master-model/master-model';
+import { MasterService } from '../../../../../services/master-service/master.service';
+import { AccountService } from '../../../../../services/account-service/account.service';
+import { DairyFarmService } from '../../../../../services/dairy-farm.service';
 
 @Component({
   selector: 'app-pregnancy-record',
   imports: [
+    CommonModule,
     MatPaginatorModule,
     MatSortModule,
     MatTableModule,
@@ -65,14 +66,13 @@ export class PregnancyRecordComponent {
   businessUnitName: any = '';
   breedId: any = null;
   delivered: boolean = true;
+  animalId: any = null;
   // for add animal popup
   addLoading: boolean = false;
   visible: boolean = false;
   pregnancyRecordForm!: FormGroup;
   displayedColumns: string[] = [
     'recordId',
-    'animalId',
-    'breedId',
     'praDate',
     'expDate',
     'actDate',
@@ -84,9 +84,11 @@ export class PregnancyRecordComponent {
     private dairyFarmService: DairyFarmService,
     private messageService: MessageService,
     private formBuilder: FormBuilder,
+    private route: ActivatedRoute,
     private router: Router
   ) {}
   ngOnInit() {
+    this.animalId = this.route.snapshot.params['id'];
     this.busUnitId = this.accountService.getBusinessUnitId();
     this.businessUnitName = this.accountService.getBusinessUnitName();
     this.initForm();
@@ -99,87 +101,49 @@ export class PregnancyRecordComponent {
     this.loadBreeds();
   }
   getPregnancyRecordList() {
-    this.paginator.pageIndex = 0;
-    this.paginator.page.observers = [];
+    this.isLoadingResults = true;
     this.pregnancyRecordList = [];
     this.dataSource = new MatTableDataSource(this.pregnancyRecordList);
-
-    this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
-
-    merge(this.paginator.page)
-      .pipe(
-        startWith({}),
-        switchMap(() => {
-          this.isLoadingResults = true;
-          this.pregnancyRecordList = [];
-          this.dataSource = new MatTableDataSource(this.pregnancyRecordList);
-
-          let data = {
-            searchKey: this.searchKey ?? null,
-            businessUnitId: this.busUnitId,
-            pageNumber: this.paginator.pageIndex + 1,
-            pageSize: 10,
-          };
-
-          return this.dairyFarmService
-            .getPregnancyRecordBySearchFilter(data)
-            .pipe(
-              catchError((resp: any) => {
-                if (resp.status == 401) {
-                  this.accountService.doLogout();
-                  this.router.navigateByUrl('/');
-                }
-                return of({ data: { totalCount: 0, list: [] } });
-              })
-            );
-        }),
-        map((resp: any) => {
-          if (!resp || !resp.data) {
-            return [];
-          }
-          this.resultsLength = resp.data.totalCount;
-          return resp.data.list;
-        })
-      )
-      .subscribe(
-        (list) => {
-          this.pregnancyRecordList = [];
-          if (list && list.length > 0) {
-            this.dataSource.data = list;
-            for (let a = 0; a < list.length; a++) {
-              let feed: PregnancyRecordModel = {
-                updatedBy: list[a].updatedBy,
-                updatedAt: list[a].updatedAt,
-                pregnancyBirthRecordId: list[a].pregnancyBirthRecordId,
-                recordRef: list[a].recordRef,
-                animalRef: list[a].animalRef,
-                breedRef: list[a].breedRef,
-                businessUnit: list[a].businessUnit,
-                createdBy: list[a].createdBy,
-                createdAt: list[a].createdAt,
-                animalId: list[a].animalId,
-                breedId: list[a].breedId,
-                pregnantDate: list[a].pregnantDate,
-                expectedDelivery: list[a].expectedDelivery,
-                actualDelivery: list[a].actualDelivery,
-                delivered: list[a].delivered,
-                businessUnitId: list[a].businessUnitId,
-              };
-              this.pregnancyRecordList.push(feed);
-            }
-          }
-          this.dataSource = new MatTableDataSource(this.pregnancyRecordList);
-          this.isLoadingResults = false;
-        },
-        (error) => {
-          this.isLoadingResults = false;
-          if (error.status == 401) {
-            this.accountService.doLogout();
-            this.router.navigateByUrl('/');
-          }
+    this.dairyFarmService.GetPregnancyRecordByAnimalId(this.animalId).subscribe(
+      (resp: any) => {
+        this.pregnancyRecordList = [];
+        if (resp && resp.data && resp.data.length > 0) {
+          this.pregnancyRecordList = resp.data.map((item: any) => {
+            let record: PregnancyRecordModel = {
+              updatedBy: item.updatedBy,
+              updatedAt: item.updatedAt,
+              pregnancyBirthRecordId: item.pregnancyBirthRecordId,
+              recordRef: item.recordRef,
+              animalRef: item.animalRef,
+              breedRef: item.breedRef,
+              businessUnit: item.businessUnit,
+              createdBy: item.createdBy,
+              createdAt: item.createdAt,
+              animalId: item.animalId,
+              breedId: item.breedId,
+              pregnantDate: item.pregnantDate,
+              expectedDelivery: item.expectedDelivery,
+              actualDelivery: item.actualDelivery,
+              delivered: item.delivered,
+              businessUnitId: item.businessUnitId,
+            };
+            return record;
+          });
         }
-      );
+
+        this.dataSource = new MatTableDataSource(this.pregnancyRecordList);
+        this.isLoadingResults = false;
+      },
+      (error) => {
+        this.isLoadingResults = false;
+        if (error.status == 401) {
+          this.accountService.doLogout();
+          this.router.navigateByUrl('/');
+        }
+      }
+    );
   }
+
   addPregnancyRecord() {
     this.addLoading = true;
     this.dairyFarmService
@@ -214,7 +178,7 @@ export class PregnancyRecordComponent {
   }
   initForm() {
     this.pregnancyRecordForm = this.formBuilder.group({
-      animalId: [null, [Validators.required]],
+      animalId: [this.animalId],
       breedId: [null],
       pregnantDate: [null, [Validators.required]],
       expectedDelivery: [null, [Validators.required]],

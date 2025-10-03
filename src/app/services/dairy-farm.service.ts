@@ -209,6 +209,15 @@ export class DairyFarmService {
         })
       );
   }
+  GetPregnancyRecordByAnimalId(id: any) {
+    return this.repositoryService
+      .get('PregnancyBirthRecord/get-pregnancyBirthRecords/' + id, true)
+      .pipe(
+        map((response: any) => {
+          return response;
+        })
+      );
+  }
   getHealthVaccinationRecordBySearchFilter(data: any) {
     return this.repositoryService
       .post(

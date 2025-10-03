@@ -61,10 +61,12 @@ export class AnimalComponent {
   isFemale: boolean = true;
   animalList: AnimalModel[] = [];
   AnimalTypes: masterModal[] = [];
+  AnimalStatus: masterModal[] = [];
   Breeds: masterModal[] = [];
   businessUnitId: any = null;
   key: any = null;
   breedId: any = null;
+  animalStatusId: any = null;
   businessUnitName: any = '';
   bgColor: string = '#FFCE3A';
   // for add animal popup
@@ -82,6 +84,10 @@ export class AnimalComponent {
     'purDate',
     'price',
     'status',
+    'guardian1',
+    'guardian2',
+    'placeOfBirth',
+    'weight',
     'note',
   ];
   constructor(
@@ -167,6 +173,11 @@ export class AnimalComponent {
                 price: list[a].price,
                 note: list[a].note,
                 businessUnitId: list[a].businessUnitId,
+                guardian1: list[a].guardian1,
+                guardian2: list[a].guardian2,
+                placeOfBirth: list[a].placeOfBirth,
+                weight: list[a].weight,
+                animalStatusId: list[a].animalStatusId,
               };
               this.animalList.push(animal);
             }
@@ -231,6 +242,11 @@ export class AnimalComponent {
       purchaseDate: [null, [Validators.pattern]],
       price: [0],
       note: [null],
+      guardian1: [null],
+      guardian2: [null],
+      placeOfBirth: [null],
+      weight: [null],
+      animalStatusId: [0, [Validators.pattern]],
       businessUnitId: [this.busUnitId],
     });
   }
@@ -276,6 +292,27 @@ export class AnimalComponent {
             type: dt[a].breedRef,
           };
           this.Breeds.push(_data);
+        }
+        this.loadAnimalStatus();
+      },
+      (error) => {
+        if (error.status == 401) {
+          this.accountService.doLogout();
+        }
+      }
+    );
+  }
+  loadAnimalStatus() {
+    this.masterService.getAnimalStatus().subscribe(
+      (res) => {
+        let dt = res.data;
+        this.AnimalStatus = [];
+        for (let a = 0; a < dt.length; a++) {
+          let _data: masterModal = {
+            id: dt[a].key,
+            type: dt[a].value,
+          };
+          this.AnimalStatus.push(_data);
         }
       },
       (error) => {

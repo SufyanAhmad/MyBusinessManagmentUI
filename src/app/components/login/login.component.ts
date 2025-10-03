@@ -60,13 +60,19 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { AccountService } from '../../services/account-service/account.service';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 @Component({
   selector: 'app-login',
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, ToastModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    ToastModule,
+    RouterModule,
+  ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
   providers: [MessageService],
@@ -125,9 +131,8 @@ export class LoginComponent {
     this.showPassword = !this.showPassword;
   }
   gotoDashboard() {
-    if(this.accountService.isLoggedIn){
-this.router.navigateByUrl('/superAdmin');
+    if (this.accountService.isLoggedIn) {
+      this.router.navigateByUrl('/superAdmin');
     }
-    
   }
 }
