@@ -1,0 +1,220 @@
+<div class="container-fluid">
+  <div class="d-pointer">
+    <span class="breadcrumb" [routerLink]="['/superAdmin/business/units']"
+      >{{ this.businessUnitName }} /
+    </span>
+    <span
+      class="breadcrumb-bold"
+      style="cursor: pointer"
+      [routerLink]="['/dairyFarm/medicine']"
+      >&nbsp;Medicine /</span
+    >
+    <span class="breadcrumb-bold">&nbsp;Medicine Detail</span>
+  </div>
+  <!-- User Header -->
+  <div
+    class="header-card d-flex align-items-center justify-content-between mb-4"
+  >
+    <div class="heading mb-0" style="color: #4079b0 !important">
+      {{ MedicineDetail.name }}
+    </div>
+  </div>
+  <!-- Customer Details -->
+  <div
+    class="d-flex justify-content-between align-items-center"
+    style="margin-top: 70px"
+  >
+    <span class="heading" style="color: #4079b0 !important">
+      Medicine Detail
+    </span>
+    <span *ngIf="isReadOnly" (click)="isReadOnly = false">
+      <button class="edit-btn">EDIT</button>
+    </span>
+    <span *ngIf="!isReadOnly" class="d-flex justify-content-end gap-4">
+      <button (click)="discardChanges()" type="button" class="btn-discard">
+        Discard
+      </button>
+      <button
+        type="button"
+        (click)="
+          editMedicineModel.valid && !editLoading ? editMedicineDetail() : null
+        "
+        [ngClass]="{
+          'btn-save': editMedicineModel.valid && !editLoading,
+          'btn-disable': editMedicineModel.invalid || editLoading
+        }"
+      >
+        Save &nbsp;
+        <span
+          *ngIf="editLoading"
+          class="spinner-border spinner-border-sm"
+          role="status"
+          aria-hidden="true"
+        ></span>
+      </button>
+    </span>
+  </div>
+  <form [formGroup]="editMedicineModel">
+    <div class="row g-3 align-items-end mt-4">
+      <div class="col-md-4 mb-4">
+        <span class="label">Name<span class="required-icon">*</span></span>
+        <input
+          type="text"
+          class="input-felid custom-date"
+          [ngClass]="{ 'input-disable': isReadOnly }"
+          placeholder="Enter name..."
+          formControlName="name"
+        />
+
+        <span
+          class="errorValidation"
+          *ngIf="
+            editMedicineModel.get('name')?.touched &&
+            editMedicineModel.get('name')?.hasError('required')
+          "
+        >
+          Required field
+        </span>
+      </div>
+      <div class="col-md-4 mb-4">
+        <span class="label">Quantity<span class="required-icon">*</span></span>
+        <input
+          type="text"
+          class="input-felid custom-date"
+          [ngClass]="{ 'input-disable': isReadOnly }"
+          placeholder="Enter quantity..."
+          formControlName="quantity"
+        />
+
+        <span
+          class="errorValidation"
+          *ngIf="
+            editMedicineModel.get('quantity')?.touched &&
+            editMedicineModel.get('quantity')?.hasError('required')
+          "
+        >
+          Required field
+        </span>
+      </div>
+      <div class="col-md-4 mb-4 position-relative">
+        <span class="label">Supplier<span class="required-icon">*</span> </span>
+        <div class="alt-dropdown" [ngClass]="{ 'input-disable': isReadOnly }">
+          <p-select
+            [options]="SupplierList"
+            name="key"
+            optionLabel="type"
+            optionValue="id"
+            [showClear]="true"
+            placeholder="Supplier "
+            formControlName="supplierId"
+          />
+          <span
+            class="errorValidation"
+            *ngIf="
+              editMedicineModel.get('supplierId')?.touched &&
+              editMedicineModel.get('supplierId')?.hasError('required')
+            "
+          >
+            Required field
+          </span>
+        </div>
+      </div>
+      <div class="col-md-4 mb-4 position-relative">
+        <span class="label"
+          >Medicine Type<span class="required-icon">*</span>
+        </span>
+        <div class="alt-dropdown" [ngClass]="{ 'input-disable': isReadOnly }">
+          <p-select
+            [options]="MedicineTypeList"
+            name="key"
+            optionLabel="type"
+            optionValue="id"
+            [showClear]="true"
+            placeholder="Medicine type "
+            formControlName="medicineTypeId"
+          />
+          <span
+            class="errorValidation"
+            *ngIf="
+              editMedicineModel.get('medicineTypeId')?.touched &&
+              editMedicineModel.get('medicineTypeId')?.hasError('required')
+            "
+          >
+            Required field
+          </span>
+        </div>
+      </div>
+      <div class="col-md-4 mb-4">
+        <span class="label">Dosage<span class="required-icon">*</span></span>
+        <input
+          type="text"
+          class="input-felid custom-date"
+          [ngClass]="{ 'input-disable': isReadOnly }"
+          placeholder="Enter dosage..."
+          formControlName="dosage"
+        />
+        <span
+          class="errorValidation"
+          *ngIf="
+            editMedicineModel.get('dosage')?.touched &&
+            editMedicineModel.get('dosage')?.hasError('required')
+          "
+        >
+          Required field
+        </span>
+      </div>
+
+      <div class="col-md-4 mb-4">
+        <span class="label">Price<span class="required-icon">*</span></span>
+        <input
+          type="text"
+          class="input-felid"
+          [ngClass]="{ 'input-disable': isReadOnly }"
+          placeholder="Enter price..."
+          formControlName="price"
+        />
+        <span
+          class="errorValidation"
+          *ngIf="
+            editMedicineModel.get('price')?.touched &&
+            editMedicineModel.get('price')?.hasError('required')
+          "
+        >
+          Required field
+        </span>
+      </div>
+      <div class="col-md-4 mb-4">
+        <span class="label"
+          >Expiry Date<span class="required-icon">*</span></span
+        >
+        <input
+          type="date"
+          class="input-felid custom-date"
+          [ngClass]="{ 'input-disable': isReadOnly }"
+          placeholder="Enter expiry date..."
+          formControlName="expiryDate"
+        />
+
+        <span
+          class="errorValidation"
+          *ngIf="
+            editMedicineModel.get('date')?.touched &&
+            editMedicineModel.get('date')?.hasError('required')
+          "
+        >
+          Required field
+        </span>
+      </div>
+      <div class="col-md-12 mb-4">
+        <span class="label">Note</span>
+        <textarea
+          formControlName="note"
+          class="input-felid my-input"
+          placeholder="Enter note..."
+          [ngClass]="{ 'input-disable': isReadOnly }"
+        ></textarea>
+      </div>
+    </div>
+  </form>
+</div>
+<p-toast />

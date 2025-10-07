@@ -20,6 +20,8 @@ import { VaccineComponent } from './vaccine/vaccine.component';
 import { EditVaccineComponent } from './vaccine/edit-vaccine/edit-vaccine.component';
 import { FinanceReportComponent } from './finance-report/finance-report.component';
 import { FinanceReportDetailComponent } from './finance-report/finance-report-detail/finance-report-detail.component';
+import { MedicineComponent } from './medicine/medicine.component';
+import { EditMedicineComponent } from './medicine/edit-medicine/edit-medicine.component';
 
 const routes: Routes = [
   {
@@ -106,6 +108,14 @@ const routes: Routes = [
       {
         path: 'finance-report/:id',
         component: FinanceReportDetailComponent,
+      },
+      {
+        path: 'medicine',
+        component: MedicineComponent,
+      },
+      {
+        path: 'medicine/:id',
+        component: EditMedicineComponent,
       },
     ],
   },

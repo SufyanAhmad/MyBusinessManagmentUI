@@ -239,4 +239,11 @@ export class MasterService {
       })
     );
   }
+  getMedicineType() {
+    return this.repositoryService.get('Master/get-medicine-types', true).pipe(
+      map((response: any) => {
+        return response;
+      })
+    );
+  }
 }

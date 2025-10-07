@@ -375,4 +375,33 @@ export class DairyFarmService {
         })
       );
   }
+  getMedicineBySearchFilter(data: any) {
+    return this.repositoryService
+      .post(
+        'Medicine/get-medicine-by-search-and-filter-with-pagination',
+        data,
+        true
+      )
+      .pipe(
+        map((response: any) => {
+          return response;
+        })
+      );
+  }
+  addMedicine(data: any) {
+    return this.repositoryService
+      .post('Medicine/add-medicine', data, true)
+      .pipe(
+        map((response: any) => {
+          return response;
+        })
+      );
+  }
+  GetMedicineDetail(id: any) {
+    return this.repositoryService.get('Medicine/get-medicine/' + id, true).pipe(
+      map((response: any) => {
+        return response;
+      })
+    );
+  }
 }

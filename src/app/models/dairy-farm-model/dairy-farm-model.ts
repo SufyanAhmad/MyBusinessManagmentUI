@@ -178,3 +178,20 @@ export interface AnimalHealthVaccination {
   animalId: String;
   healthVaccinationRecordId?: String;
 }
+export interface MedicineModel {
+  medicineId?: String;
+  medicineType?: String;
+  supplierName?: String;
+  businessUnit?: String;
+  createdBy?: String;
+  createdAt?: String;
+  name: String;
+  dosage: String;
+  expiryDate: String;
+  quantity: Number;
+  medicineTypeId: Number;
+  price: Number;
+  note: String;
+  supplierId: String;
+  businessUnitId: String;
+}
