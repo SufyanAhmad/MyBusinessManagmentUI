@@ -20,7 +20,7 @@ import { MasterService } from '../../../../../services/master-service/master.ser
 import { masterModal } from '../../../../../models/master-model/master-model';
 import { AnimalModel } from '../../../../../models/dairy-farm-model/dairy-farm-model';
 import { DairyFarmService } from '../../../../../services/dairy-farm.service';
-
+import { AnimalMedicineComponent } from '../animal-medicine/animal-medicine.component';
 @Component({
   selector: 'app-edit-animal',
   imports: [
@@ -34,6 +34,7 @@ import { DairyFarmService } from '../../../../../services/dairy-farm.service';
     VaccineRecordComponent,
     AnimalBreedComponent,
     PregnancyRecordComponent,
+    AnimalMedicineComponent,
   ],
   templateUrl: './edit-animal.component.html',
   styleUrl: './edit-animal.component.scss',

@@ -13,7 +13,7 @@ import { MatSort, MatSortModule } from '@angular/material/sort';
 import { SelectModule } from 'primeng/select';
 import { DialogModule } from 'primeng/dialog';
 import { Router, RouterLink } from '@angular/router';
-import { catchError, map, merge, of, startWith, switchMap, tap } from 'rxjs';
+import { catchError, map, merge, of, startWith, switchMap } from 'rxjs';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { SkeletonModule } from 'primeng/skeleton';
@@ -24,6 +24,8 @@ import { LoadingComponent } from '../../../loading/loading.component';
 import { DataNotFoundComponent } from '../../../data-not-found/data-not-found.component';
 import { BreedModel } from '../../../../models/dairy-farm-model/dairy-farm-model';
 import { DairyFarmService } from '../../../../services/dairy-farm.service';
+import * as countries from 'i18n-iso-countries';
+import enLocale from 'i18n-iso-countries/langs/en.json';
 
 @Component({
   selector: 'app-breed',
@@ -59,10 +61,11 @@ export class BreedComponent {
   busUnitId: any = null;
   BreedList: BreedModel[] = [];
   AnimalTypes: masterModal[] = [];
+  countryList: { name: string; value: string }[] = [];
   businessUnitId: any = null;
   businessUnitName: any = '';
   key: any = null;
-  bgColor: string = '#FFCE3A';
+
   // for add animal popup
   addLoading: boolean = false;
   visible: boolean = false;
@@ -72,6 +75,7 @@ export class BreedComponent {
     'breedName',
     'type',
     'origin',
+    'country',
     'note',
   ];
   constructor(
@@ -86,13 +90,13 @@ export class BreedComponent {
   ngOnInit() {
     this.busUnitId = this.accountService.getBusinessUnitId();
     this.businessUnitName = this.accountService.getBusinessUnitName();
-
     this.initForm();
   }
   ngAfterViewInit() {
     setTimeout(() => {
       this.getBreedList();
     }, 0);
+    this.loadCountries();
   }
   getBreedList() {
     this.paginator.pageIndex = 0;
@@ -150,6 +154,7 @@ export class BreedComponent {
                 name: list[a].name,
                 origin: list[a].origin,
                 note: list[a].note,
+                country: list[a].country,
                 businessUnitId: list[a].businessUnitId,
               };
               this.BreedList.push(breed);
@@ -208,20 +213,33 @@ export class BreedComponent {
       name: [null, [Validators.required]],
       origin: [null],
       note: [null],
+      country: [null],
       businessUnitId: [this.busUnitId],
     });
   }
   onDialogHide() {
     this.addBreedForm.reset();
   }
-  SearchBySearchKey(event: any) {
+  loadCountries() {
+    countries.registerLocale(enLocale);
+    const names = countries.getNames('en', { select: 'official' });
+    this.countryList = Object.values(names).map((name) => ({
+      name: String(name),
+      value: String(name),
+    }));
+  }
+  archBySearchKey(event: any) {
     if (event.key != 'Enter') {
       if (this.searchKey == '' || this.searchKey == null) {
         this.searchKey = null;
       }
     }
   }
-
+  SearchBySearchKey(event: Event) {
+    const value = (event.target as HTMLInputElement).value;
+    // implement your search logic here
+    console.log('Searching:', value);
+  }
   loadAnimalTypes() {
     this.masterService.getAnimalTypes().subscribe(
       (res) => {

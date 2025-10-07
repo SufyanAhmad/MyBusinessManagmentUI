@@ -14,10 +14,7 @@ import { SelectModule } from 'primeng/select';
 import { AccountService } from '../../../../../services/account-service/account.service';
 import { MasterService } from '../../../../../services/master-service/master.service';
 import { masterModal } from '../../../../../models/master-model/master-model';
-import {
-  MedicineModel,
-  VaccineRecordModel,
-} from '../../../../../models/dairy-farm-model/dairy-farm-model';
+import { MedicineModel } from '../../../../../models/dairy-farm-model/dairy-farm-model';
 import { DairyFarmService } from '../../../../../services/dairy-farm.service';
 
 @Component({
@@ -168,10 +165,7 @@ export class EditMedicineComponent {
   editMedicineDetail() {
     this.editLoading = true;
     this.dairyFarmService
-      .UpdateHealthVaccinationRecordDetail(
-        this.medicineId,
-        this.editMedicineModel.value
-      )
+      .UpdateMedicineDetail(this.medicineId, this.editMedicineModel.value)
       .subscribe(
         (dt) => {
           this.messageService.add({
@@ -215,8 +209,9 @@ export class EditMedicineComponent {
   }
   initForm() {
     this.editMedicineModel = this.formBuilder.group({
-      dosage: [this.MedicineDetail.dosage, [Validators.required]],
       name: [this.MedicineDetail.name, [Validators.required]],
+      dosage: [this.MedicineDetail.dosage, [Validators.required]],
+      expiryDate: [this.MedicineDetail.expiryDate, [Validators.required]],
       quantity: [this.MedicineDetail.quantity, [Validators.required]],
       medicineTypeId: [
         this.MedicineDetail.medicineTypeId,
@@ -225,7 +220,6 @@ export class EditMedicineComponent {
       price: [this.MedicineDetail.price, [Validators.required]],
       note: [this.MedicineDetail.note, [Validators.required]],
       supplierId: [this.MedicineDetail.supplierId, [Validators.required]],
-      expiryDate: [this.MedicineDetail.expiryDate, [Validators.required]],
       businessUnitId: [this.busUnitId],
     });
   }

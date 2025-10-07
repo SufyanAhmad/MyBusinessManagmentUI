@@ -248,14 +248,14 @@
     </div>
   </div>
   <app-data-not-found
-    *ngIf="HealthVaccinationRecordList.length == 0 && !isLoadingResults"
+    *ngIf="MedicineRecordList.length == 0 && !isLoadingResults"
   />
   <div class="skelton" *ngIf="isLoadingResults">
     <app-loading></app-loading>
   </div>
   <mat-paginator
     pageSize="10"
-    [length]="HealthVaccinationRecordList.length"
+    [length]="MedicineRecordList.length"
     showFirstLastButtons
     aria-label="Select page of periodic elements"
   >

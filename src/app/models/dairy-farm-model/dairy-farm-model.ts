@@ -85,6 +85,7 @@ export interface BreedModel {
   name: String;
   origin: String;
   note?: String;
+  country: String;
   businessUnitId: String;
 }
 export interface FeedModel {
@@ -194,4 +195,12 @@ export interface MedicineModel {
   note: String;
   supplierId: String;
   businessUnitId: String;
+}
+export interface AnimalMedicineModel {
+  animalMedicineMappingId: String;
+  animalRef: String;
+  medicineName: String;
+  animalId: String;
+  medicineId: String;
+  date: String;
 }

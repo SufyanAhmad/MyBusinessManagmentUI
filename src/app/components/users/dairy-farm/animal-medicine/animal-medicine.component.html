@@ -3,7 +3,7 @@
     <span class="breadcrumb" [routerLink]="['/superAdmin/business/units']"
       >{{ this.businessUnitName }} /</span
     >
-    <span class="breadcrumb-bold">&nbsp;Breed</span>
+    <span class="breadcrumb-bold">&nbsp;Animal Medicine </span>
   </div>
   <span class="d-flex flex-wrap justify-content-between">
     <span class="d-flex flex-wrap">
@@ -24,19 +24,19 @@
         <input
           type="text"
           autocomplete="off"
-          (keyup)="SearchBySearchKey($event); getBreedList()"
-          (keyup.enter)="getBreedList()"
+          (keyup)="SearchBySearchKey($event); getAnimalMedicineList()"
+          (keyup.enter)="getAnimalMedicineList()"
           style="padding-left: 40px"
           [(ngModel)]="searchKey"
           class="search-input"
           name="searchValue"
-          placeholder="Search by breed id..."
+          placeholder="Search animal id..."
         />
         <div style="position: absolute; top: 4px; right: 0">
           <svg
             class="search-cross-icon"
             *ngIf="searchKey != null"
-            (click)="searchKey = null; getBreedList()"
+            (click)="searchKey = null; getAnimalMedicineList()"
             style="
               margin-top: 6px !important;
               margin-right: 10px !important;
@@ -107,124 +107,58 @@
             </path>
           </g>
         </svg>
-        New Breed
+        New Animal Medicine
       </button>
     </div>
   </span>
   <div class="mat-elevation-z8 mt-4 rounded-table">
     <div class="table-responsive">
       <table mat-table matSort [dataSource]="dataSource">
-        <ng-container matColumnDef="breedId">
+        <ng-container matColumnDef="cell1">
           <th
             mat-header-cell
             *matHeaderCellDef
             class="table-header"
-            style="min-width: 100px !important"
+            style="min-width: 120px"
           >
-            Breed Id
+            Animal Id
           </th>
           <td
             mat-cell
             *matCellDef="let element"
             class="tableText-bold"
-            [routerLink]="['/dairyFarm/breed/', element.breedId]"
+            [routerLink]="[
+              '/dairyFarm/animal-medicine/',
+              element.animalMedicineMappingId
+            ]"
           >
-            {{ element.breedRef }}
+            {{ element.animalRef }}
           </td>
         </ng-container>
-        <ng-container matColumnDef="breedName">
+        <ng-container matColumnDef="cell2">
           <th
             mat-header-cell
             *matHeaderCellDef
             class="table-header"
-            style="min-width: 140px !important"
+            style="min-width: 120px"
           >
-            Breed Name
-          </th>
-          <td
-            mat-cell
-            *matCellDef="let element"
-            class="tableText-bold"
-            [routerLink]="['/dairyFarm/breed/', element.breedId]"
-          >
-            {{ element.name }}
-          </td>
-        </ng-container>
-        <ng-container matColumnDef="type">
-          <th
-            mat-header-cell
-            *matHeaderCellDef
-            class="table-header"
-            style="min-width: 100px !important"
-          >
-            TYPE
-          </th>
-          <td mat-cell *matCellDef="let element">
-            <div
-              class="mat_table_btn"
-              *ngIf="element.animalTypeId == 1"
-              [style.background-color]="'#FFCE3A'"
-            >
-              {{ element.animalType }}
-            </div>
-            <div
-              class="mat_table_btn"
-              *ngIf="element.animalTypeId == 2"
-              [style.background-color]="'#7C9052'"
-            >
-              {{ element.animalType }}
-            </div>
-            <div
-              class="mat_table_btn"
-              *ngIf="element.animalTypeId == 3"
-              [style.background-color]="'#FF5C40'"
-            >
-              {{ element.animalType }}
-            </div>
-          </td>
-        </ng-container>
-
-        <ng-container matColumnDef="origin">
-          <th
-            mat-header-cell
-            *matHeaderCellDef
-            class="table-header"
-            style="min-width: 150px !important"
-          >
-            Origin
+            Medicine Name
           </th>
           <td mat-cell *matCellDef="let element" class="tableText-thin">
-            {{ element.origin }}
+            {{ element.medicineName }}
           </td>
         </ng-container>
-        <ng-container matColumnDef="country">
+        <ng-container matColumnDef="cell3">
           <th
             mat-header-cell
             *matHeaderCellDef
             class="table-header"
-            style="min-width: 150px !important"
+            style="min-width: 190px !important"
           >
-            Country
+            Date
           </th>
           <td mat-cell *matCellDef="let element" class="tableText-thin">
-            {{ element.country }}
-          </td>
-        </ng-container>
-        <ng-container matColumnDef="note">
-          <th
-            mat-header-cell
-            *matHeaderCellDef
-            class="table-header"
-            style="min-width: 170px !important"
-          >
-            Note
-          </th>
-          <td
-            mat-cell
-            *matCellDef="let element"
-            class="tableText-thin one-line-text"
-          >
-            {{ element.note }}
+            {{ element.date | date : "dd/MM/yyyy" }}
           </td>
         </ng-container>
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
@@ -232,22 +166,24 @@
       </table>
     </div>
   </div>
-  <app-data-not-found *ngIf="BreedList.length == 0 && !isLoadingResults" />
+  <app-data-not-found
+    *ngIf="AnimalMedicineRecordList.length == 0 && !isLoadingResults"
+  />
   <div class="skelton" *ngIf="isLoadingResults">
     <app-loading></app-loading>
   </div>
   <mat-paginator
     pageSize="10"
-    [length]="BreedList.length"
+    [length]="AnimalMedicineRecordList.length"
     showFirstLastButtons
     aria-label="Select page of periodic elements"
   >
   </mat-paginator>
 </div>
-<!-- Add breed -->
+<!-- Add Animal Medicine -->
 
 <p-dialog
-  header="Add Breed"
+  header="Add Medicine "
   [modal]="true"
   [(visible)]="visible"
   [style]="{ width: '60vw' }"
@@ -255,48 +191,27 @@
   [resizable]="false"
   (onHide)="onDialogHide()"
 >
-  <form [formGroup]="addBreedForm">
+  <form [formGroup]="AnimalMedicineForm">
     <div class="row" style="row-gap: 20px">
       <div class="col-6">
         <span class="label"
-          >Breed Name<span class="required-icon">*</span>
-        </span>
-        <input
-          type="text"
-          formControlName="name"
-          class="input-felid"
-          placeholder="Enter name..."
-        />
-        <span
-          class="errorValidation"
-          *ngIf="
-            addBreedForm.get('name')?.touched &&
-            addBreedForm.get('name')?.hasError('required')
-          "
-        >
-          Required field
-        </span>
-      </div>
-      <div class="col-6">
-        <span class="label"
-          >Animal Type<span class="required-icon">*</span>
+          >Animal ID<span class="required-icon">*</span>
         </span>
         <div class="alt-dropdown">
           <p-select
-            [options]="AnimalTypes"
-            [(ngModel)]="key"
+            [options]="AnimalList"
             name="key"
             optionLabel="type"
             optionValue="id"
             [showClear]="true"
-            placeholder="Animal Type "
-            formControlName="animalTypeId"
+            placeholder="Animal "
+            formControlName="animalId"
           />
           <span
             class="errorValidation"
             *ngIf="
-              addBreedForm.get('animalTypeId')?.touched &&
-              addBreedForm.get('animalTypeId')?.hasError('required')
+              AnimalMedicineForm.get('animalId')?.touched &&
+              AnimalMedicineForm.get('animalId')?.hasError('required')
             "
           >
             Required field
@@ -304,36 +219,45 @@
         </div>
       </div>
       <div class="col-6">
-        <span class="label">Origin</span>
-        <input
-          type="text"
-          class="input-felid"
-          placeholder="Enter location..."
-          formControlName="origin"
-        />
-      </div>
-      <div class="col-6">
-        <span class="label">Country </span>
+        <span class="label">Medicine<span class="required-icon">*</span> </span>
         <div class="alt-dropdown">
           <p-select
-            [options]="countryList"
-            [(ngModel)]="key"
+            [options]="MedicineList"
             name="key"
-            optionLabel="name"
-            optionValue="name"
+            optionLabel="type"
+            optionValue="id"
             [showClear]="true"
-            placeholder="Select Country"
-            formControlName="country"
+            placeholder="Medicine"
+            formControlName="medicineId"
           />
+          <span
+            class="errorValidation"
+            *ngIf="
+              AnimalMedicineForm.get('supplierId')?.touched &&
+              AnimalMedicineForm.get('supplierId')?.hasError('required')
+            "
+          >
+            Required field
+          </span>
         </div>
       </div>
-      <div class="col-12">
-        <span class="label">Note</span>
-        <textarea
-          formControlName="note"
-          class="input-felid my-input"
-          placeholder="Enter note..."
-        ></textarea>
+      <div class="col-6">
+        <span class="label">Date<span class="required-icon">*</span> </span>
+        <input
+          type="date"
+          class="input-felid custom-date"
+          placeholder="Enter date..."
+          formControlName="date"
+        />
+        <span
+          class="errorValidation"
+          *ngIf="
+            AnimalMedicineForm.get('expiryDate')?.touched &&
+            AnimalMedicineForm.get('expiryDate')?.hasError('required')
+          "
+        >
+          Required field
+        </span>
       </div>
     </div>
     <div class="d-flex justify-content-end gap-4 margin-btn">
@@ -342,10 +266,12 @@
       </button>
       <button
         type="button"
-        (click)="addBreedForm.valid && !addLoading ? addBreed() : null"
+        (click)="
+          AnimalMedicineForm.valid && !addLoading ? addAnimalMedicine() : null
+        "
         [ngClass]="{
-          'btn-save': addBreedForm.valid && !addLoading,
-          'btn-disable': addBreedForm.invalid || addLoading
+          'btn-save': AnimalMedicineForm.valid && !addLoading,
+          'btn-disable': AnimalMedicineForm.invalid || addLoading
         }"
       >
         Save &nbsp;

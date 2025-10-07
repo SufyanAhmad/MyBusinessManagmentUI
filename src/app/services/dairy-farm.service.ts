@@ -404,4 +404,62 @@ export class DairyFarmService {
       })
     );
   }
+  UpdateMedicineDetail(id: any, data: any) {
+    return this.repositoryService
+      .putWithOutFile('Medicine/update-medicine/' + id, data)
+      .pipe(
+        map((response: any) => {
+          return response;
+        })
+      );
+  }
+  getAnimalMedicineBySearchFilter(data: any) {
+    return this.repositoryService
+      .post(
+        'AnimalMedicine/get-animal-medicine-by-search-and-filter-with-pagination',
+        data,
+        true
+      )
+      .pipe(
+        map((response: any) => {
+          return response;
+        })
+      );
+  }
+  addAnimalMedicine(data: any) {
+    return this.repositoryService
+      .post('AnimalMedicine/add-animal-medicine', data, true)
+      .pipe(
+        map((response: any) => {
+          return response;
+        })
+      );
+  }
+  GetAnimalMedicineDetail(id: any) {
+    return this.repositoryService
+      .get('AnimalMedicine/get-animal-medicine/' + id, true)
+      .pipe(
+        map((response: any) => {
+          return response;
+        })
+      );
+  }
+  UpdateAnimalMedicineDetail(id: any, data: any) {
+    return this.repositoryService
+      .putWithOutFile('Medicine/update-medicine/' + id, data)
+      .pipe(
+        map((response: any) => {
+          return response;
+        })
+      );
+  }
+  GetAnimalMedicineByAnimalId(id: any) {
+    return this.repositoryService
+      .get('AnimalMedicine/get-animal-medicines/' + id, true)
+      .pipe(
+        map((response: any) => {
+          return response;
+        })
+      );
+  }
 }

@@ -16,6 +16,8 @@ import { MasterService } from '../../../../../services/master-service/master.ser
 import { masterModal } from '../../../../../models/master-model/master-model';
 import { BreedModel } from '../../../../../models/dairy-farm-model/dairy-farm-model';
 import { DairyFarmService } from '../../../../../services/dairy-farm.service';
+import * as countries from 'i18n-iso-countries';
+import enLocale from 'i18n-iso-countries/langs/en.json';
 
 @Component({
   selector: 'app-edit-breed',
@@ -42,6 +44,7 @@ export class EditBreedComponent {
   isArchived: boolean = false;
   businessUnitTypes: masterModal[] = [];
   AnimalTypes: masterModal[] = [];
+  countryList: { name: string; value: string }[] = [];
 
   editBreedForm!: FormGroup;
 
@@ -54,6 +57,7 @@ export class EditBreedComponent {
     name: '',
     origin: '',
     note: '',
+    country: '',
     businessUnitId: '',
   };
   constBreedDetail: BreedModel = {
@@ -65,6 +69,7 @@ export class EditBreedComponent {
     name: '',
     origin: '',
     note: '',
+    country: '',
     businessUnitId: '',
   };
   constructor(
@@ -98,6 +103,7 @@ export class EditBreedComponent {
           name: data.name,
           origin: data.origin,
           note: data.note,
+          country: data.country,
           businessUnitId: data.businessUnitId,
         };
         this.constBreedDetail = {
@@ -109,6 +115,7 @@ export class EditBreedComponent {
           name: data.name,
           origin: data.origin,
           note: data.note,
+          country: data.country,
           businessUnitId: data.businessUnitId,
         };
         this.initForm();
@@ -159,7 +166,6 @@ export class EditBreedComponent {
         }
       );
   }
-
   discardChanges() {
     this.BreedDetail = {
       breedId: this.constBreedDetail.breedId,
@@ -170,6 +176,7 @@ export class EditBreedComponent {
       name: this.constBreedDetail.name,
       origin: this.constBreedDetail.origin,
       note: this.constBreedDetail.note,
+      country: this.constBreedDetail.country,
       businessUnitId: this.constBreedDetail.businessUnitId,
     };
     this.isReadOnly = true;
@@ -181,10 +188,18 @@ export class EditBreedComponent {
       animalTypeId: [this.BreedDetail.animalTypeId, [Validators.required]],
       name: [this.BreedDetail.name, [Validators.required]],
       origin: [this.BreedDetail.origin],
+      country: [this.BreedDetail.country],
       note: [this.BreedDetail.note],
     });
   }
-
+  loadCountries() {
+    countries.registerLocale(enLocale);
+    const names = countries.getNames('en', { select: 'official' });
+    this.countryList = Object.values(names).map((name) => ({
+      name: String(name),
+      value: String(name),
+    }));
+  }
   loadAnimalTypes() {
     this.masterService.getAnimalTypes().subscribe(
       (res) => {
@@ -197,6 +212,7 @@ export class EditBreedComponent {
           };
           this.AnimalTypes.push(_data);
         }
+        this.loadCountries();
       },
       (error) => {
         if (error.status == 401) {

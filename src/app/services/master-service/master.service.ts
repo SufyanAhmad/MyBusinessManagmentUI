@@ -246,4 +246,11 @@ export class MasterService {
       })
     );
   }
+  getMedicine() {
+    return this.repositoryService.get('Master/get-medicines', true).pipe(
+      map((response: any) => {
+        return response;
+      })
+    );
+  }
 }

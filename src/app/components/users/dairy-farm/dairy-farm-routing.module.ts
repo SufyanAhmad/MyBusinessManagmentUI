@@ -22,6 +22,8 @@ import { FinanceReportComponent } from './finance-report/finance-report.componen
 import { FinanceReportDetailComponent } from './finance-report/finance-report-detail/finance-report-detail.component';
 import { MedicineComponent } from './medicine/medicine.component';
 import { EditMedicineComponent } from './medicine/edit-medicine/edit-medicine.component';
+import { AnimalMedicineComponent } from './animal-medicine/animal-medicine.component';
+import { EditAnimalMedicineComponent } from './animal-medicine/edit-animal-medicine/edit-animal-medicine.component';
 
 const routes: Routes = [
   {
@@ -116,6 +118,14 @@ const routes: Routes = [
       {
         path: 'medicine/:id',
         component: EditMedicineComponent,
+      },
+      {
+        path: 'animal-medicine',
+        component: AnimalMedicineComponent,
+      },
+      {
+        path: 'animal-medicine/:id',
+        component: EditAnimalMedicineComponent,
       },
     ],
   },

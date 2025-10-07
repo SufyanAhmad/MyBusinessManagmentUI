@@ -2,6 +2,7 @@ import { CommonModule, Location } from '@angular/common';
 import { Component } from '@angular/core';
 import {
   FormBuilder,
+  FormControl,
   FormGroup,
   FormsModule,
   ReactiveFormsModule,
@@ -48,6 +49,7 @@ export class AnimalBreedComponent {
   addLoading: boolean = false;
   visible: boolean = false;
   hasBreed: boolean = false;
+  alreadyHasBreed = false;
   key: any = null;
 
   addBreedForm!: FormGroup;
@@ -61,6 +63,7 @@ export class AnimalBreedComponent {
     name: '',
     origin: '',
     note: '',
+    country: '',
     businessUnitId: '',
   };
   constBreedDetail: BreedModel = {
@@ -72,6 +75,7 @@ export class AnimalBreedComponent {
     name: '',
     origin: '',
     note: '',
+    country: '',
     businessUnitId: '',
   };
   constructor(
@@ -111,6 +115,7 @@ export class AnimalBreedComponent {
           name: data.name,
           origin: data.origin,
           note: data.note,
+          country: data.country,
           businessUnitId: data.businessUnitId,
         };
         this.constBreedDetail = {
@@ -122,6 +127,7 @@ export class AnimalBreedComponent {
           name: data.name,
           origin: data.origin,
           note: data.note,
+          country: data.country,
           businessUnitId: data.businessUnitId,
         };
         this.initForm();
@@ -181,6 +187,7 @@ export class AnimalBreedComponent {
       animalTypeId: this.constBreedDetail.animalTypeId,
       name: this.constBreedDetail.name,
       origin: this.constBreedDetail.origin,
+      country: this.constBreedDetail.country,
       businessUnitId: this.constBreedDetail.businessUnitId,
     };
     this.isReadOnly = true;
@@ -194,7 +201,9 @@ export class AnimalBreedComponent {
       origin: [this.BreedDetail?.origin],
     });
   }
-  alreadyHasBreed = false;
+  get countryControl() {
+    return this.editBreedForm.get('country') as FormControl;
+  }
 
   addBreed() {
     if (this.alreadyHasBreed) {
