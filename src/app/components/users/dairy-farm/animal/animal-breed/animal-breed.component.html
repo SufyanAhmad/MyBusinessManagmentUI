@@ -91,28 +91,6 @@
           placeholder="Breed name..."
         />
       </div>
-      <!-- <div class="col-md-4 mb-4">
-        <span class="label"
-          >Breed Name<span class="required-icon">*</span></span
-        >
-        <input
-          type="text"
-          value="NILI-RAVI"
-          class="input-felid"
-          [ngClass]="{ 'input-disable': isReadOnly }"
-          placeholder="Enter breed name..."
-          formControlName="name"
-        />
-        <span
-          class="errorValidation"
-          *ngIf="
-            editBreedForm.get('name')?.touched &&
-            editBreedForm.get('name')?.hasError('required')
-          "
-        >
-          Required field
-        </span>
-      </div> -->
       <div class="col-md-4 mb-4 position-relative">
         <span class="label"
           >Animal Type<span class="required-icon">*</span>
@@ -146,6 +124,18 @@
           placeholder="Enter location..."
           formControlName="origin"
         />
+      </div>
+      <div class="col-md-4 mb-4 position-relative">
+        <span class="label">Country<span class="required-icon">*</span> </span>
+        <div class="alt-dropdown" [ngClass]="{ 'input-disable': isReadOnly }">
+          <p-select
+            [options]="countryList"
+            optionLabel="name"
+            optionValue="name"
+            formControlName="country"
+            placeholder="Select Country"
+          ></p-select>
+        </div>
       </div>
     </div>
   </form>

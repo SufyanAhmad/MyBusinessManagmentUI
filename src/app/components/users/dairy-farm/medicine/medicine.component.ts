@@ -60,7 +60,6 @@ export class MedicineComponent {
   MedicineRecordList: MedicineModel[] = [];
   businessUnitId: any = null;
   businessUnitName: any = '';
-  bgColor: string = '#FFCE3A';
   AnimalList: masterModal[] = [];
   MedicineTypeList: masterModal[] = [];
   SupplierList: masterModal[] = [];

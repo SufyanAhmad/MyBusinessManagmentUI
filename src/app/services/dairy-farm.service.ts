@@ -446,7 +446,7 @@ export class DairyFarmService {
   }
   UpdateAnimalMedicineDetail(id: any, data: any) {
     return this.repositoryService
-      .putWithOutFile('Medicine/update-medicine/' + id, data)
+      .putWithOutFile('AnimalMedicine/update-animal-medicine/' + id, data)
       .pipe(
         map((response: any) => {
           return response;
