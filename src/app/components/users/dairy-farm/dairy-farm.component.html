@@ -28,9 +28,38 @@
       <li [routerLink]="['/dairyFarm/breed']" [routerLinkActive]="['active']">
         <span>Breed</span>
       </li>
-      <li [routerLink]="['/dairyFarm/feed']" [routerLinkActive]="['active']">
+      <!-- <li [routerLink]="['/dairyFarm/feed']" [routerLinkActive]="['active']">
         <span>Feed</span>
+      </li> -->
+      <li class="menu-item" [routerLinkActive]="['active']">
+        <a [routerLink]="['/dairyFarm/feed']">
+          <span>Feed</span>
+          <span class="arrow">▼</span>
+        </a>
+
+        <ul class="sub-menu">
+          <li
+            [routerLink]="['/dairyFarm/feed-stock']"
+            [routerLinkActive]="['active']"
+            class="sub-li"
+          >
+            <span>Feed Stock</span>
+          </li>
+          <li
+            [routerLink]="['/dairyFarm/feed-transactions']"
+            [routerLinkActive]="['active']"
+          >
+            <span>Feed Transactions</span>
+          </li>
+          <li
+            [routerLink]="['/dairyFarm/feed-consumption']"
+            [routerLinkActive]="['active']"
+          >
+            <span>Feed Consumption</span>
+          </li>
+        </ul>
       </li>
+
       <li
         [routerLink]="['/dairyFarm/milk-production']"
         [routerLinkActive]="['active']"

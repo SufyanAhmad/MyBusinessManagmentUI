@@ -24,6 +24,9 @@ import { MedicineComponent } from './medicine/medicine.component';
 import { EditMedicineComponent } from './medicine/edit-medicine/edit-medicine.component';
 import { AnimalMedicineComponent } from './animal-medicine/animal-medicine.component';
 import { EditAnimalMedicineComponent } from './animal-medicine/edit-animal-medicine/edit-animal-medicine.component';
+import { FeedStockComponent } from './feed/feed-stock/feed-stock.component';
+import { FeedTransactionsComponent } from './feed/feed-transactions/feed-transactions.component';
+import { FeedConsumptionComponent } from './feed/feed-consumption/feed-consumption.component';
 
 const routes: Routes = [
   {
@@ -63,6 +66,9 @@ const routes: Routes = [
         path: 'feed/:id',
         component: EditFeedComponent,
       },
+      { path: 'feed-stock', component: FeedStockComponent },
+      { path: 'feed-transactions', component: FeedTransactionsComponent },
+      { path: 'feed-consumption', component: FeedConsumptionComponent },
       {
         path: 'milk-production',
         component: MilkProductionComponent,
