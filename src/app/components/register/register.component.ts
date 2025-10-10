@@ -7,14 +7,25 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { AccountService } from '../../services/account-service/account.service';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
+import { MasterService } from '../../services/master-service/master.service';
+import { masterModal } from '../../models/master-model/master-model';
+import { SelectModule } from 'primeng/select';
 
 @Component({
   selector: 'app-register',
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, ToastModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    ToastModule,
+    RouterModule,
+    SelectModule,
+    ToastModule,
+  ],
   templateUrl: './register.component.html',
   styleUrl: './register.component.scss',
   providers: [MessageService],
@@ -24,38 +35,36 @@ export class RegisterComponent {
   showPassword: boolean = false;
   showConfirmPassword: boolean = false;
   loginLoading: boolean = false;
-  isFemale: boolean = true;
+  userRoleId: any = null;
+  UserType: masterModal[] = [];
   constructor(
     private formBuilder: FormBuilder,
     private router: Router,
     private accountService: AccountService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private masterService: MasterService
   ) {
     // this.gotoDashboard();
   }
-
   ngOnInit() {
     this.registerForm = this.formBuilder.group(
       {
-        name: ['', Validators.required],
+        fullName: ['', Validators.required],
+        contactNumber: [null],
         email: ['', [Validators.required]],
+        userRoleId: ['', [Validators.required]],
+        address: [null],
         password: [
           '',
           Validators.compose([Validators.required, Validators.minLength(8)]),
         ],
         confirmPassword: ['', Validators.required],
-        rememberMe: [true],
-        phone: [''],
-        province: [''],
-        district: [''],
-        city: [''],
-        postal: [''],
-        isFemale: [true],
       },
       {
         validators: this.passwordMatchValidator,
       }
     );
+    this.loadUserType();
   }
   passwordMatchValidator(form: FormGroup) {
     const password = form.get('password')?.value;
@@ -79,20 +88,20 @@ export class RegisterComponent {
     }
     return null;
   }
-
-  onSubmitLogin() {
+  onSubmitRegister() {
     this.loginLoading = true;
     if (this.registerForm.valid) {
-      this.accountService.login(this.registerForm.value).subscribe(
+      this.accountService.Register(this.registerForm.value).subscribe(
         (dt) => {
           // this.router.navigateByUrl('/dairyFarm/animal');
-          this.router.navigateByUrl('/superAdmin');
+          this.router.navigateByUrl('/login');
           this.messageService.add({
             severity: 'success',
             summary: 'Success',
-            detail: 'User login successfully',
+            detail: 'Your account has been created successfully',
             life: 3000,
           });
+          console.log('✅ Toast triggered');
           this.loginLoading = false;
         },
         (error) => {
@@ -112,7 +121,27 @@ export class RegisterComponent {
   }
   gotoDashboard() {
     if (this.accountService.isLoggedIn) {
-      this.router.navigateByUrl('/superAdmin');
+      this.router.navigateByUrl('/login');
     }
+  }
+  loadUserType() {
+    this.masterService.getUserRoles().subscribe(
+      (res) => {
+        const dt = res;
+        this.UserType = [];
+        for (let a = 0; a < dt.length; a++) {
+          const _data: masterModal = {
+            id: dt[a].key,
+            type: dt[a].value,
+          };
+          this.UserType.push(_data);
+        }
+      },
+      (error) => {
+        if (error.status === 401) {
+          this.accountService.doLogout();
+        }
+      }
+    );
   }
 }

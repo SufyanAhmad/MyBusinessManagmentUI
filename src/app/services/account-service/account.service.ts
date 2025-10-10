@@ -12,7 +12,13 @@ export class AccountService {
     private router: Router,
     private repositoryService: RepositoryService
   ) {}
-
+  Register(data: any) {
+    return this.repositoryService.post('Account/register', data, true).pipe(
+      map((response: any) => {
+        return response;
+      })
+    );
+  }
   login(authenticateModel: AuthenticateModel) {
     return this.repositoryService
       .post('Account/login', authenticateModel, false)
@@ -46,9 +52,8 @@ export class AccountService {
     return authToken !== null ? true : false;
   }
   doLogout() {
-      localStorage.removeItem('DF_access_token');
-      this.router.navigateByUrl('/login');
-    
+    localStorage.removeItem('DF_access_token');
+    this.router.navigateByUrl('/login');
   }
   getBusinessUnitId() {
     return localStorage.getItem('DF_businessUnitId');

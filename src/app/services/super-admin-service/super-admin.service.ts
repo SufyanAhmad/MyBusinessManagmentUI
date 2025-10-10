@@ -16,8 +16,9 @@ export class SuperAdminService {
         })
       );
   }
+
   addUser(data: any) {
-    return this.repositoryService.post('Account/register', data, true).pipe(
+    return this.repositoryService.post('User/add-user', data, true).pipe(
       map((response: any) => {
         return response;
       })
@@ -75,18 +76,16 @@ export class SuperAdminService {
         })
       );
   }
-   getBusinessUnitsByAdminOrUser(type:any) {
+  getBusinessUnitsByAdminOrUser(type: any) {
     let url = 'BusinessUnit/get-all-business-unit';
-    if(type != 'Admin'){
-      url = 'BusinessUnit/get-user-all-business-unit'
+    if (type != 'Admin') {
+      url = 'BusinessUnit/get-user-all-business-unit';
     }
-    return this.repositoryService
-      .get(url, true)
-      .pipe(
-        map((response: any) => {
-          return response;
-        })
-      );
+    return this.repositoryService.get(url, true).pipe(
+      map((response: any) => {
+        return response;
+      })
+    );
   }
   addBusinessUnit(data: any) {
     return this.repositoryService
@@ -359,7 +358,7 @@ export class SuperAdminService {
         })
       );
   }
- getUsersBarGraph() {
+  getUsersBarGraph() {
     return this.repositoryService
       .get('Dashboard/get-users-bar-graph', true)
       .pipe(
@@ -368,7 +367,7 @@ export class SuperAdminService {
         })
       );
   }
-   getSuppliersBarGraph() {
+  getSuppliersBarGraph() {
     return this.repositoryService
       .get('Dashboard/get-supplier-bar-graph', true)
       .pipe(
@@ -377,7 +376,7 @@ export class SuperAdminService {
         })
       );
   }
-   getCustomersBarGraph() {
+  getCustomersBarGraph() {
     return this.repositoryService
       .get('Dashboard/get-customers-bar-graph', true)
       .pipe(

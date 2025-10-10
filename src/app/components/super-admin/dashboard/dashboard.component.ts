@@ -1,112 +1,302 @@
+import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { RouterLink } from '@angular/router';
-import { ChartModule } from 'primeng/chart';
-import { TotalCountsModel,BarGraphModel } from '../../../models/super-admin/super-admin-model';
+import {
+  FormBuilder,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
+import { CheckboxModule } from 'primeng/checkbox';
+import { DialogModule } from 'primeng/dialog';
+import { SelectModule } from 'primeng/select';
 import { SuperAdminService } from '../../../services/super-admin-service/super-admin.service';
+import { MessageService } from 'primeng/api';
 import { AccountService } from '../../../services/account-service/account.service';
+import { BusinessUnitModel } from '../../../models/super-admin/super-admin-model';
+import { masterModal } from '../../../models/master-model/master-model';
+import { MasterService } from '../../../services/master-service/master.service';
+import { Router, RouterLink } from '@angular/router';
+import { ToastModule } from 'primeng/toast';
+import { SkeletonModule } from 'primeng/skeleton';
+import { ConfirmationPopupComponent } from '../../confirmation-popup/confirmation-popup.component';
+import { DataNotFoundComponent } from '../../data-not-found/data-not-found.component';
 
 @Component({
   selector: 'app-dashboard',
-  imports: [ChartModule, RouterLink],
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    DialogModule,
+    SelectModule,
+    CheckboxModule,
+    ToastModule,
+    SkeletonModule,
+    RouterLink,
+    ConfirmationPopupComponent,
+    DataNotFoundComponent,
+  ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss',
+  providers: [MessageService],
 })
 export class DashboardComponent {
-  usersChartData: any; 
-  suppliersChartData: any; 
-  customersChartData: any;
-  chartData: any;
-  chartOptions: any;
-  TotalCounts: TotalCountsModel[] = [];
+  addLoading: boolean = false;
+  editLoading: boolean = false;
   loading: boolean = false;
+  detailLoading: boolean = false;
+  visible: boolean = false;
+  isEditVisible: boolean = false;
+  addUserVisible: boolean = false;
+  showConfirmDialog: boolean = false;
   isAdminExit: boolean = false;
-  TotalCount: TotalCountsModel = {
-    users: 0,
-    customers: 0,
-    suppliers: 0,
+  addUserForm!: FormGroup;
+  addUsersForm!: FormGroup;
+  userRoleId: any = null;
+  showNewPassword: boolean = false;
+  UserRoles: masterModal[] = [];
+  businessUnitId: any = null;
+  dairyFarmUnitList: BusinessUnitModel[] = [];
+  businessTypes: masterModal[] = [];
+  addBusinessUnitModel!: FormGroup;
+  editBusinessUnitModel!: FormGroup;
+  businessUnitDetail: BusinessUnitModel = {
+    totalProfit: 0,
+    totalSale: 0,
+    businessUnitId: '',
+    name: '',
+    location: '',
+    businessTypeId: 0,
+    businessTypeName: '',
+    totalUser: 0,
+    totalEmployee: 0,
   };
-   barGraph: BarGraphModel[] = [];
-   barGraphModels: BarGraphModel[] = [];
-   usersLabels: string[] = [];
-   usersDataValues: number[] = [];
-   suppliersLabels: string[] = [];
-   suppliersDataValues: number[] = [];
-   customersLabels: string[] = [];
-   customersDataValues: number[] = [];
-   dummy : any =5;
+  type: number = 0;
+  userRole: string = '';
+  _businessUnitId: string = '';
   constructor(
+    private formBuilder: FormBuilder,
     private superAdminService: SuperAdminService,
-    private accountService: AccountService
+    private masterService: MasterService,
+    private messageService: MessageService,
+    private accountService: AccountService,
+    private router: Router
   ) {}
-
   ngOnInit() {
-     if (this.accountService.getRoles().includes("Admin")) {
+    this.initForm(1);
+    this._initForm();
+    this.initUserForm();
+    this.getDairyUserRoles();
+    if (this.accountService.getRoles().includes('Admin')) {
       this.isAdminExit = true;
     }
-     this.chartData = {
-       labels: ['Feb', 'Mar', 'Apr', 'May'],
-      datasets: [
-        {
-          label: 'Monthly Sales',
-          backgroundColor: '#00B3B3',
-           data: [65, 50, 50, 50],
-        },
-      ],
-    };
-    this.InitDairyFarmUsersChart();
-    this.InitDairyFarmSuppliersChart();
-    this.InitDairyFarmCustomersChart();
-    this.getDairyFarmUsersBarGraph();
-    this.getDairyFarmSuppliersBarGraph();
-    this.getDairyFarmCustomersBarGraph();
-    this.loadTotalCounts();
-  this.chartOptions = {
-  plugins: {
-    legend: {
-      display: false,
-    },
-  },
-  scales: {
-    x: {
-      type: 'category',
-      ticks: {
-        color: '#000',
-      },
-      grid: {
-        display: false,
-      },
-    },
-    y: {
-      ticks: {
-        color: '#000',
-        stepSize: 1,   // ✅ force step of 1
-        callback: function (value:any) {
-          return value; // show only integers
-        },
-      },
-      grid: {
-        display: false,
-      },
-      beginAtZero: true, // ✅ start at 0
-    },
-  },
-  responsive: true,
-  maintainAspectRatio: false,
-};
+    this.userRole = this.accountService.getRoles();
+    debugger;
 
-
+    this.getBusinessUnits();
   }
-  loadTotalCounts() {
-    this.loading = true;
-    this.superAdminService.getTotalCounts().subscribe(
+  addBusinessUnit() {
+    this.addBusinessUnitModel.get('businessTypeId')?.enable();
+    this.addLoading = true;
+    this.superAdminService
+      .addBusinessUnit(this.addBusinessUnitModel.value)
+      .subscribe(
+        (dt) => {
+          this.addLoading = false;
+          this.visible = false;
+          this.getBusinessUnits();
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Added',
+            detail: 'Business unit added successfully',
+            life: 3000,
+          });
+        },
+        (error) => {
+          this.addLoading = false;
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: error.error.message,
+            life: 3000,
+          });
+          if (error.status == 401) {
+            this.accountService.doLogout();
+            this.router.navigateByUrl('/');
+          }
+        }
+      );
+  }
+  getBusinessUnitDetails() {
+    this.detailLoading = true;
+    this.superAdminService.getBusinessUnitDetail(this.businessUnitId).subscribe(
       (dt) => {
-        debugger
         let data = dt;
-        this.TotalCount = {
-          users: data.users,
-          customers: data.customers,
-          suppliers: data.suppliers,
+        this.businessUnitDetail = {
+          totalProfit: data.totalProfit,
+          totalSale: data.totalSale,
+          businessUnitId: data.businessUnitId,
+          name: data.name,
+          location: data.location,
+          businessTypeId: data.businessTypeId,
+          businessTypeName: data.businessTypeName,
         };
+        this._initForm();
+        this.detailLoading = false;
+      },
+      (error) => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: error.error.message,
+          life: 4000,
+        });
+        this.accountService.doLogout();
+        // if (error.status == 401) {
+        // }
+      }
+    );
+  }
+  editBusinessDetail() {
+    this.editLoading = true;
+    this.superAdminService
+      .updateBusinessDetail(
+        this.businessUnitId,
+        this.editBusinessUnitModel.value
+      )
+      .subscribe(
+        (dt) => {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Updated',
+            detail: 'Business unit updated successfully',
+            life: 3000,
+          });
+          this.editLoading = false;
+          this.isEditVisible = false;
+          this.getBusinessUnits();
+        },
+        (error) => {
+          this.editLoading = true;
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: error.error.message,
+            life: 3000,
+          });
+          if (error.status == 401) {
+            this.accountService.doLogout();
+          }
+        }
+      );
+  }
+  initForm(type: any) {
+    this.type = type;
+    this.addBusinessUnitModel = this.formBuilder.group({
+      name: [null, [Validators.required]],
+      location: [null, [Validators.required]],
+      businessTypeId: [3, [Validators.required]],
+    });
+  }
+  _initForm() {
+    this.editBusinessUnitModel = this.formBuilder.group({
+      name: [this.businessUnitDetail.name, [Validators.required]],
+      location: [this.businessUnitDetail.location, [Validators.required]],
+      businessTypeId: [
+        this.businessUnitDetail.businessTypeId,
+        [Validators.required],
+      ],
+    });
+  }
+
+  initUserForm() {
+    this.addUsersForm = this.formBuilder.group({
+      fullName: [null, [Validators.required]],
+      email: [
+        null,
+        [
+          Validators.required,
+          Validators.pattern(
+            '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$'
+          ),
+        ],
+      ],
+
+      userRoleId: [null, [Validators.required]],
+      password: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(8),
+          Validators.pattern(
+            '^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$@!%*?&#])[A-Za-z\\d$@!%*?&#]{8,}$'
+          ),
+        ],
+      ],
+    });
+  }
+  getBusinessUnits() {
+    this.loading = true;
+    this.superAdminService
+      .getBusinessUnitsByAdminOrUser(this.userRole)
+      .subscribe(
+        (dt) => {
+          debugger;
+          this.dairyFarmUnitList = [];
+          for (let a = 0; a < dt.length; a++) {
+            let busUnit: BusinessUnitModel = {
+              totalProfit: dt[a].totalProfit,
+              totalSale: dt[a].totalSale,
+              businessUnitId: dt[a].businessUnitId,
+              name: dt[a].name,
+              location: dt[a].location,
+              businessTypeId: dt[a].businessTypeId,
+              businessTypeName: dt[a].businessTypeName,
+              totalUser: dt[a].totalUser,
+              totalEmployee: dt[a].totalEmployee,
+              totalStockIn: dt[a].totalStockIn,
+              totalStockOut: dt[a].totalStockOut,
+              totalPendingItems: dt[a].totalPendingItems,
+              totalInventoryItems: dt[a].totalInventoryItems,
+              totalSales: dt[a].totalSales,
+              totalStorageUnitPendingItems: dt[a].totalStorageUnitPendingItems,
+              totalAnimalCount: dt[a].totalAnimalCount,
+            };
+
+            if (busUnit.businessTypeId == 3) {
+              this.dairyFarmUnitList.push(busUnit);
+            }
+          }
+          this.loading = false;
+          this.loadBusinessTypes();
+        },
+        (error) => {
+          this.loading = true;
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: error.message,
+            life: 3000,
+          });
+          if (error.status == 401) {
+            this.accountService.doLogout();
+          }
+        }
+      );
+  }
+  loadBusinessTypes() {
+    this.masterService.getBusinessTypes().subscribe(
+      (res) => {
+        var dt = res;
+        this.businessTypes = [];
+        for (let a = 0; a < dt.length; a++) {
+          let _data: masterModal = {
+            id: dt[a].key,
+            type: dt[a].value,
+          };
+          this.businessTypes.push(_data);
+        }
       },
       (error) => {
         if (error.status == 401) {
@@ -115,123 +305,133 @@ export class DashboardComponent {
       }
     );
   }
-  getDairyFarmUsersBarGraph() {
-  this.loading = true;
-  this.superAdminService.getUsersBarGraph().subscribe(
-    (dt) => {
-      this.usersLabels = [];
-      this.usersDataValues=[];
-      this.usersChartData.datasets[0].data = [];
-      this.barGraphModels = [];
-      for (let a = 0; a < dt.length; a++) {
-        let barGraph: BarGraphModel = {
-          monthName: dt[a].monthName,
-          percentage: dt[a].count
-        };
-        this.usersLabels.push(barGraph.monthName);
-        this.usersDataValues.push(barGraph.percentage);
-        this.barGraphModels.push(barGraph);
-      }
-      this.InitDairyFarmUsersChart();
-    },
-    (error) => {
-      if (error.status === 401) {
-        this.accountService.doLogout();
-      }
-    }
-  );
+  setBusinessUnitId(id: any, name: any) {
+    localStorage.setItem('DF_businessUnitId', id);
+    localStorage.setItem('DF_businessUnit_Name', name);
+    localStorage.setItem('DF_businessUnitId', id);
+    localStorage.setItem('DF_businessUnit_Name', name);
   }
-  getDairyFarmSuppliersBarGraph() {
-  this.loading = true;
-  this.superAdminService.getSuppliersBarGraph().subscribe(
-    (dt) => {
-      this.suppliersLabels = [];
-      this.suppliersDataValues=[];
-      this.suppliersChartData.datasets[0].data = [];
-      this.barGraphModels = [];
-      for (let a = 0; a < dt.length; a++) {
-        let barGraph: BarGraphModel = {
-          monthName: dt[a].monthName,
-          percentage: dt[a].count
-        };
-        this.suppliersLabels.push(barGraph.monthName);
-        this.suppliersDataValues.push(barGraph.percentage);
-        this.barGraphModels.push(barGraph);
+  deleteBusinessUnit() {
+    this.showConfirmDialog = false;
+    this.superAdminService.deleteBusinessUnit(this.businessUnitId).subscribe(
+      (dt) => {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Deleted',
+          detail: 'Business unit deleted successfully',
+          life: 3000,
+        });
+        for (let b = 0; b < this.dairyFarmUnitList.length; b++) {
+          if (this.dairyFarmUnitList[b].businessUnitId == this.businessUnitId) {
+            this.dairyFarmUnitList.splice(b, 1);
+          }
+        }
+      },
+      (error) => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: error.message,
+          life: 3000,
+        });
+        if (error.status == 401) {
+          this.accountService.doLogout();
+        }
       }
-      this.InitDairyFarmSuppliersChart();
-    },
-    (error) => {
-      if (error.status === 401) {
-        this.accountService.doLogout();
-      }
-    }
-  );
+    );
   }
-  getDairyFarmCustomersBarGraph() {
-  this.loading = true;
-  this.superAdminService.getCustomersBarGraph().subscribe(
-    (dt) => {
-      this.customersLabels = [];
-      this.customersDataValues=[];
-      this.customersChartData.datasets[0].data = [];
-      this.barGraphModels = [];
-      for (let a = 0; a < dt.length; a++) {
-        let barGraph: BarGraphModel = {
-          monthName: dt[a].monthName,
-          percentage: dt[a].count
-        };
-        this.customersLabels.push(barGraph.monthName);
-        this.customersDataValues.push(barGraph.percentage);
-        this.barGraphModels.push(barGraph);
+  addUser() {
+    this.addLoading = true;
+    this.superAdminService.addUser(this.addUsersForm.value).subscribe(
+      (dt) => {
+        debugger;
+        this.submitAssignedUnits(dt);
+        this.addLoading = false;
+        this.addUserVisible = false;
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Added',
+          detail: 'User added successfully',
+          life: 3000,
+        });
+      },
+      (error) => {
+        this.addLoading = false;
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: error.error?.message,
+          life: 3000,
+        });
+        if (error.status == 401) {
+          this.accountService.doLogout();
+          this.router.navigateByUrl('/');
+        }
       }
-      this.InitDairyFarmCustomersChart();
-    },
-    (error) => {
-      if (error.status === 401) {
-        this.accountService.doLogout();
-      }
-    }
-  );
+    );
   }
-  // Initialize the storage unit chart data
-  InitDairyFarmUsersChart(){
-    this.usersChartData = {
-      labels: this.usersLabels,
-      datasets: [
+  showNewHidePassword() {
+    this.showNewPassword = !this.showNewPassword;
+  }
+  getDairyUserRoles() {
+    this.masterService.getUserRoles().subscribe(
+      (res: any) => {
+        let dt = res; // response is directly an array
+        this.UserRoles = [];
+
+        for (let a = 0; a < dt.length; a++) {
+          let _data: masterModal = {
+            id: dt[a].key,
+            type: dt[a].value,
+          };
+          this.UserRoles.push(_data);
+        }
+      },
+      (error) => {
+        if (error.status == 401) {
+          this.accountService.doLogout();
+        }
+      }
+    );
+  }
+  handleCancelled() {
+    this.showConfirmDialog = false;
+  }
+  submitAssignedUnits(_data: any) {
+    debugger;
+    let data = {
+      applicationUserId: _data.data.id,
+      userBusinessUnitAndRoleDtos: [
         {
-          label: 'Monthly Users',
-          backgroundColor: '#e47c1c',
-          data: this.usersDataValues,
+          businessUnitId: this._businessUnitId,
+          userRoleId: _data.data.userRoleId,
         },
       ],
     };
+    // console.log('Assigning Business Units to User:', data);
 
-  } 
-  InitDairyFarmSuppliersChart(){
-    this.suppliersChartData = {
-      labels: this.suppliersLabels,
-      datasets: [
-        {
-          label: 'Monthly Suppliers',
-          backgroundColor: '#0d77bc',
-          data: this.suppliersDataValues,
-        },
-      ],
-    };
-
-  } 
-  InitDairyFarmCustomersChart(){
-    this.customersChartData = {
-      labels: this.customersLabels,
-      datasets: [
-        {
-          label: 'Monthly Customers',
-          backgroundColor: '#338c8e',
-          data: this.customersDataValues,
-        },
-      ],
-    };
-
-  } 
+    this.superAdminService.assignBusinessUnitToUser(data).subscribe(
+      (response) => {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Success',
+          detail: 'Business units assigned successfully',
+          life: 3000,
+        });
+        // this.getUsers();
+      },
+      (error) => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: error.error?.message,
+          life: 3000,
+        });
+        if (error.status == 401) {
+          this.accountService.doLogout();
+          this.router.navigateByUrl('/');
+        }
+      }
+    );
+  }
 }
-

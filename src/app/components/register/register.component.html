@@ -8,17 +8,17 @@
       <img src="./assets/Images/isSidebarLogo.png" alt="Cow Logo" />
     </div>
     <div class="heading">Welcome!</div>
-    <form [formGroup]="registerForm" (ngSubmit)="onSubmitLogin()">
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmitRegister()">
       <div class="row col-12">
-        <div class="heading1">PERSONAL INFORMATION</div>
+        <div class="heading1">INFORMATION</div>
         <div class="col-6">
-          <div class="lable mb-1">Owner Name</div>
+          <div class="lable mb-1">Company Name</div>
           <div class="position-relative">
             <input
               type="text"
               class="input-felid"
-              placeholder="Enter your name"
-              formControlName="name"
+              placeholder="Enter company name"
+              formControlName="fullName"
               name="no-autofill-email"
               autocomplete="new-email"
             />
@@ -26,35 +26,31 @@
           <div style="margin-bottom: 12px">
             <span
               class="errorValidation"
-              *ngIf="registerForm.controls['name'].touched && registerForm.controls['name'].errors?.['required']"
-              >Enter your name.</span
+              *ngIf="registerForm.controls['fullName'].touched && registerForm.controls['fullName'].errors?.['required']"
+              >Enter company name.</span
             >
           </div>
         </div>
         <div class="col-6">
-          <div class="lable mb-1">Father/Husband Name</div>
-          <div class="position-relative">
-            <input
-              type="text"
-              class="input-felid"
-              placeholder="Enter your father/husband name"
-              formControlName="email"
-              name="no-autofill-email"
-              autocomplete="new-email"
+          <div class="lable mb-1">User Role</div>
+          <div class="alt-dropdown">
+            <p-select
+              [options]="UserType"
+              [(ngModel)]="userRoleId"
+              name="userRoleId"
+              optionLabel="type"
+              optionValue="id"
+              [showClear]="true"
+              placeholder="Select user role"
+              formControlName="userRoleId"
             />
           </div>
-        </div>
-        <div class="col-6">
-          <div class="lable mb-1">Date of Birth</div>
-          <div class="position-relative">
-            <input
-              type="date"
-              class="input-felid custom-date"
-              placeholder="Enter your email"
-              formControlName="email"
-              name="no-autofill-email"
-              autocomplete="new-email"
-            />
+          <div style="margin-bottom: 12px">
+            <span
+              class="errorValidation"
+              *ngIf="registerForm.controls['userRoleId'].touched && registerForm.controls['userRoleId'].errors?.['required']"
+              >Select user role.</span
+            >
           </div>
         </div>
         <div class="col-6">
@@ -87,129 +83,33 @@
           <div class="lable mb-1">Contact Number</div>
           <div class="position-relative">
             <input
-              type="phone"
+              type="number"
               class="input-felid"
               placeholder="Enter your contact number..."
-              formControlName="phone"
-              name="no-autofill-email"
-              autocomplete="new-email"
-            />
-          </div>
-          <div style="margin-bottom: 12px">
-            <span
-              class="errorValidation"
-              *ngIf="registerForm.controls['email'].touched && registerForm.controls['email'].errors?.['required']"
-              >Enter your email address.</span
-            >
-            <span
-              style="float: left"
-              class="errorValdation"
-              *ngIf="registerForm.controls['email'].touched && registerForm.controls['email'].errors?.['email']"
-              >Please enter valid email address</span
-            >
-          </div>
-        </div>
-        <div class="col-6 mt-2">
-          <div class="mt-4" style="display: flex">
-            <div style="display: flex">
-              <span class="label">Male</span>
-              <span
-                ><input
-                  class="form-check-input"
-                  type="radio"
-                  name="isFemale"
-                  [value]="false"
-              /></span>
-            </div>
-            <div style="display: flex">
-              <span class="label" style="margin-left: 25px">Female</span>
-              <span
-                ><input
-                  class="form-check-input"
-                  type="radio"
-                  name="isFemale"
-                  [value]="true"
-              /></span>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="row col-12 mt-3">
-        <div class="heading1">ADDRESS</div>
-        <div class="col-6">
-          <div class="lable mb-1">Province</div>
-          <div class="position-relative">
-            <input
-              type="text"
-              class="input-felid custom-date"
-              placeholder="Enter your province"
-              formControlName="province"
-              name="no-autofill-email"
-              autocomplete="new-email"
+              formControlName="contactNumber"
             />
           </div>
         </div>
         <div class="col-6">
-          <div class="lable mb-1">District</div>
+          <div class="lable mb-1">Address</div>
           <div class="position-relative">
             <input
               type="text"
               class="input-felid"
-              placeholder="Enter your district"
-              formControlName="district"
-              name="no-autofill-email"
-              autocomplete="new-email"
+              placeholder="Enter your address"
+              formControlName="address"
             />
-          </div>
-        </div>
-        <div class="col-6 mt-3">
-          <div class="lable mb-1">Village/City</div>
-          <div class="position-relative">
-            <input
-              type="text"
-              class="input-felid"
-              placeholder="Enter your name"
-              formControlName="city"
-              name="no-autofill-email"
-              autocomplete="new-email"
-            />
-          </div>
-        </div>
-        <div class="col-6 mt-3">
-          <div class="lable mb-1">Postal Code</div>
-          <div class="position-relative">
-            <input
-              type="email"
-              class="input-felid"
-              placeholder="Enter your postal code"
-              formControlName="postal"
-              name="no-autofill-email"
-              autocomplete="new-email"
-            />
-          </div>
-          <div style="margin-bottom: 12px">
-            <span
-              class="errorValidation"
-              *ngIf="registerForm.controls['email'].touched && registerForm.controls['email'].errors?.['required']"
-              >Enter your email address.</span
-            >
-            <span
-              style="float: left"
-              class="errorValdation"
-              *ngIf="registerForm.controls['email'].touched && registerForm.controls['email'].errors?.['email']"
-              >Please enter valid email address</span
-            >
           </div>
         </div>
       </div>
+      <!-- Password  -->
       <div class="row col-12 mt-3">
-        <div class="heading1">LOGIN CREDENTIALS</div>
         <div class="col-6">
           <div class="lable mb-1">Password</div>
           <div style="position: relative">
             <input
               [type]="showPassword ? 'text' : 'password'"
-              class="text-input"
+              class="text-input input-felid"
               placeholder="********"
               formControlName="password"
               name="no-autofill-password"
@@ -279,7 +179,7 @@
           <div style="position: relative">
             <input
               [type]="showConfirmPassword ? 'text' : 'password'"
-              class="text-input"
+              class="text-input input-felid"
               placeholder="********"
               formControlName="confirmPassword"
               autocomplete="new-password"
@@ -381,6 +281,15 @@
         ></span>
       </button>
     </form>
+    <div class="reg-heading">
+      Already have an account?
+      <span
+        [routerLink]="['/login']"
+        style="text-decoration: underline; cursor: pointer"
+        >Login</span
+      >
+    </div>
   </div>
 </div>
 <p-toast></p-toast>
+<router-outlet></router-outlet>
