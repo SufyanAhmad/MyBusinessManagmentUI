@@ -148,68 +148,44 @@
             {{ element.animalRef }}
           </td>
         </ng-container>
-        <ng-container matColumnDef="animalName">
+        <ng-container matColumnDef="time">
           <th
             mat-header-cell
             *matHeaderCellDef
             class="table-header"
             style="min-width: 150px"
           >
-            Animal Name
+            Time
           </th>
           <td mat-cell *matCellDef="let element" class="tableText-thin">
-            {{ element.animalRef }}
+            {{ element.sessions[0]?.time }}
           </td>
         </ng-container>
-        <ng-container matColumnDef="date">
+        <ng-container matColumnDef="milkingTime">
           <th
             mat-header-cell
             *matHeaderCellDef
             class="table-header"
             style="min-width: 140px !important"
           >
-            Date
+            Milking Time
           </th>
           <td mat-cell *matCellDef="let element" class="tableText-thin">
-            {{ element.date | date : "dd/MM/yyyy" }}
+            {{ element.sessions[0]?.milkingTime }}
           </td>
         </ng-container>
-        <ng-container matColumnDef="morningL">
-          <th
-            mat-header-cell
-            *matHeaderCellDef
-            class="table-header"
-            style="min-width: 130px !important"
-          >
-            Morning (L)
-          </th>
-          <td mat-cell *matCellDef="let element" class="tableText-thin">
-            {{ element.morning }}
-          </td>
-        </ng-container>
-        <ng-container matColumnDef="eveningL">
-          <th
-            mat-header-cell
-            *matHeaderCellDef
-            class="table-header"
-            style="min-width: 120px !important"
-          >
-            Evening (L)
-          </th>
-          <td mat-cell *matCellDef="let element" class="tableText-thin">
-            {{ element.evening }}
-          </td>
-        </ng-container>
-        <ng-container matColumnDef="totalL">
+        <ng-container matColumnDef="quantity">
           <th
             mat-header-cell
             *matHeaderCellDef
             class="table-header"
             style="min-width: 150px !important"
           >
-            Total (L)
+            Quantity
           </th>
-          <td mat-cell *matCellDef="let element" class="tableText-thin">13</td>
+          <td mat-cell *matCellDef="let element" class="tableText-thin">
+            {{ element.sessions[0]?.quantity }}
+          </td>
         </ng-container>
         <ng-container matColumnDef="fat">
           <th
@@ -220,7 +196,9 @@
           >
             Fat %
           </th>
-          <td mat-cell *matCellDef="let element" class="tableText-thin">4.2</td>
+          <td mat-cell *matCellDef="let element" class="tableText-thin">
+            {{ element.sessions[0]?.fat }}
+          </td>
         </ng-container>
         <ng-container matColumnDef="snf">
           <th
@@ -231,7 +209,9 @@
           >
             Snf %
           </th>
-          <td mat-cell *matCellDef="let element" class="tableText-thin">8.7</td>
+          <td mat-cell *matCellDef="let element" class="tableText-thin">
+            {{ element.sessions[0]?.snf }}
+          </td>
         </ng-container>
 
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
@@ -266,12 +246,6 @@
 >
   <form [formGroup]="addMilkProductionForm">
     <div class="row" style="row-gap: 20px">
-      <!-- <div class="col-6">
-        <span class="label"
-          >Record ID<span class="required-icon">*</span>
-        </span>
-        <input type="text" class="input-felid" placeholder="Enter name..." />
-      </div> -->
       <div class="col-6">
         <span class="label"
           >Animal ID<span class="required-icon">*</span>
@@ -315,34 +289,21 @@
         </span>
       </div>
       <div class="col-6">
-        <span class="label"
-          >Morning (L)<span class="required-icon">*</span></span
-        >
+        <span class="label">Time</span>
         <input
-          type="number"
+          type="time"
           class="input-felid"
-          placeholder="Enter morning quantity..."
-          formControlName="morning"
+          placeholder="Enter time..."
+          formControlName="time"
         />
-        <span
-          class="errorValidation"
-          *ngIf="
-            addMilkProductionForm.get('date')?.touched &&
-            addMilkProductionForm.get('date')?.hasError('required')
-          "
-        >
-          Required field
-        </span>
       </div>
       <div class="col-6">
-        <span class="label"
-          >Evening (L)<span class="required-icon">*</span></span
-        >
+        <span class="label">Milking Time</span>
         <input
           type="number"
           class="input-felid"
-          placeholder="Enter evening quantity..."
-          formControlName="evening"
+          placeholder="Enter milking time..."
+          formControlName="milkingTime"
         />
         <span
           class="errorValidation"
@@ -355,22 +316,31 @@
         </span>
       </div>
       <div class="col-6">
-        <span class="label">Total (L)<span class="required-icon">*</span></span>
+        <span class="label">Quantity</span>
         <input
           type="number"
           class="input-felid"
-          placeholder="Enter total quantity..."
-          formControlName="total"
+          placeholder="Enter quantity..."
+          formControlName="quantity"
         />
-        <span
-          class="errorValidation"
-          *ngIf="
-            addMilkProductionForm.get('total')?.touched &&
-            addMilkProductionForm.get('total')?.hasError('required')
-          "
-        >
-          Required field
-        </span>
+      </div>
+      <div class="col-6">
+        <span class="label">Fat %</span>
+        <input
+          type="number"
+          class="input-felid"
+          placeholder="Enter fat..."
+          formControlName="fat"
+        />
+      </div>
+      <div class="col-6">
+        <span class="label">Snf %</span>
+        <input
+          type="number"
+          class="input-felid"
+          placeholder="Enter snf..."
+          formControlName="snf"
+        />
       </div>
     </div>
     <div class="d-flex justify-content-end gap-4 margin-btn">

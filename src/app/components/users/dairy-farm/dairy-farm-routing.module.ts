@@ -27,6 +27,7 @@ import { EditAnimalMedicineComponent } from './animal-medicine/edit-animal-medic
 import { FeedStockComponent } from './feed/feed-stock/feed-stock.component';
 import { FeedTransactionsComponent } from './feed/feed-transactions/feed-transactions.component';
 import { FeedConsumptionComponent } from './feed/feed-consumption/feed-consumption.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
 
 const routes: Routes = [
   {
@@ -35,12 +36,16 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        redirectTo: 'animal',
+        redirectTo: 'dashboard',
         pathMatch: 'full',
       },
       {
         path: 'businessUnit',
         component: DairyFarmBusinessComponent,
+      },
+      {
+        path: 'dashboard',
+        component: DashboardComponent,
       },
       {
         path: 'animal',

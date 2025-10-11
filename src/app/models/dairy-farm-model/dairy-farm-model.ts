@@ -102,22 +102,44 @@ export interface FeedModel {
   note: String;
   businessUnitId: String;
 }
+// export interface MilkProductionModel {
+//   updatedBy?: String;
+//   updatedAt?: String;
+//   milkProductionId?: String;
+//   milkProductionRef?: String;
+//   animalRef?: String;
+//   businessUnit?: String;
+//   createdBy?: String;
+//   createdAt?: String;
+//   animalId: String;
+//   date: String;
+//   morning: Number;
+//   evening: Number;
+//   total: Number;
+//   businessUnitId: String;
+// }
 export interface MilkProductionModel {
-  updatedBy?: String;
-  updatedAt?: String;
-  milkProductionId?: String;
-  milkProductionRef?: String;
-  animalRef?: String;
-  businessUnit?: String;
-  createdBy?: String;
-  createdAt?: String;
-  animalId: String;
-  date: String;
-  morning: Number;
-  evening: Number;
-  total: Number;
-  businessUnitId: String;
+  animalId: string;
+  date: string;
+  businessUnitId: string;
+  milkProductionId: string;
+  milkProductionRef: string;
+  animalRef: string;
+  businessUnit: string;
+  createdBy: string;
+  createdAt: string;
+  updatedBy: string | null;
+  updatedAt: string | null;
+  sessions: {
+    milkProductionSessionId: string;
+    time: string;
+    milkingTime: number;
+    quantity: number;
+    fat: number;
+    snf: number;
+  }[];
 }
+
 export interface PregnancyRecordModel {
   updatedBy?: String;
   updatedAt?: String;

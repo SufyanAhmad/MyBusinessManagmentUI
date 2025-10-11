@@ -92,8 +92,6 @@ export class DashboardComponent {
       this.isAdminExit = true;
     }
     this.userRole = this.accountService.getRoles();
-    debugger;
-
     this.getBusinessUnits();
   }
   addBusinessUnit() {
@@ -242,7 +240,6 @@ export class DashboardComponent {
       .getBusinessUnitsByAdminOrUser(this.userRole)
       .subscribe(
         (dt) => {
-          debugger;
           this.dairyFarmUnitList = [];
           for (let a = 0; a < dt.length; a++) {
             let busUnit: BusinessUnitModel = {
@@ -344,7 +341,6 @@ export class DashboardComponent {
     this.addLoading = true;
     this.superAdminService.addUser(this.addUsersForm.value).subscribe(
       (dt) => {
-        debugger;
         this.submitAssignedUnits(dt);
         this.addLoading = false;
         this.addUserVisible = false;
@@ -398,7 +394,6 @@ export class DashboardComponent {
     this.showConfirmDialog = false;
   }
   submitAssignedUnits(_data: any) {
-    debugger;
     let data = {
       applicationUserId: _data.data.id,
       userBusinessUnitAndRoleDtos: [

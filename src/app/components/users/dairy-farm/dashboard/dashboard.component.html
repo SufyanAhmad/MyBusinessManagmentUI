@@ -1,0 +1,123 @@
+<div class="container-fluid">
+  <span
+    class="business-title mb-3"
+    [routerLink]="['/superAdmin/business/units']"
+    >{{ this.businessUnitName }}</span
+  >
+  <div class="dashboard-container mt-3">
+    <div class="stats-cards mt-2">
+      <div class="card blue">
+        <div class="card-image">
+          <img src="assets/Images/dashboard/cow.jpg" alt="Cow" />
+        </div>
+        <div class="card-content">
+          <h2>618</h2>
+          <p>Current Animals</p>
+        </div>
+      </div>
+
+      <div class="card green">
+        <div class="card-image">
+          <img src="assets/Images/dashboard/cow1.jpeg" alt="Pregnant" />
+        </div>
+        <div class="card-content">
+          <h2>245</h2>
+          <p>Pregnant Animals</p>
+        </div>
+      </div>
+
+      <div class="card red">
+        <div class="card-image">
+          <img src="assets/Images/dashboard/cow3.jpg" alt="Non Pregnant" />
+        </div>
+        <div class="card-content">
+          <h2>36</h2>
+          <p>Non Pregnant</p>
+        </div>
+      </div>
+
+      <div class="card orange">
+        <div class="card-image">
+          <img src="assets/Images/dashboard/cow2.jpeg" alt="Schedule" />
+        </div>
+        <div class="card-content">
+          <h2>13</h2>
+          <p>Today Schedules</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tables and Chart -->
+    <div class="tables">
+      <!-- <div class="table">
+        <h3>Particulars</h3>
+        <table>
+          <tr>
+            <th>Particular</th>
+            <th>Count</th>
+            <th>%</th>
+          </tr>
+          <tr>
+            <td>Inseminated</td>
+            <td>83</td>
+            <td>20.6</td>
+          </tr>
+          <tr>
+            <td>Pregnant</td>
+            <td>245</td>
+            <td>60.79</td>
+          </tr>
+          <tr>
+            <td>Fresher</td>
+            <td>39</td>
+            <td>9.68</td>
+          </tr>
+          <tr>
+            <td>Open Cows</td>
+            <td>35</td>
+            <td>8.68</td>
+          </tr>
+          <tr>
+            <td>Total Females</td>
+            <td>584</td>
+            <td>100</td>
+          </tr>
+        </table>
+      </div> -->
+
+      <div class="table">
+        <h3>Figures</h3>
+        <table>
+          <tr>
+            <td>Current Females</td>
+            <td>584</td>
+          </tr>
+          <tr>
+            <td>Current Males</td>
+            <td>34</td>
+          </tr>
+          <tr>
+            <td>Total Animals</td>
+            <td>909</td>
+          </tr>
+          <tr>
+            <td>Milking</td>
+            <td>230</td>
+          </tr>
+          <tr>
+            <td>Dry</td>
+            <td>32</td>
+          </tr>
+        </table>
+      </div>
+      <div class="chart-container">
+        <canvas id="lactationChart"></canvas>
+      </div>
+
+      <!-- <div class="chart">
+        <h3>Lactation Graph</h3>
+        <canvas id="lactationChart"></canvas>
+      </div> -->
+    </div>
+  </div>
+</div>

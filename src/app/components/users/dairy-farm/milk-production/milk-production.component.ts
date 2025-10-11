@@ -70,11 +70,9 @@ export class MilkProductionComponent {
   displayedColumns: string[] = [
     'recordId',
     'animalId',
-    'animalName',
-    'date',
-    'morningL',
-    'eveningL',
-    'totalL',
+    'time',
+    'milkingTime',
+    'quantity',
     'fat',
     'snf',
   ];
@@ -145,26 +143,62 @@ export class MilkProductionComponent {
       .subscribe(
         (data) => {
           this.MilkProductionList = [];
-          if (data.list && data.list.length > 0) {
+          // if (data.list && data.list.length > 0) {
+
+          //   for (let a = 0; a < data.data.list.length; a++) {
+          //     let milkProduction: MilkProductionModel = {
+          //       animalId: data.data.list[a].animalId,
+          //       date: data.data.list[a].date,
+          //       businessUnitId: data.data.list[a].businessUnitId,
+          //       milkProductionId: data.data.list[a].milkProductionId,
+          //       milkProductionRef: data.data.list[a].milkProductionRef,
+          //       animalRef: data.data.list[a].animalRef,
+          //       businessUnit: data.data.list[a].businessUnit,
+          //       createdBy: data.data.list[a].createdBy,
+          //       createdAt: data.data.list[a].createdAt,
+          //       updatedBy: data.data.list[a].updatedBy,
+          //       updatedAt: data.data.list[a].updatedAt,
+          //       sessions: data.data.list[a].sessions.map((s: any) => ({
+          //         milkProductionSessionId: s.milkProductionSessionId,
+          //         time: s.time,
+          //         milkingTime: s.milkingTime,
+          //         quantity: s.quantity,
+          //         fat: s.fat,
+          //         snf: s.snf,
+          //       })),
+          //     };
+          //     this.MilkProductionList.push(milkProduction);
+          //   }
+          // }
+          if (data && data.list && data.list.length > 0) {
             for (let a = 0; a < data.list.length; a++) {
-              let stockOut: MilkProductionModel = {
-                updatedBy: data.list[a].updatedBy,
-                updatedAt: data.list[a].updatedAt,
-                milkProductionId: data.list[a].milkProductionId,
-                milkProductionRef: data.list[a].milkProductionRef,
-                animalRef: data.list[a].animalRef,
-                businessUnit: data.list[a].businessUnit,
-                createdBy: data.list[a].createdBy,
-                createdAt: data.list[a].createdAt,
-                animalId: data.list[a].animalId,
-                date: data.list[a].date,
-                morning: data.list[a].morning,
-                evening: data.list[a].evening,
-                total: data.list[a].total,
-                businessUnitId: data.list[a].businessUnitId,
+              const item = data.list[a];
+              const milkProduction: MilkProductionModel = {
+                animalId: item.animalId,
+                date: item.date,
+                businessUnitId: item.businessUnitId,
+                milkProductionId: item.milkProductionId,
+                milkProductionRef: item.milkProductionRef,
+                animalRef: item.animalRef,
+                businessUnit: item.businessUnit,
+                createdBy: item.createdBy,
+                createdAt: item.createdAt,
+                updatedBy: item.updatedBy,
+                updatedAt: item.updatedAt,
+                sessions:
+                  item.sessions?.map((s: any) => ({
+                    milkProductionSessionId: s.milkProductionSessionId,
+                    time: s.time,
+                    milkingTime: s.milkingTime,
+                    quantity: s.quantity,
+                    fat: s.fat,
+                    snf: s.snf,
+                  })) || [],
               };
-              this.MilkProductionList.push(stockOut);
+              this.MilkProductionList.push(milkProduction);
             }
+          } else {
+            console.error('No list data found:', data);
           }
 
           this.dataSource = new MatTableDataSource(this.MilkProductionList);
@@ -211,14 +245,16 @@ export class MilkProductionComponent {
         }
       );
   }
+
   initForm() {
     this.addMilkProductionForm = this.formBuilder.group({
       animalId: [null, [Validators.required]],
       date: [null, [Validators.required]],
-      morning: ['', [Validators.required, Validators.pattern('^[0-9]*$')]],
-      evening: ['', [Validators.required, Validators.pattern('^[0-9]*$')]],
-      total: ['', [Validators.required, Validators.pattern('^[0-9]*$')]],
-      isActive: [true],
+      time: [null, [Validators.required]],
+      milkingTime: [, [Validators.required, Validators.pattern('^[0-9]*$')]],
+      quantity: [, [Validators.required, Validators.pattern('^[0-9]*$')]],
+      fat: [, [Validators.required, Validators.pattern('^[0-9]*$')]],
+      snf: [, [Validators.required, Validators.pattern('^[0-9]*$')]],
       businessUnitId: [this.busUnitId],
     });
   }
