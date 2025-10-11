@@ -61,8 +61,8 @@ export class MilkProductionComponent {
   AnimalList: masterModal[] = [];
   businessUnitId: any = null;
   businessUnitName: any = '';
-  isActive: boolean = true;
-  bgColor: string = '#FFCE3A';
+  toDate: any = null;
+  fromDate: any = null;
   // for add animal popup
   addLoading: boolean = false;
   visible: boolean = false;
@@ -113,10 +113,12 @@ export class MilkProductionComponent {
           this.dataSource = new MatTableDataSource(this.MilkProductionList);
 
           let data = {
-            searchKey: this.searchKey || null,
+            searchKey: this.searchKey,
             businessUnitId: this.busUnitId,
             pageNumber: this.paginator.pageIndex + 1,
             pageSize: 10,
+            from: this.fromDate,
+            to: this.toDate,
           };
 
           return this.dairyFarmService
@@ -143,33 +145,6 @@ export class MilkProductionComponent {
       .subscribe(
         (data) => {
           this.MilkProductionList = [];
-          // if (data.list && data.list.length > 0) {
-
-          //   for (let a = 0; a < data.data.list.length; a++) {
-          //     let milkProduction: MilkProductionModel = {
-          //       animalId: data.data.list[a].animalId,
-          //       date: data.data.list[a].date,
-          //       businessUnitId: data.data.list[a].businessUnitId,
-          //       milkProductionId: data.data.list[a].milkProductionId,
-          //       milkProductionRef: data.data.list[a].milkProductionRef,
-          //       animalRef: data.data.list[a].animalRef,
-          //       businessUnit: data.data.list[a].businessUnit,
-          //       createdBy: data.data.list[a].createdBy,
-          //       createdAt: data.data.list[a].createdAt,
-          //       updatedBy: data.data.list[a].updatedBy,
-          //       updatedAt: data.data.list[a].updatedAt,
-          //       sessions: data.data.list[a].sessions.map((s: any) => ({
-          //         milkProductionSessionId: s.milkProductionSessionId,
-          //         time: s.time,
-          //         milkingTime: s.milkingTime,
-          //         quantity: s.quantity,
-          //         fat: s.fat,
-          //         snf: s.snf,
-          //       })),
-          //     };
-          //     this.MilkProductionList.push(milkProduction);
-          //   }
-          // }
           if (data && data.list && data.list.length > 0) {
             for (let a = 0; a < data.list.length; a++) {
               const item = data.list[a];
@@ -292,5 +267,7 @@ export class MilkProductionComponent {
   ResetFilter() {
     this.searchKey = null;
     this.ngAfterViewInit();
+    this.toDate = null;
+    this.fromDate = null;
   }
 }
