@@ -88,19 +88,18 @@ export interface BreedModel {
   country: String;
   businessUnitId: String;
 }
+
 export interface FeedModel {
   feedId: String;
-  feedRef: String;
-  animalRef: String;
-  supplierName: String;
   businessUnit: String;
-  animalId: String;
-  supplierId: String;
+  feedType: String;
   name: String;
-  quantity: Number;
-  feedTime: String;
-  note: String;
   businessUnitId: String;
+  quantity: Number;
+  date: String;
+  expiryDate: String;
+  note: String;
+  feedTypeId: Number;
 }
 // export interface MilkProductionModel {
 //   updatedBy?: String;

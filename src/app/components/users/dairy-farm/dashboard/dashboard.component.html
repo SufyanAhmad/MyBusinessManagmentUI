@@ -15,7 +15,6 @@
           <p>Current Animals</p>
         </div>
       </div>
-
       <div class="card green">
         <div class="card-image">
           <img src="assets/Images/dashboard/cow1.jpeg" alt="Pregnant" />
@@ -25,66 +24,37 @@
           <p>Pregnant Animals</p>
         </div>
       </div>
-
       <div class="card red">
         <div class="card-image">
           <img src="assets/Images/dashboard/cow3.jpg" alt="Non Pregnant" />
         </div>
         <div class="card-content">
           <h2>36</h2>
-          <p>Non Pregnant</p>
+          <p>Dry Animals</p>
         </div>
       </div>
-
+      <div class="card calf">
+        <div class="card-image">
+          <img src="assets/Images/dashboard/calf.png" alt="Schedule" />
+        </div>
+        <div class="card-content">
+          <h2>55</h2>
+          <p>Total Calfs</p>
+        </div>
+      </div>
       <div class="card orange">
         <div class="card-image">
           <img src="assets/Images/dashboard/cow2.jpeg" alt="Schedule" />
         </div>
         <div class="card-content">
           <h2>13</h2>
-          <p>Today Schedules</p>
+          <p>Today Schedule</p>
         </div>
       </div>
     </div>
 
     <!-- Tables and Chart -->
     <div class="tables">
-      <!-- <div class="table">
-        <h3>Particulars</h3>
-        <table>
-          <tr>
-            <th>Particular</th>
-            <th>Count</th>
-            <th>%</th>
-          </tr>
-          <tr>
-            <td>Inseminated</td>
-            <td>83</td>
-            <td>20.6</td>
-          </tr>
-          <tr>
-            <td>Pregnant</td>
-            <td>245</td>
-            <td>60.79</td>
-          </tr>
-          <tr>
-            <td>Fresher</td>
-            <td>39</td>
-            <td>9.68</td>
-          </tr>
-          <tr>
-            <td>Open Cows</td>
-            <td>35</td>
-            <td>8.68</td>
-          </tr>
-          <tr>
-            <td>Total Females</td>
-            <td>584</td>
-            <td>100</td>
-          </tr>
-        </table>
-      </div> -->
-
       <div class="table">
         <h3>Figures</h3>
         <table>
@@ -113,11 +83,26 @@
       <div class="chart-container">
         <canvas id="lactationChart"></canvas>
       </div>
-
-      <!-- <div class="chart">
-        <h3>Lactation Graph</h3>
-        <canvas id="lactationChart"></canvas>
-      </div> -->
+      <div class="chart-container mt-5">
+        <canvas id="dailyTasksChart"></canvas>
+      </div>
+      <div class="milk-production-section">
+        <div class="milk-production-column">
+          <div class="alt-dropdown">
+            <p-select
+              [options]="periodOptions"
+              [(ngModel)]="selectedPeriod"
+              placeholder="Select Period"
+              (onChange)="onPeriodChange($event)"
+              appendTo="body"
+            >
+            </p-select>
+          </div>
+          <div class="chart-container">
+            <canvas id="milkProductionChart"></canvas>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>

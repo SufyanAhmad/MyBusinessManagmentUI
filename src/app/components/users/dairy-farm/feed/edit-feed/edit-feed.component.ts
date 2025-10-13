@@ -45,33 +45,30 @@ export class EditFeedComponent {
   SupplierList: masterModal[] = [];
 
   editFeedForm!: FormGroup;
+
   FeedDetail: FeedModel = {
     feedId: '',
-    feedRef: '',
-    animalRef: '',
-    supplierName: '',
     businessUnit: '',
-    animalId: '',
-    supplierId: '',
+    feedType: '',
     name: '',
-    quantity: 0,
-    feedTime: '',
-    note: '',
     businessUnitId: '',
+    quantity: 0,
+    date: '',
+    expiryDate: '',
+    note: '',
+    feedTypeId: 0,
   };
   constFeedDetail: FeedModel = {
     feedId: '',
-    feedRef: '',
-    animalRef: '',
-    supplierName: '',
     businessUnit: '',
-    animalId: '',
-    supplierId: '',
+    feedType: '',
     name: '',
-    quantity: 0,
-    feedTime: '',
-    note: '',
     businessUnitId: '',
+    quantity: 0,
+    date: '',
+    expiryDate: '',
+    note: '',
+    feedTypeId: 0,
   };
   constructor(
     private route: ActivatedRoute,
@@ -89,7 +86,6 @@ export class EditFeedComponent {
     this.getFeedDetails();
     this.initForm();
   }
-
   getFeedDetails() {
     this.loading = true;
     this.dairyFarmService.GetFeedDetail(this.feedId).subscribe(
@@ -97,31 +93,27 @@ export class EditFeedComponent {
         let data = dt.data;
         this.FeedDetail = {
           feedId: data.feedId,
-          feedRef: data.feedRef,
-          animalId: data.animalId,
-          animalRef: data.animalRef,
-          supplierId: data.supplierId,
-          supplierName: data.supplierName,
           businessUnit: data.businessUnit,
+          feedType: data.feedType,
           name: data.name,
-          quantity: data.quantity,
-          feedTime: data.feedTime,
-          note: data.note,
           businessUnitId: data.businessUnitId,
+          quantity: data.quantity,
+          date: data.date,
+          expiryDate: data.expiryDate,
+          feedTypeId: data.feedTypeId,
+          note: data.note,
         };
         this.constFeedDetail = {
           feedId: data.feedId,
-          feedRef: data.feedRef,
-          animalId: data.animalId,
-          animalRef: data.animalRef,
-          supplierId: data.supplierId,
-          supplierName: data.supplierName,
           businessUnit: data.businessUnit,
+          feedType: data.feedType,
           name: data.name,
-          quantity: data.quantity,
-          feedTime: data.feedTime,
-          note: data.note,
           businessUnitId: data.businessUnitId,
+          quantity: data.quantity,
+          date: data.date,
+          expiryDate: data.expiryDate,
+          feedTypeId: data.feedTypeId,
+          note: data.note,
         };
         this.initForm();
         this.loadAnimalTypes();
@@ -175,32 +167,30 @@ export class EditFeedComponent {
   discardChanges() {
     this.FeedDetail = {
       feedId: this.constFeedDetail.feedId,
-      feedRef: this.constFeedDetail.feedRef,
-      animalId: this.constFeedDetail.animalId,
-      animalRef: this.constFeedDetail.animalRef,
-      quantity: this.constFeedDetail.quantity,
-      supplierId: this.constFeedDetail.supplierId,
-      supplierName: this.constFeedDetail.supplierName,
-      name: this.constFeedDetail.name,
-      feedTime: this.constFeedDetail.feedTime,
-      note: this.constFeedDetail.note,
       businessUnit: this.constFeedDetail.businessUnit,
+      feedType: this.constFeedDetail.feedType,
+      name: this.constFeedDetail.name,
+      quantity: this.constFeedDetail.quantity,
       businessUnitId: this.constFeedDetail.businessUnitId,
+      date: this.constFeedDetail.date,
+      note: this.constFeedDetail.note,
+      expiryDate: this.constFeedDetail.expiryDate,
+      feedTypeId: this.constFeedDetail.feedTypeId,
     };
     this.isReadOnly = true;
     this.initForm();
   }
   initForm() {
     this.editFeedForm = this.formBuilder.group({
-      businessUnitId: [this.busUnitId],
-      animalId: [this.FeedDetail.animalId, [Validators.required]],
-      supplierId: [this.FeedDetail.supplierId, [Validators.required]],
       name: [this.FeedDetail.name, [Validators.required]],
+      businessUnitId: [this.busUnitId],
       quantity: [
         this.FeedDetail.quantity,
         [Validators.pattern('^[1-9][0-9]*$'), Validators.min(1)],
       ],
-      feedTime: [this.FeedDetail.feedTime, [Validators.required]],
+      date: [this.FeedDetail.date, [Validators.required]],
+      expiryDate: [this.FeedDetail.expiryDate],
+      feedTypeId: [this.FeedDetail.feedTypeId, [Validators.required]],
       note: [this.FeedDetail.note],
     });
   }

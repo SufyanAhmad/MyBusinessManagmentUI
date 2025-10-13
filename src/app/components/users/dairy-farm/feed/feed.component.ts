@@ -58,23 +58,21 @@ export class FeedComponent {
   stockId: any = null;
   busUnitId: any = null;
   feedList: FeedModel[] = [];
-  AnimalList: masterModal[] = [];
-  SupplierList: masterModal[] = [];
+  FeedTypes: masterModal[] = [];
   businessUnitId: any = null;
   key: any = null;
   businessUnitName: any = '';
-  bgColor: string = '#FFCE3A';
   // for add feed popup
   addLoading: boolean = false;
   visible: boolean = false;
   addFeedForm!: FormGroup;
   displayedColumns: string[] = [
-    'feedId',
-    'animalId',
-    'feedName',
-    'quantity',
-    'feedTime',
-    'note',
+    'cell1',
+    'cell2',
+    'cell3',
+    'cell4',
+    'cell5',
+    'cell6',
   ];
   constructor(
     private masterService: MasterService,
@@ -94,8 +92,7 @@ export class FeedComponent {
     setTimeout(() => {
       this.getFeedList();
     }, 0);
-    this.loadParties();
-    this.loadAnimal();
+    this.loadFeedTypes();
   }
   getFeedList() {
     this.paginator.pageIndex = 0;
@@ -114,7 +111,7 @@ export class FeedComponent {
           this.dataSource = new MatTableDataSource(this.feedList);
 
           let data = {
-            searchKey: this.searchKey ?? null,
+            searchKey: this.searchKey,
             businessUnitId: this.busUnitId,
             pageNumber: this.paginator.pageIndex + 1,
             pageSize: 10,
@@ -142,21 +139,20 @@ export class FeedComponent {
         (list) => {
           this.feedList = [];
           if (list && list.length > 0) {
+            debugger;
             this.dataSource.data = list;
             for (let a = 0; a < list.length; a++) {
               let feed: FeedModel = {
                 feedId: list[a].feedId,
-                feedRef: list[a].feedRef,
-                animalRef: list[a].animalRef,
-                supplierName: list[a].supplierName,
                 businessUnit: list[a].businessUnit,
-                animalId: list[a].animalId,
-                supplierId: list[a].supplierId,
+                feedType: list[a].feedType,
                 name: list[a].name,
-                quantity: list[a].quantity,
-                feedTime: list[a].feedTime,
-                note: list[a].note,
                 businessUnitId: list[a].businessUnitId,
+                quantity: list[a].quantity,
+                date: list[a].date,
+                expiryDate: list[a].expiryDate,
+                note: list[a].note,
+                feedTypeId: list[a].feedTypeId,
               };
               this.feedList.push(feed);
             }
@@ -212,29 +208,29 @@ export class FeedComponent {
   }
   initForm() {
     this.addFeedForm = this.formBuilder.group({
-      animalId: [null, [Validators.required]],
-      supplierId: [null, [Validators.required]],
       name: [null, [Validators.required]],
-      quantity: [, [Validators.required, Validators.pattern('^[0-9]*$')]],
-      feedTime: [null, [Validators.required]],
-      note: [null],
       businessUnitId: [this.busUnitId],
+      quantity: [, [Validators.required, Validators.pattern('^[0-9]*$')]],
+      date: [null, [Validators.required]],
+      expiryDate: [null],
+      feedTypeId: [null, [Validators.required]],
+      note: [null],
     });
   }
   onDialogHide() {
     this.addFeedForm.reset();
   }
-  loadAnimal() {
-    this.masterService.getAnimal().subscribe(
+  loadFeedTypes() {
+    this.masterService.getFeedTypes().subscribe(
       (res) => {
-        let dt = res.data;
-        this.AnimalList = [];
+        let dt = res;
+        this.FeedTypes = [];
         for (let a = 0; a < dt.length; a++) {
           let _data: masterModal = {
-            id: dt[a].animalId,
-            type: dt[a].animalRef,
+            id: dt[a].feedTypeId,
+            type: dt[a].feedType,
           };
-          this.AnimalList.push(_data);
+          this.FeedTypes.push(_data);
         }
       },
       (error) => {
@@ -244,26 +240,7 @@ export class FeedComponent {
       }
     );
   }
-  loadParties() {
-    this.masterService.getParties(1).subscribe(
-      (res) => {
-        var dt = res;
-        this.SupplierList = [];
-        for (let a = 0; a < dt.length; a++) {
-          let _data: masterModal = {
-            id: dt[a].partyId,
-            type: dt[a].name,
-          };
-          this.SupplierList.push(_data);
-        }
-      },
-      (error) => {
-        if (error.status == 401) {
-          this.accountService.doLogout();
-        }
-      }
-    );
-  }
+
   ResetFilter() {
     this.searchKey = null;
     this.ngAfterViewInit();

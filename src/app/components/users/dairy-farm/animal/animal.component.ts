@@ -77,17 +77,10 @@ export class AnimalComponent {
   displayedColumns: string[] = [
     'animalId',
     'breedId',
-    'type',
     'animalCode',
-    'age',
-    'gender',
     'purDate',
     'price',
     'status',
-    'guardian1',
-    'guardian2',
-    'placeOfBirth',
-    'weight',
     'note',
   ];
   constructor(

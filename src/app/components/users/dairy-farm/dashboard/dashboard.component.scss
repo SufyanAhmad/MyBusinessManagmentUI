@@ -7,30 +7,6 @@
   font-size: 40px;
   margin-bottom: 15px;
 }
-/* Tabs */
-.tabs {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-bottom: 20px;
-}
-
-.tab {
-  background: #f5a623;
-  border: none;
-  color: #fff;
-  padding: 10px 16px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: 500;
-  transition: background 0.3s;
-}
-
-.tab.active,
-.tab:hover {
-  background: #e07a00;
-}
-
 .stats-cards {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
@@ -48,13 +24,11 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   overflow: hidden;
 }
-
 .card-image {
   position: absolute;
   top: 18px;
   left: 12px;
 }
-
 .card-image img {
   width: 80px;
   height: 70px;
@@ -62,20 +36,23 @@
   border-radius: 2px;
   margin-bottom: 50px;
 }
-
 .card-content {
   text-align: right;
 }
-
 .card-content h2 {
   font-size: 1.8rem;
   margin: 0;
   font-weight: 700;
 }
-
 .card-content p {
   margin: 2px 0 0;
   font-size: 0.9rem;
+}
+.stats-cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 15px;
+  margin-bottom: 55px;
 }
 
 .blue {
@@ -87,18 +64,18 @@
 .red {
   background: #ff5c40;
 }
+.calf {
+  background: #9b59b6;
+}
 .orange {
   background: #fd9808;
 }
-
-/* Tables and Charts */
 .tables {
   display: grid;
   // grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   grid-template-columns: 40% 60%;
   gap: 20px;
 }
-
 .table,
 .chart {
   background: #fff;
@@ -106,18 +83,15 @@
   border-radius: 10px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
-
 .table h3,
 .chart h3 {
   color: #333;
   margin-bottom: 10px;
 }
-
 .table table {
   width: 100%;
   border-collapse: collapse;
 }
-
 .table th,
 .table td {
   padding: 6px;
@@ -128,4 +102,104 @@
   position: relative;
   height: 380px;
   width: 100%;
+}
+.chart-container canvas {
+  width: 100% !important;
+  height: auto !important;
+  display: block;
+}
+
+.alt-dropdown {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+  margin-bottom: 10px;
+  overflow: visible !important;
+}
+
+.alt-dropdown p-select,
+.alt-dropdown p-dropdown {
+  width: 200px;
+  max-width: 100%;
+  z-index: 2000 !important;
+  margin-right: 15px;
+}
+
+@media (max-width: 768px) {
+  .tables {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .table,
+  .chart-container,
+  .milk-production-section {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .chart-container {
+    height: 300px;
+  }
+  .alt-dropdown {
+    justify-content: flex-end;
+  }
+  .alt-dropdown p-select {
+    width: 180px;
+  }
+  .stats-cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .card-content {
+    margin-left: calc(70px + 20px);
+  }
+  .card-content p {
+    font-size: 0.75rem;
+  }
+  .card-content h2 {
+    font-size: 1.4rem;
+  }
+  .card-image img {
+    width: 70px;
+    height: 60px;
+    margin-bottom: 50px;
+  }
+}
+@media (max-width: 480px) {
+  .stats-cards {
+    grid-template-columns: 1fr;
+  }
+  .card-content {
+    margin-left: calc(60px + 15px);
+  }
+  .card-content p {
+    font-size: 0.7rem;
+  }
+  .card-content h2 {
+    font-size: 1.2rem;
+  }
+  .card-image img {
+    width: 60px;
+    height: 50px;
+    margin-bottom: 0;
+  }
+  .chart-container {
+    height: 250px;
+  }
+
+  .table table {
+    font-size: 0.9rem;
+  }
+  .alt-dropdown {
+    justify-content: center;
+  }
+  .alt-dropdown p-select {
+    width: 100%;
+  }
+}
+@media (max-width: 1024px) {
+  .stats-cards {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }

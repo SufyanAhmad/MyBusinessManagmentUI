@@ -114,14 +114,14 @@
   <div class="mat-elevation-z8 mt-4 rounded-table">
     <div class="table-responsive">
       <table mat-table matSort [dataSource]="dataSource">
-        <ng-container matColumnDef="feedId">
+        <ng-container matColumnDef="cell1">
           <th
             mat-header-cell
             *matHeaderCellDef
             class="table-header"
             style="min-width: 120px"
           >
-            Feed ID
+            Feed Name
           </th>
           <td
             mat-cell
@@ -129,41 +129,15 @@
             class="tableText-bold"
             [routerLink]="['/dairyFarm/feed/', element.feedId]"
           >
-            {{ element.feedRef }}
+            {{ element.name }}
           </td>
         </ng-container>
-        <ng-container matColumnDef="animalId">
+        <ng-container matColumnDef="cell2">
           <th
             mat-header-cell
             *matHeaderCellDef
             class="table-header"
             style="min-width: 120px"
-          >
-            Animal ID
-          </th>
-          <td mat-cell *matCellDef="let element" class="tableText-thin">
-            {{ element.animalRef }}
-          </td>
-        </ng-container>
-        <ng-container matColumnDef="feedName">
-          <th
-            mat-header-cell
-            *matHeaderCellDef
-            class="table-header"
-            style="min-width: 140px !important"
-          >
-            Feed Name
-          </th>
-          <td mat-cell *matCellDef="let element" class="tableText-thin">
-            {{ element.name }}
-          </td>
-        </ng-container>
-        <ng-container matColumnDef="quantity">
-          <th
-            mat-header-cell
-            *matHeaderCellDef
-            class="table-header"
-            style="min-width: 150px !important"
           >
             Quantity
           </th>
@@ -171,20 +145,51 @@
             {{ element.quantity }}
           </td>
         </ng-container>
-        <ng-container matColumnDef="feedTime">
+        <ng-container matColumnDef="cell3">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            class="table-header"
+            style="min-width: 140px !important"
+          >
+            Date
+          </th>
+          <td mat-cell *matCellDef="let element" class="tableText-thin">
+            {{ element.date | date : "dd/MM/yyyy" }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="cell4">
           <th
             mat-header-cell
             *matHeaderCellDef
             class="table-header"
             style="min-width: 150px !important"
           >
-            Feed Time
+            expiryDate
           </th>
           <td mat-cell *matCellDef="let element" class="tableText-thin">
-            {{ element.feedTime }}
+            {{ element.expiryDate | date : "dd/MM/yyyy" }}
           </td>
         </ng-container>
-        <ng-container matColumnDef="note">
+        <ng-container matColumnDef="cell5">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            class="table-header"
+            style="min-width: 170px !important"
+          >
+            Feed Type
+          </th>
+          <td
+            mat-cell
+            *matCellDef="let element"
+            class="tableText-thin one-line-text"
+          >
+            {{ element.feedType }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="cell6">
           <th
             mat-header-cell
             *matHeaderCellDef
@@ -218,7 +223,7 @@
   >
   </mat-paginator>
 </div>
-<!-- Add Dairy Business -->
+<!-- Add Feed -->
 
 <p-dialog
   header="Add Feed"
@@ -252,54 +257,6 @@
         </span>
       </div>
       <div class="col-6">
-        <span class="label"
-          >Animal ID<span class="required-icon">*</span>
-        </span>
-        <div class="alt-dropdown">
-          <p-select
-            [options]="AnimalList"
-            name="key"
-            optionLabel="type"
-            optionValue="id"
-            [showClear]="true"
-            placeholder="Animal "
-            formControlName="animalId"
-          />
-          <span
-            class="errorValidation"
-            *ngIf="
-              addFeedForm.get('animalId')?.touched &&
-              addFeedForm.get('animalId')?.hasError('required')
-            "
-          >
-            Required field
-          </span>
-        </div>
-      </div>
-      <div class="col-6">
-        <span class="label">Supplier<span class="required-icon">*</span> </span>
-        <div class="alt-dropdown">
-          <p-select
-            [options]="SupplierList"
-            name="key"
-            optionLabel="type"
-            optionValue="id"
-            [showClear]="true"
-            placeholder="Supplier "
-            formControlName="supplierId"
-          />
-          <span
-            class="errorValidation"
-            *ngIf="
-              addFeedForm.get('supplierId')?.touched &&
-              addFeedForm.get('supplierId')?.hasError('required')
-            "
-          >
-            Required field
-          </span>
-        </div>
-      </div>
-      <div class="col-6">
         <span class="label">Quantity<span class="required-icon">*</span></span>
         <input
           type="number"
@@ -318,22 +275,57 @@
         </span>
       </div>
       <div class="col-6">
-        <span class="label">Feed Time<span class="required-icon">*</span></span>
+        <span class="label">date<span class="required-icon">*</span></span>
         <input
-          type="time"
-          class="input-felid custom-time"
+          type="date"
+          class="input-felid custom-date"
           placeholder="Enter time..."
-          formControlName="feedTime"
+          formControlName="date"
         />
         <span
           class="errorValidation"
           *ngIf="
-            addFeedForm.get('feedTime')?.touched &&
-            addFeedForm.get('feedTime')?.hasError('required')
+            addFeedForm.get('date')?.touched &&
+            addFeedForm.get('date')?.hasError('required')
           "
         >
           Required field
         </span>
+      </div>
+      <div class="col-6">
+        <span class="label">Expiry Date</span>
+        <input
+          type="date"
+          class="input-felid custom-date"
+          placeholder="Enter expiry date..."
+          formControlName="expiryDate"
+        />
+      </div>
+
+      <div class="col-6">
+        <span class="label"
+          >Feed Type<span class="required-icon">*</span>
+        </span>
+        <div class="alt-dropdown">
+          <p-select
+            [options]="FeedTypes"
+            name="key"
+            optionLabel="type"
+            optionValue="id"
+            [showClear]="true"
+            placeholder="Select feed type"
+            formControlName="feedTypeId"
+          />
+          <span
+            class="errorValidation"
+            *ngIf="
+              addFeedForm.get('feedTypeId')?.touched &&
+              addFeedForm.get('feedTypeId')?.hasError('required')
+            "
+          >
+            Required field
+          </span>
+        </div>
       </div>
 
       <div class="col-12">
