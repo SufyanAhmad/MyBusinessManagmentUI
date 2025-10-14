@@ -16,7 +16,7 @@
     class="header-card d-flex align-items-center justify-content-between mb-4"
   >
     <div class="heading mb-0" style="color: #4079b0 !important">
-      {{ FeedDetail.feedRef }}
+      {{ FeedDetail.name }}
     </div>
   </div>
   <!-- Customer Details -->
@@ -52,7 +52,7 @@
   </div>
   <form [formGroup]="editFeedForm">
     <div class="row g-3 align-items-end mt-4">
-      <div class="col-md-4 mb-4">
+      <!-- <div class="col-md-4 mb-4">
         <span class="label">Feed Id</span>
         <input
           type="text"
@@ -61,51 +61,7 @@
           [readonly]="true"
           placeholder="Enter feed id..."
         />
-      </div>
-      <div class="col-md-4 mb-4 position-relative">
-        <span class="label"
-          >Animal Type<span class="required-icon">*</span>
-        </span>
-        <div class="alt-dropdown" [ngClass]="{ 'input-disable': isReadOnly }">
-          <p-select
-            [options]="AnimalTypes"
-            optionLabel="type"
-            optionValue="id"
-            formControlName="animalId"
-            placeholder="Animal Type"
-          ></p-select>
-          <span
-            class="errorValidation"
-            *ngIf="
-              editFeedForm.get('animalId')?.touched &&
-              editFeedForm.get('animalId')?.hasError('required')
-            "
-          >
-            Required field
-          </span>
-        </div>
-      </div>
-      <div class="col-md-4 mb-4 position-relative">
-        <span class="label">Supplier<span class="required-icon">*</span> </span>
-        <div class="alt-dropdown" [ngClass]="{ 'input-disable': isReadOnly }">
-          <p-select
-            [options]="SupplierList"
-            optionLabel="type"
-            optionValue="id"
-            formControlName="supplierId"
-            placeholder="Supplier"
-          ></p-select>
-          <span
-            class="errorValidation"
-            *ngIf="
-              editFeedForm.get('supplierId')?.touched &&
-              editFeedForm.get('supplierId')?.hasError('required')
-            "
-          >
-            Required field
-          </span>
-        </div>
-      </div>
+      </div> -->
       <div class="col-md-4 mb-4">
         <span class="label">Feed name<span class="required-icon">*</span></span>
         <input
@@ -145,23 +101,56 @@
         </span>
       </div>
       <div class="col-md-4 mb-4 position-relative">
-        <span class="label">Feed Time<span class="required-icon">*</span></span>
+        <span class="label">Date<span class="required-icon">*</span></span>
         <input
-          type="text"
-          class="input-felid"
+          type="date"
+          class="input-felid custom-date"
           [ngClass]="{ 'input-disable': isReadOnly }"
-          placeholder="Enter feed time..."
-          formControlName="feedTime"
+          placeholder="Enter date..."
+          formControlName="date"
         />
         <span
           class="errorValidation"
           *ngIf="
-            editFeedForm.get('feedTime')?.touched &&
-            editFeedForm.get('feedTime')?.hasError('required')
+            editFeedForm.get('date')?.touched &&
+            editFeedForm.get('date')?.hasError('required')
           "
         >
           Required field
         </span>
+      </div>
+      <div class="col-md-4 mb-4 position-relative">
+        <span class="label">Date<span class="required-icon">*</span></span>
+        <input
+          type="date"
+          class="input-felid custom-date"
+          [ngClass]="{ 'input-disable': isReadOnly }"
+          placeholder="Enter expiry date..."
+          formControlName="expiryDate"
+        />
+      </div>
+      <div class="col-md-4 mb-4 position-relative">
+        <span class="label"
+          >Feed Type<span class="required-icon">*</span>
+        </span>
+        <div class="alt-dropdown" [ngClass]="{ 'input-disable': isReadOnly }">
+          <p-select
+            [options]="FeedTypes"
+            optionLabel="type"
+            optionValue="id"
+            formControlName="feedTypeId"
+            placeholder="Select Feed Type"
+          ></p-select>
+          <span
+            class="errorValidation"
+            *ngIf="
+              editFeedForm.get('feedTypeId')?.touched &&
+              editFeedForm.get('feedTypeId')?.hasError('required')
+            "
+          >
+            Required field
+          </span>
+        </div>
       </div>
       <div class="col-md-12 mb-4">
         <span class="label">Note</span>

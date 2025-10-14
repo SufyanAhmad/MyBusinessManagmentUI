@@ -41,8 +41,7 @@ export class EditFeedComponent {
   busUnitId: any = null;
   isArchived: boolean = false;
   businessUnitTypes: masterModal[] = [];
-  AnimalTypes: masterModal[] = [];
-  SupplierList: masterModal[] = [];
+  FeedTypes: masterModal[] = [];
 
   editFeedForm!: FormGroup;
 
@@ -116,8 +115,7 @@ export class EditFeedComponent {
           note: data.note,
         };
         this.initForm();
-        this.loadAnimalTypes();
-        this.loadParties();
+        this.loadFeedTypes();
         this.loading = false;
       },
       (error) => {
@@ -195,37 +193,17 @@ export class EditFeedComponent {
     });
   }
 
-  loadAnimalTypes() {
-    this.masterService.getAnimalTypes().subscribe(
+  loadFeedTypes() {
+    this.masterService.getFeedTypes().subscribe(
       (res) => {
-        let dt = res.data;
-        this.AnimalTypes = [];
+        let dt = res;
+        this.FeedTypes = [];
         for (let a = 0; a < dt.length; a++) {
           let _data: masterModal = {
-            id: dt[a].key,
-            type: dt[a].value,
+            id: dt[a].feedTypeId,
+            type: dt[a].feedType,
           };
-          this.AnimalTypes.push(_data);
-        }
-      },
-      (error) => {
-        if (error.status == 401) {
-          this.accountService.doLogout();
-        }
-      }
-    );
-  }
-  loadParties() {
-    this.masterService.getParties(1).subscribe(
-      (res) => {
-        var dt = res;
-        this.SupplierList = [];
-        for (let a = 0; a < dt.length; a++) {
-          let _data: masterModal = {
-            id: dt[a].partyId,
-            type: dt[a].name,
-          };
-          this.SupplierList.push(_data);
+          this.FeedTypes.push(_data);
         }
       },
       (error) => {
