@@ -40,17 +40,17 @@
   text-align: right;
 }
 .card-content h2 {
-  font-size: 1.8rem;
+  font-size: 1.4rem;
   margin: 0;
-  font-weight: 700;
+  font-weight: 600;
 }
 .card-content p {
   margin: 2px 0 0;
-  font-size: 0.9rem;
+  font-size: 0.8rem;
 }
 .stats-cards {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   gap: 15px;
   margin-bottom: 55px;
 }
@@ -69,6 +69,18 @@
 }
 .orange {
   background: #fd9808;
+}
+.pink {
+  background: #e53564;
+}
+.sky {
+  background: #7abadd;
+}
+.yellow {
+  background: #ffce3a;
+}
+.cgreen {
+  background: #50b595;
 }
 .tables {
   display: grid;
@@ -166,6 +178,7 @@
     margin-bottom: 50px;
   }
 }
+
 @media (max-width: 480px) {
   .stats-cards {
     grid-template-columns: 1fr;
@@ -201,5 +214,10 @@
 @media (max-width: 1024px) {
   .stats-cards {
     grid-template-columns: repeat(3, 1fr);
+  }
+}
+@media (max-width: 768px) {
+  .stats-cards {
+    grid-template-columns: repeat(2, 1fr);
   }
 }

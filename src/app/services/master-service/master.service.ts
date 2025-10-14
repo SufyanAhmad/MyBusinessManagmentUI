@@ -253,4 +253,18 @@ export class MasterService {
       })
     );
   }
+  getAnimalColor() {
+    return this.repositoryService.get('Master/get-animal-colors', true).pipe(
+      map((response: any) => {
+        return response;
+      })
+    );
+  }
+  getBirthTypes() {
+    return this.repositoryService.get('Master/get-birth-types', true).pipe(
+      map((response: any) => {
+        return response;
+      })
+    );
+  }
 }

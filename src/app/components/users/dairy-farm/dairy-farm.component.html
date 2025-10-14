@@ -34,7 +34,47 @@
       <!-- <li [routerLink]="['/dairyFarm/feed']" [routerLinkActive]="['active']">
         <span>Feed</span>
       </li> -->
-      <li class="menu-item" [routerLinkActive]="['active']">
+
+      <li
+        [routerLink]="['/dairyFarm/feed']"
+        [routerLinkActive]="['active']"
+        class="has-submenu"
+      >
+        <span class="li-flex">
+          <span>Feed</span>
+          <span
+            class="arrow"
+            (click)="toggleSubMenu($event)"
+            [class.open]="isSubMenuOpen"
+            >&#9654;</span
+          >
+        </span>
+        <!-- Submenu -->
+      </li>
+      <ul class="submenu" [class.open]="isSubMenuOpen">
+        <li
+          [routerLink]="['/dairyFarm/feed-stock']"
+          [routerLinkActive]="['active']"
+          class="submenu-li"
+        >
+          <span>Feed Stock</span>
+        </li>
+        <li
+          [routerLink]="['/dairyFarm/feed-transactions']"
+          [routerLinkActive]="['active']"
+          class="submenu-li"
+        >
+          <span>Feed Transactions</span>
+        </li>
+        <li
+          [routerLink]="['/dairyFarm/feed-consumption']"
+          [routerLinkActive]="['active']"
+          class="submenu-li"
+        >
+          <span>Feed Consumption</span>
+        </li>
+      </ul>
+      <!-- <li class="menu-item" [routerLinkActive]="['active']">
         <a [routerLink]="['/dairyFarm/feed']">
           <span>Feed</span>
           <span class="arrow">▼</span>
@@ -44,7 +84,7 @@
           <li
             [routerLink]="['/dairyFarm/feed-stock']"
             [routerLinkActive]="['active']"
-            class="sub-li"
+            class="submenu-li"
           >
             <span>Feed Stock</span>
           </li>
@@ -61,7 +101,7 @@
             <span>Feed Consumption</span>
           </li>
         </ul>
-      </li>
+      </li> -->
 
       <li
         [routerLink]="['/dairyFarm/milk-production']"

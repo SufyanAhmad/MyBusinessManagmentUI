@@ -277,6 +277,34 @@
   (onHide)="onDialogHide()"
 >
   <form [formGroup]="addAnimalForm">
+    <div class="row">
+      <!-- <div class="tabs">
+        <button [class.active]="activeTab === 1" (click)="setTab(1)">
+          Add Purchaseed Animal
+        </button>
+
+        <button [class.active]="activeTab === 2" (click)="setTab(2)">
+          Add Birth Animal
+        </button>
+      </div> -->
+      <div class="tabs">
+        <button
+          type="button"
+          [class.active]="addAnimalForm.get('animalTypeId')?.value === 1"
+          (click)="addAnimalForm.get('animalTypeId')?.setValue(1)"
+        >
+          Add Purchased Animal
+        </button>
+
+        <button
+          type="button"
+          [class.active]="addAnimalForm.get('animalTypeId')?.value === 2"
+          (click)="addAnimalForm.get('animalTypeId')?.setValue(2)"
+        >
+          Add New Born Animal
+        </button>
+      </div>
+    </div>
     <div class="row" style="row-gap: 20px">
       <div class="col-6">
         <span class="label"
@@ -305,24 +333,26 @@
         </span>
       </div>
       <div class="col-6">
-        <span class="label">Breed ID</span>
+        <span class="label"
+          >Animal Color<span class="required-icon">*</span>
+        </span>
         <div class="alt-dropdown">
           <p-select
-            [options]="Breeds"
-            [(ngModel)]="breedId"
-            name="breedId"
+            [options]="AnimalColor"
+            [(ngModel)]="key"
+            name="key"
             optionLabel="type"
             optionValue="id"
             [showClear]="true"
-            placeholder="Breeds"
-            formControlName="breedId"
+            placeholder="Select animal color "
+            formControlName="animalColorId"
           />
         </div>
         <span
           class="errorValidation"
           *ngIf="
-            addAnimalForm.get('breedId')?.touched &&
-            addAnimalForm.get('breedId')?.hasError('required')
+            addAnimalForm.get('animalColorId')?.touched &&
+            addAnimalForm.get('animalColorId')?.hasError('required')
           "
         >
           Required field
@@ -354,19 +384,43 @@
       </div>
       <div class="col-6">
         <span class="label"
-          >Animal Code<span class="required-icon">*</span></span
+          >Birth Type<span class="required-icon">*</span>
+        </span>
+        <div class="alt-dropdown">
+          <p-select
+            [options]="BirthType"
+            [(ngModel)]="key"
+            name="key"
+            optionLabel="type"
+            optionValue="id"
+            [showClear]="true"
+            placeholder="Select animal color "
+            formControlName="birthTypeId"
+          />
+        </div>
+        <span
+          class="errorValidation"
+          *ngIf="
+            addAnimalForm.get('birthTypeId')?.touched &&
+            addAnimalForm.get('birthTypeId')?.hasError('required')
+          "
         >
+          Required field
+        </span>
+      </div>
+      <div class="col-6">
+        <span class="label">Ear Tag<span class="required-icon">*</span></span>
         <input
           type="text"
           class="input-felid"
-          formControlName="animalCode"
-          placeholder="Enter animal code..."
+          formControlName="earTag"
+          placeholder="Enter ear tag..."
         />
         <span
           class="errorValidation"
           *ngIf="
-            addAnimalForm.get('animalCode')?.touched &&
-            addAnimalForm.get('animalCode')?.hasError('required')
+            addAnimalForm.get('earTag')?.touched &&
+            addAnimalForm.get('earTag')?.hasError('required')
           "
         >
           Required field
@@ -378,7 +432,7 @@
         >
         <input
           type="date"
-          class="input-felid custome-date"
+          class="input-felid custom-date"
           formControlName="age"
           placeholder="Enter birth date..."
           [max]="today"
@@ -390,7 +444,7 @@
         >
         <input
           type="date"
-          class="input-felid custome-date"
+          class="input-felid custom-date"
           placeholder="Enter purchase date..."
           formControlName="purchaseDate"
           [max]="today"

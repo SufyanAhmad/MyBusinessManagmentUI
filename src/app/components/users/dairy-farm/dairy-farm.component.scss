@@ -105,81 +105,48 @@
     }
   }
 }
-// ----------------------------------------------
-.menu-item {
+/* Sub Menu Container */
+.has-submenu {
+  flex-direction: column;
+  align-items: flex-start;
   position: relative;
-  padding: 10px 14px;
-  transition: margin-bottom 0.3s ease;
 }
-.menu-item > a {
+.submenu {
+  list-style: none;
+  padding-left: 30px;
+  margin: 5px 0 0;
+  display: none;
+  border-left: 3px solid #dce7f6;
+}
+.submenu.open {
+  display: block;
+}
+.submenu-li {
+  font-family: "Montserrat", sans-serif;
+  display: flex;
+  align-items: center;
+  padding: 10px 15px;
+  margin: 4px 0;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s;
+  font-size: 14px;
+  font-weight: 500;
+  color: #f3f6fb;
+}
+.submenu-li:hover {
+  background-color: #dce7f6;
+  color: #4079b0;
+}
+.li-flex {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  text-decoration: none;
-  color: inherit;
-  cursor: pointer;
+  width: 100%;
 }
 .arrow {
-  margin-left: 130px;
-  font-size: 1rem;
-  transition: transform 0.3s ease;
+  transition: transform 0.3s;
 }
-.menu-item:hover .arrow,
-.menu-item:has(.sub-menu li.active) .arrow {
-  transform: rotate(180deg);
-}
-.sub-menu {
-  position: absolute;
-  top: 100%;
-  left: 10px;
-  background: #4079b0;
-  border-radius: 8px;
-  padding: 6px 0;
-  margin: 0;
-  list-style: none;
-  opacity: 0;
-  visibility: hidden;
-  transform: translateY(10px);
-  transition: all 0.3s ease;
-  min-width: 180px;
-  border: 2px solid #dce7f6;
-  z-index: 100;
-  padding: 10px;
-}
-.menu-item:hover > .sub-menu {
-  opacity: 1;
-  visibility: visible;
-  transform: translateY(0);
-}
-.menu-item:has(.sub-menu li.active) > .sub-menu {
-  opacity: 1;
-  visibility: visible;
-  transform: translateY(0);
-}
-.menu-item:hover {
-  margin-bottom: 195px;
-}
-.menu-item:has(.sub-menu li.active) {
-  margin-bottom: 195px;
-}
-.sub-menu li {
-  list-style: none;
-  padding: 10px 16px;
-  white-space: nowrap;
-  text-align: left;
-  margin-left: 0px;
-}
-.sub-menu li.active,
-.sub-menu li.active:hover {
-  background-color: #dce7f6;
-  color: #4079b0;
-  font-weight: 600;
-  border-radius: 10px;
-}
-.sub-menu li:hover {
-  background-color: #dce7f6;
-  color: #4079b0;
-  font-weight: 600;
-  border-radius: 10px;
-  cursor: pointer;
+.arrow.open {
+  transform: rotate(90deg);
 }

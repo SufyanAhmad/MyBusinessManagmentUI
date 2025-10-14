@@ -61,14 +61,16 @@ export class AnimalComponent {
   isFemale: boolean = true;
   animalList: AnimalModel[] = [];
   AnimalTypes: masterModal[] = [];
+  AnimalColor: masterModal[] = [];
   AnimalStatus: masterModal[] = [];
+  BirthType: masterModal[] = [];
   Breeds: masterModal[] = [];
   businessUnitId: any = null;
   key: any = null;
   breedId: any = null;
   animalStatusId: any = null;
   businessUnitName: any = '';
-  bgColor: string = '#FFCE3A';
+  activeTab = 1;
   // for add animal popup
   addLoading: boolean = false;
   visible: boolean = false;
@@ -226,8 +228,7 @@ export class AnimalComponent {
   initForm() {
     this.addAnimalForm = this.formBuilder.group({
       animalTypeId: [0, [Validators.required]],
-      breedId: [null],
-      animalCode: [null, [Validators.required]],
+      earTag: [null, [Validators.required]],
       age: [null, [Validators.required]],
       address: [null],
       isFemale: [true, [Validators.pattern]],
@@ -241,6 +242,8 @@ export class AnimalComponent {
       weight: [null],
       animalStatusId: [0, [Validators.pattern]],
       businessUnitId: [this.busUnitId],
+      animalColorId: [0, [Validators.pattern]],
+      birthTypeId: [0, [Validators.pattern]],
     });
   }
   onDialogHide() {
@@ -252,6 +255,9 @@ export class AnimalComponent {
         this.searchKey = null;
       }
     }
+  }
+  setTab(id: number) {
+    this.activeTab = id;
   }
   loadAnimalTypes() {
     this.masterService.getAnimalTypes().subscribe(
@@ -265,7 +271,7 @@ export class AnimalComponent {
           };
           this.AnimalTypes.push(_data);
         }
-        this.loadBreeds();
+        this.loadAnimalColor();
       },
       (error) => {
         if (error.status == 401) {
@@ -274,19 +280,19 @@ export class AnimalComponent {
       }
     );
   }
-  loadBreeds() {
-    this.masterService.getBreeds().subscribe(
+  loadAnimalColor() {
+    this.masterService.getAnimalColor().subscribe(
       (res) => {
-        var dt = res.data;
-        this.Breeds = [];
+        let dt = res.data;
+        this.AnimalColor = [];
         for (let a = 0; a < dt.length; a++) {
           let _data: masterModal = {
-            id: dt[a].breedId,
-            type: dt[a].breedRef,
+            id: dt[a].key,
+            type: dt[a].value,
           };
-          this.Breeds.push(_data);
+          this.AnimalColor.push(_data);
         }
-        this.loadAnimalStatus();
+        this.loadBirthType();
       },
       (error) => {
         if (error.status == 401) {
@@ -295,6 +301,27 @@ export class AnimalComponent {
       }
     );
   }
+  // loadBreeds() {
+  //   this.masterService.getBreeds().subscribe(
+  //     (res) => {
+  //       var dt = res.data;
+  //       this.Breeds = [];
+  //       for (let a = 0; a < dt.length; a++) {
+  //         let _data: masterModal = {
+  //           id: dt[a].breedId,
+  //           type: dt[a].breedRef,
+  //         };
+  //         this.Breeds.push(_data);
+  //       }
+  //       this.loadAnimalStatus();
+  //     },
+  //     (error) => {
+  //       if (error.status == 401) {
+  //         this.accountService.doLogout();
+  //       }
+  //     }
+  //   );
+  // }
   loadAnimalStatus() {
     this.masterService.getAnimalStatus().subscribe(
       (res) => {
@@ -306,6 +333,26 @@ export class AnimalComponent {
             type: dt[a].value,
           };
           this.AnimalStatus.push(_data);
+        }
+      },
+      (error) => {
+        if (error.status == 401) {
+          this.accountService.doLogout();
+        }
+      }
+    );
+  }
+  loadBirthType() {
+    this.masterService.getBirthTypes().subscribe(
+      (res) => {
+        let dt = res.data;
+        this.BirthType = [];
+        for (let a = 0; a < dt.length; a++) {
+          let _data: masterModal = {
+            id: dt[a].key,
+            type: dt[a].value,
+          };
+          this.BirthType.push(_data);
         }
       },
       (error) => {
