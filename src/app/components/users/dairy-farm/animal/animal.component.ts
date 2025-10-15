@@ -63,6 +63,7 @@ export class AnimalComponent {
   AnimalTypes: masterModal[] = [];
   AnimalColor: masterModal[] = [];
   AnimalStatus: masterModal[] = [];
+  AnimalSourceTypes: masterModal[] = [];
   BirthType: masterModal[] = [];
   Breeds: masterModal[] = [];
   businessUnitId: any = null;
@@ -71,6 +72,7 @@ export class AnimalComponent {
   animalStatusId: any = null;
   businessUnitName: any = '';
   activeTab = 1;
+  animalSourceTypeId: any = null;
   // for add animal popup
   addLoading: boolean = false;
   visible: boolean = false;
@@ -78,8 +80,8 @@ export class AnimalComponent {
   today: string = new Date().toISOString().split('T')[0];
   displayedColumns: string[] = [
     'animalId',
+    'earTag',
     'breedId',
-    'animalCode',
     'purDate',
     'price',
     'status',
@@ -120,8 +122,9 @@ export class AnimalComponent {
           this.animalList = [];
           this.dataSource = new MatTableDataSource(this.animalList);
           let data = {
-            searchKey: this.searchKey ?? null,
+            searchKey: this.searchKey,
             businessUnitId: this.busUnitId,
+            animalSourceTypeId: this.animalSourceTypeId,
             pageNumber: this.paginator.pageIndex + 1,
             pageSize: 10,
           };
@@ -157,10 +160,10 @@ export class AnimalComponent {
                 animalRef: list[a].animalRef,
                 animalType: list[a].animalType,
                 businessUnit: list[a].businessUnit,
-                breedRef: list[a].breedRef,
+                breedType: list[a].breedType,
                 animalTypeId: list[a].animalTypeId,
                 breedId: list[a].breedId,
-                animalCode: list[a].animalCode,
+                earTag: list[a].earTag,
                 age: list[a].age,
                 isFemale: list[a].isFemale,
                 isActive: list[a].isActive,
@@ -173,6 +176,15 @@ export class AnimalComponent {
                 placeOfBirth: list[a].placeOfBirth,
                 weight: list[a].weight,
                 animalStatusId: list[a].animalStatusId,
+                animalStatus: list[a].animalStatus,
+                animalColor: list[a].animalColor,
+                birthType: list[a].birthType,
+                animalSourceType: list[a].animalSourceType,
+                animalSourceTypeId: list[a].animalSourceTypeId,
+                breedTypeId: list[a].breedTypeId,
+                birthDate: list[a].birthDate,
+                animalColorId: list[a].animalColorId,
+                birthTypeId: list[a].birthTypeId,
               };
               this.animalList.push(animal);
             }
@@ -227,23 +239,24 @@ export class AnimalComponent {
   }
   initForm() {
     this.addAnimalForm = this.formBuilder.group({
+      animalSourceTypeId: [1, [Validators.required]],
       animalTypeId: [0, [Validators.required]],
+      breedTypeId: [0, [Validators.required]],
       earTag: [null, [Validators.required]],
-      age: [null, [Validators.required]],
-      address: [null],
-      isFemale: [true, [Validators.pattern]],
-      isActive: [true, [Validators.pattern]],
-      purchaseDate: [null, [Validators.pattern]],
-      price: [0],
+      birthDate: [this.today],
+      isFemale: [true, [Validators.required]],
+      isActive: [true, [Validators.required]],
+      purchaseDate: [this.today, [Validators.required]],
+      price: [0, [Validators.required]],
       note: [null],
       guardian1: [null],
       guardian2: [null],
       placeOfBirth: [null],
       weight: [null],
-      animalStatusId: [0, [Validators.pattern]],
+      animalStatusId: [0, [Validators.required]],
       businessUnitId: [this.busUnitId],
-      animalColorId: [0, [Validators.pattern]],
-      birthTypeId: [0, [Validators.pattern]],
+      animalColorId: [0, [Validators.required]],
+      birthTypeId: [0, [Validators.required]],
     });
   }
   onDialogHide() {
@@ -293,47 +306,7 @@ export class AnimalComponent {
           this.AnimalColor.push(_data);
         }
         this.loadBirthType();
-      },
-      (error) => {
-        if (error.status == 401) {
-          this.accountService.doLogout();
-        }
-      }
-    );
-  }
-  // loadBreeds() {
-  //   this.masterService.getBreeds().subscribe(
-  //     (res) => {
-  //       var dt = res.data;
-  //       this.Breeds = [];
-  //       for (let a = 0; a < dt.length; a++) {
-  //         let _data: masterModal = {
-  //           id: dt[a].breedId,
-  //           type: dt[a].breedRef,
-  //         };
-  //         this.Breeds.push(_data);
-  //       }
-  //       this.loadAnimalStatus();
-  //     },
-  //     (error) => {
-  //       if (error.status == 401) {
-  //         this.accountService.doLogout();
-  //       }
-  //     }
-  //   );
-  // }
-  loadAnimalStatus() {
-    this.masterService.getAnimalStatus().subscribe(
-      (res) => {
-        let dt = res.data;
-        this.AnimalStatus = [];
-        for (let a = 0; a < dt.length; a++) {
-          let _data: masterModal = {
-            id: dt[a].key,
-            type: dt[a].value,
-          };
-          this.AnimalStatus.push(_data);
-        }
+        this.loadAnimalStatus();
       },
       (error) => {
         if (error.status == 401) {
@@ -354,6 +327,69 @@ export class AnimalComponent {
           };
           this.BirthType.push(_data);
         }
+        this.loadBreeds();
+      },
+      (error) => {
+        if (error.status == 401) {
+          this.accountService.doLogout();
+        }
+      }
+    );
+  }
+  loadBreeds() {
+    this.masterService.getBreeds().subscribe(
+      (res) => {
+        var dt = res.data;
+        this.Breeds = [];
+        for (let a = 0; a < dt.length; a++) {
+          let _data: masterModal = {
+            id: dt[a].key,
+            type: dt[a].value,
+          };
+          this.Breeds.push(_data);
+        }
+        this.loadAnimalStatus();
+      },
+      (error) => {
+        if (error.status == 401) {
+          this.accountService.doLogout();
+        }
+      }
+    );
+  }
+  loadAnimalStatus() {
+    this.masterService.getAnimalStatus().subscribe(
+      (res) => {
+        let dt = res.data;
+        this.AnimalStatus = [];
+        for (let a = 0; a < dt.length; a++) {
+          let _data: masterModal = {
+            id: dt[a].key,
+            type: dt[a].value,
+          };
+          this.AnimalStatus.push(_data);
+        }
+        this.loadAnimalSourceTypes();
+      },
+      (error) => {
+        if (error.status == 401) {
+          this.accountService.doLogout();
+        }
+      }
+    );
+  }
+  loadAnimalSourceTypes() {
+    this.masterService.getAnimalSourceTypes().subscribe(
+      (res) => {
+        let dt = res.data;
+        this.AnimalSourceTypes = [];
+        for (let a = 0; a < dt.length; a++) {
+          let _data: masterModal = {
+            id: dt[a].key,
+            type: dt[a].value,
+          };
+          this.AnimalSourceTypes.push(_data);
+        }
       },
       (error) => {
         if (error.status == 401) {
@@ -365,6 +401,7 @@ export class AnimalComponent {
   ResetFilter() {
     this.searchKey = null;
     this.businessUnitId = null;
+    this.animalSourceTypeId = null;
     this.ngAfterViewInit();
   }
 }

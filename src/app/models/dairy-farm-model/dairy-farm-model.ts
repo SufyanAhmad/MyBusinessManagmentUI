@@ -52,6 +52,7 @@ export interface DairyFarmModel {
   businessTypeId: number;
   businessType: string;
 }
+
 export interface AnimalModel {
   animalId?: String;
   createdBy?: String;
@@ -59,10 +60,10 @@ export interface AnimalModel {
   animalRef?: String;
   animalType?: String;
   businessUnit?: String;
-  breedRef?: String;
+  breedType?: String;
   animalTypeId: number;
   breedId: String;
-  animalCode: String;
+  earTag: String;
   age: String;
   isFemale: Boolean;
   isActive: Boolean;
@@ -75,6 +76,15 @@ export interface AnimalModel {
   placeOfBirth: String;
   weight: String;
   animalStatusId: number;
+  animalStatus?: String;
+  animalColor?: String;
+  birthType?: String;
+  animalSourceType?: String;
+  animalSourceTypeId: number;
+  breedTypeId: number;
+  birthDate: String;
+  animalColorId: number;
+  birthTypeId: number;
 }
 export interface BreedModel {
   breedId: String;

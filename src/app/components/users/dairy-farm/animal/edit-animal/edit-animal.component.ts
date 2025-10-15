@@ -51,6 +51,7 @@ export class EditAnimalComponent {
   businessUnitTypes: masterModal[] = [];
   AnimalTypes: masterModal[] = [];
   AnimalStatus: masterModal[] = [];
+  AnimalColor: masterModal[] = [];
   isFemale: boolean = true;
   isActive: boolean = false;
   key: any = null;
@@ -64,10 +65,10 @@ export class EditAnimalComponent {
     animalRef: '',
     animalType: '',
     businessUnit: '',
-    breedRef: '',
+    breedType: '',
     animalTypeId: 0,
     breedId: '',
-    animalCode: '',
+    earTag: '',
     age: '',
     isFemale: true,
     isActive: true,
@@ -80,6 +81,15 @@ export class EditAnimalComponent {
     placeOfBirth: '',
     weight: '',
     animalStatusId: 0,
+    animalStatus: '',
+    animalColor: '',
+    birthType: '',
+    animalSourceType: '',
+    animalSourceTypeId: 0,
+    breedTypeId: 0,
+    birthDate: '',
+    animalColorId: 0,
+    birthTypeId: 0,
   };
 
   constAnimalDetail: AnimalModel = {
@@ -89,10 +99,10 @@ export class EditAnimalComponent {
     animalRef: '',
     animalType: '',
     businessUnit: '',
-    breedRef: '',
+    breedType: '',
     animalTypeId: 0,
     breedId: '',
-    animalCode: '',
+    earTag: '',
     age: '',
     isFemale: true,
     isActive: true,
@@ -105,7 +115,17 @@ export class EditAnimalComponent {
     placeOfBirth: '',
     weight: '',
     animalStatusId: 0,
+    animalStatus: '',
+    animalColor: '',
+    birthType: '',
+    animalSourceType: '',
+    animalSourceTypeId: 0,
+    breedTypeId: 0,
+    birthDate: '',
+    animalColorId: 0,
+    birthTypeId: 0,
   };
+
   constructor(
     private route: ActivatedRoute,
     private location: Location,
@@ -128,7 +148,7 @@ export class EditAnimalComponent {
       (dt) => {
         let data = dt.data;
         let purchaseDate = data.purchaseDate?.split('T')[0];
-
+        let birthDate = data.birthDate?.split('T')[0];
         this.AnimalDetail = {
           animalId: data.animalId,
           createdBy: data.createdBy,
@@ -136,10 +156,10 @@ export class EditAnimalComponent {
           animalRef: data.animalRef,
           animalType: data.animalType,
           businessUnit: data.businessUnit,
-          breedRef: data.breedRef,
+          breedType: data.breedType,
           animalTypeId: data.animalTypeId,
           breedId: data.breedId,
-          animalCode: data.animalCode,
+          earTag: data.earTag,
           age: data.age,
           isFemale: data.isFemale,
           isActive: data.isActive,
@@ -152,6 +172,15 @@ export class EditAnimalComponent {
           placeOfBirth: data.placeOfBirth,
           weight: data.weight,
           animalStatusId: data.animalStatusId,
+          animalStatus: data.animalStatus,
+          animalColor: data.animalColor,
+          birthType: data.birthType,
+          animalSourceType: data.animalSourceType,
+          animalSourceTypeId: data.animalSourceTypeId,
+          breedTypeId: data.breedTypeId,
+          birthDate: birthDate,
+          animalColorId: data.animalColorId,
+          birthTypeId: data.birthTypeId,
         };
 
         this.constAnimalDetail = {
@@ -161,10 +190,10 @@ export class EditAnimalComponent {
           animalRef: data.animalRef,
           animalType: data.animalType,
           businessUnit: data.businessUnit,
-          breedRef: data.breedRef,
+          breedType: data.breedType,
           animalTypeId: data.animalTypeId,
           breedId: data.breedId,
-          animalCode: data.animalCode,
+          earTag: data.earTag,
           age: data.age,
           isFemale: data.isFemale,
           isActive: data.isActive,
@@ -177,6 +206,15 @@ export class EditAnimalComponent {
           placeOfBirth: data.placeOfBirth,
           weight: data.weight,
           animalStatusId: data.animalStatusId,
+          animalStatus: data.animalStatus,
+          animalColor: data.animalColor,
+          birthType: data.birthType,
+          animalSourceType: data.animalSourceType,
+          animalSourceTypeId: data.animalSourceTypeId,
+          breedTypeId: data.breedTypeId,
+          birthDate: birthDate,
+          animalColorId: data.animalColorId,
+          birthTypeId: data.birthTypeId,
         };
         this.initForm();
         this.loadAnimalTypes();
@@ -232,7 +270,7 @@ export class EditAnimalComponent {
     this.AnimalDetail = {
       animalTypeId: this.constAnimalDetail.animalTypeId,
       breedId: this.constAnimalDetail.breedId,
-      animalCode: this.constAnimalDetail.animalCode,
+      earTag: this.constAnimalDetail.earTag,
       age: this.constAnimalDetail.age,
       isFemale: this.constAnimalDetail.isFemale,
       isActive: this.constAnimalDetail.isActive,
@@ -245,6 +283,11 @@ export class EditAnimalComponent {
       placeOfBirth: this.constAnimalDetail.placeOfBirth,
       weight: this.constAnimalDetail.weight,
       animalStatusId: this.constAnimalDetail.animalStatusId,
+      animalSourceTypeId: this.constAnimalDetail.animalStatusId,
+      breedTypeId: this.constAnimalDetail.breedTypeId,
+      birthDate: this.constAnimalDetail.birthDate,
+      animalColorId: this.constAnimalDetail.animalColorId,
+      birthTypeId: this.constAnimalDetail.birthTypeId,
     };
     this.isReadOnly = true;
     this.initForm();
@@ -253,8 +296,8 @@ export class EditAnimalComponent {
   initForm() {
     this.editAnimalForm = this.formBuilder.group({
       animalTypeId: [this.AnimalDetail.animalTypeId, Validators.required],
-      breedId: [this.AnimalDetail.breedId],
-      animalCode: [this.AnimalDetail.animalCode, [Validators.required]],
+      breedTypeId: [this.AnimalDetail.breedTypeId],
+      earTag: [this.AnimalDetail.earTag, [Validators.required]],
       age: [this.AnimalDetail.age],
       isFemale: [this.AnimalDetail.isFemale],
       isActive: [this.AnimalDetail.isActive],
@@ -267,6 +310,8 @@ export class EditAnimalComponent {
       placeOfBirth: [this.AnimalDetail.placeOfBirth],
       weight: [this.AnimalDetail.weight],
       animalStatusId: [this.AnimalDetail.animalStatusId],
+      animalColorId: [this.AnimalDetail.animalColorId],
+      birthDate: [this.AnimalDetail.birthDate],
     });
   }
   loadAnimalTypes() {
@@ -280,8 +325,8 @@ export class EditAnimalComponent {
             type: dt[a].value,
           };
           this.AnimalTypes.push(_data);
-          this.loadBreeds();
         }
+        this.loadBreeds();
       },
       (error) => {
         if (error.status == 401) {
@@ -297,8 +342,8 @@ export class EditAnimalComponent {
         this.Breeds = [];
         for (let a = 0; a < dt.length; a++) {
           let _data: masterModal = {
-            id: dt[a].breedId,
-            type: dt[a].breedRef,
+            id: dt[a].key,
+            type: dt[a].value,
           };
           this.Breeds.push(_data);
         }
@@ -322,6 +367,27 @@ export class EditAnimalComponent {
             type: dt[a].value,
           };
           this.AnimalStatus.push(_data);
+        }
+        this.loadAnimalColor();
+      },
+      (error) => {
+        if (error.status == 401) {
+          this.accountService.doLogout();
+        }
+      }
+    );
+  }
+  loadAnimalColor() {
+    this.masterService.getAnimalColor().subscribe(
+      (res) => {
+        let dt = res.data;
+        this.AnimalColor = [];
+        for (let a = 0; a < dt.length; a++) {
+          let _data: masterModal = {
+            id: dt[a].key,
+            type: dt[a].value,
+          };
+          this.AnimalColor.push(_data);
         }
       },
       (error) => {

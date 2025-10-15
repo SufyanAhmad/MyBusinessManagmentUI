@@ -58,11 +58,22 @@
           </svg>
         </div>
       </div>
+      <span class="alarms mt-4 mb-3 mx-3 alt-dropdown alt-dropdown-small">
+        <p-select
+          [options]="AnimalSourceTypes"
+          [(ngModel)]="animalSourceTypeId"
+          optionLabel="type"
+          optionValue="id"
+          [showClear]="true"
+          placeholder="Select source type"
+          (onChange)="getAnimalList()"
+        ></p-select>
+      </span>
     </span>
     <div class="d-flex align-items-center gap-5">
       <span
         (click)="ResetFilter()"
-        *ngIf="searchKey != null"
+        *ngIf="searchKey != null || animalSourceTypeId != null"
         class="tableText-bold mt-2"
         style="color: #12557e; font-weight: 700"
       >
@@ -132,6 +143,19 @@
             {{ element.animalRef }}
           </td>
         </ng-container>
+        <ng-container matColumnDef="earTag">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            class="table-header"
+            style="min-width: 140px !important"
+          >
+            Ear Tag
+          </th>
+          <td mat-cell *matCellDef="let element" class="tableText-thin">
+            {{ element.earTag }}
+          </td>
+        </ng-container>
         <ng-container matColumnDef="breedId">
           <th
             mat-header-cell
@@ -139,23 +163,10 @@
             class="table-header"
             style="min-width: 150px"
           >
-            Breed Name
+            Breed Type
           </th>
           <td mat-cell *matCellDef="let element" class="tableText-thin">
-            {{ element.breedRef }}
-          </td>
-        </ng-container>
-        <ng-container matColumnDef="animalCode">
-          <th
-            mat-header-cell
-            *matHeaderCellDef
-            class="table-header"
-            style="min-width: 140px !important"
-          >
-            Animal CODE
-          </th>
-          <td mat-cell *matCellDef="let element" class="tableText-thin">
-            {{ element.animalCode }}
+            {{ element.breedType }}
           </td>
         </ng-container>
         <ng-container matColumnDef="purDate">
@@ -197,37 +208,51 @@
             <div
               class="mat_table_btn"
               *ngIf="element.animalStatusId == 1"
-              [style.background-color]="'#50B595'"
+              [style.background-color]="'#FFCE3A'"
             >
-              Milking
+              Calf
             </div>
             <div
               class="mat_table_btn"
               *ngIf="element.animalStatusId == 2"
-              [style.background-color]="'#FD9808'"
+              [style.background-color]="'#7C9052'"
             >
-              NonMilking
+              Heifer
             </div>
             <div
               class="mat_table_btn"
               *ngIf="element.animalStatusId == 3"
-              [style.background-color]="'#FD9808'"
+              [style.background-color]="'#FF5C40'"
             >
-              Pregnent
+              Fresh
             </div>
             <div
               class="mat_table_btn"
               *ngIf="element.animalStatusId == 4"
-              [style.background-color]="'#50B595'"
+              [style.background-color]="'#E53564'"
             >
-              Child
+              Ready
             </div>
             <div
               class="mat_table_btn"
               *ngIf="element.animalStatusId == 5"
-              [style.background-color]="'#FFCE3A'"
+              [style.background-color]="'#7ABADD'"
             >
-              Expired
+              Inseminated
+            </div>
+            <div
+              class="mat_table_btn"
+              *ngIf="element.animalStatusId == 6"
+              [style.background-color]="'#FD9808'"
+            >
+              PregnantHeiferCow
+            </div>
+            <div
+              class="mat_table_btn"
+              *ngIf="element.animalStatusId == 7"
+              [style.background-color]="'#50B595'"
+            >
+              PregnantNonMilking
             </div>
           </td>
         </ng-container>
@@ -258,12 +283,11 @@
     <app-loading></app-loading>
   </div>
   <mat-paginator
-    pageSize="10"
-    [length]="animalList.length"
+    [length]="resultsLength"
+    [pageSize]="10"
     showFirstLastButtons
-    aria-label="Select page of periodic elements"
-  >
-  </mat-paginator>
+    aria-label="Select page of animals"
+  ></mat-paginator>
 </div>
 
 <!-- Add Animal -->
@@ -278,28 +302,19 @@
 >
   <form [formGroup]="addAnimalForm">
     <div class="row">
-      <!-- <div class="tabs">
-        <button [class.active]="activeTab === 1" (click)="setTab(1)">
-          Add Purchaseed Animal
-        </button>
-
-        <button [class.active]="activeTab === 2" (click)="setTab(2)">
-          Add Birth Animal
-        </button>
-      </div> -->
-      <div class="tabs">
+      <div class="tabs mb-4">
         <button
           type="button"
-          [class.active]="addAnimalForm.get('animalTypeId')?.value === 1"
-          (click)="addAnimalForm.get('animalTypeId')?.setValue(1)"
+          [class.active]="addAnimalForm.get('animalSourceTypeId')?.value === 1"
+          (click)="addAnimalForm.get('animalSourceTypeId')?.setValue(1)"
         >
           Add Purchased Animal
         </button>
 
         <button
           type="button"
-          [class.active]="addAnimalForm.get('animalTypeId')?.value === 2"
-          (click)="addAnimalForm.get('animalTypeId')?.setValue(2)"
+          [class.active]="addAnimalForm.get('animalSourceTypeId')?.value === 2"
+          (click)="addAnimalForm.get('animalSourceTypeId')?.setValue(2)"
         >
           Add New Born Animal
         </button>
@@ -313,12 +328,11 @@
         <div class="alt-dropdown">
           <p-select
             [options]="AnimalTypes"
-            [(ngModel)]="key"
             name="key"
             optionLabel="type"
             optionValue="id"
             [showClear]="true"
-            placeholder="Animal Type "
+            placeholder="Select animal Type "
             formControlName="animalTypeId"
           />
         </div>
@@ -334,12 +348,36 @@
       </div>
       <div class="col-6">
         <span class="label"
+          >Breed Type<span class="required-icon">*</span></span
+        >
+        <div class="alt-dropdown">
+          <p-select
+            [options]="Breeds"
+            name="key"
+            optionLabel="type"
+            optionValue="id"
+            [showClear]="true"
+            placeholder="Select breed type"
+            formControlName="breedTypeId"
+          />
+        </div>
+        <span
+          class="errorValidation"
+          *ngIf="
+            addAnimalForm.get('breedTypeId')?.touched &&
+            addAnimalForm.get('breedTypeId')?.hasError('required')
+          "
+        >
+          Required field
+        </span>
+      </div>
+      <div class="col-6">
+        <span class="label"
           >Animal Color<span class="required-icon">*</span>
         </span>
         <div class="alt-dropdown">
           <p-select
             [options]="AnimalColor"
-            [(ngModel)]="key"
             name="key"
             optionLabel="type"
             optionValue="id"
@@ -359,7 +397,9 @@
         </span>
       </div>
       <div class="col-6">
-        <span class="label">Animal Status</span>
+        <span class="label"
+          >Animal Status<span class="required-icon">*</span></span
+        >
         <div class="alt-dropdown">
           <p-select
             [options]="AnimalStatus"
@@ -368,7 +408,7 @@
             optionLabel="type"
             optionValue="id"
             [showClear]="true"
-            placeholder="Animal Status"
+            placeholder="Select animal status"
             formControlName="animalStatusId"
           />
         </div>
@@ -382,7 +422,10 @@
           Required field
         </span>
       </div>
-      <div class="col-6">
+      <div
+        class="col-6"
+        *ngIf="addAnimalForm.get('animalSourceTypeId')?.value === 2"
+      >
         <span class="label"
           >Birth Type<span class="required-icon">*</span>
         </span>
@@ -427,18 +470,28 @@
         </span>
       </div>
       <div class="col-6">
-        <span class="label"
-          >Birth Date<span class="required-icon">*</span></span
-        >
+        <span class="label">Birth Date</span>
         <input
           type="date"
           class="input-felid custom-date"
-          formControlName="age"
+          formControlName="birthDate"
           placeholder="Enter birth date..."
           [max]="today"
         />
+        <span
+          class="errorValidation"
+          *ngIf="
+            addAnimalForm.get('birthDate')?.touched &&
+            addAnimalForm.get('birthDate')?.hasError('required')
+          "
+        >
+          Required field
+        </span>
       </div>
-      <div class="col-6">
+      <div
+        class="col-6"
+        *ngIf="addAnimalForm.get('animalSourceTypeId')?.value === 1"
+      >
         <span class="label"
           >Purchase Date<span class="required-icon">*</span></span
         >
@@ -459,8 +512,11 @@
           Required field
         </span>
       </div>
-      <div class="col-6">
-        <span class="label">Price</span>
+      <div
+        class="col-6"
+        *ngIf="addAnimalForm.get('animalSourceTypeId')?.value === 1"
+      >
+        <span class="label">Price<span class="required-icon">*</span></span>
         <input
           type="number"
           min="0"

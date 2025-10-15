@@ -208,7 +208,7 @@ export class MasterService {
     );
   }
   getBreeds() {
-    return this.repositoryService.get('Master/get-breeds', true).pipe(
+    return this.repositoryService.get('Master/get-breed-types', true).pipe(
       map((response: any) => {
         return response;
       })
@@ -266,5 +266,14 @@ export class MasterService {
         return response;
       })
     );
+  }
+  getAnimalSourceTypes() {
+    return this.repositoryService
+      .get('Master/get-animal-source-types', true)
+      .pipe(
+        map((response: any) => {
+          return response;
+        })
+      );
   }
 }

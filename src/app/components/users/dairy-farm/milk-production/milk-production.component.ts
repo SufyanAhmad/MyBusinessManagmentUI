@@ -66,6 +66,8 @@ export class MilkProductionComponent {
   // for add animal popup
   addLoading: boolean = false;
   visible: boolean = false;
+  today: string = new Date().toISOString().split('T')[0];
+  currentTime: string = new Date().toTimeString().slice(0, 5);
   addMilkProductionForm!: FormGroup;
   displayedColumns: string[] = [
     'recordId',
@@ -87,7 +89,6 @@ export class MilkProductionComponent {
   ngOnInit() {
     this.busUnitId = this.accountService.getBusinessUnitId();
     this.businessUnitName = this.accountService.getBusinessUnitName();
-
     this.initForm();
   }
   ngAfterViewInit() {
@@ -189,6 +190,7 @@ export class MilkProductionComponent {
       );
   }
   AddMilkProduction() {
+    console.log('Submitting form:', this.addMilkProductionForm.value);
     this.addLoading = true;
     this.dairyFarmService
       .addMilkProduction(this.addMilkProductionForm.value)
@@ -224,17 +226,26 @@ export class MilkProductionComponent {
   initForm() {
     this.addMilkProductionForm = this.formBuilder.group({
       animalId: [null, [Validators.required]],
-      date: [null, [Validators.required]],
-      time: [null, [Validators.required]],
+      date: [this.today, [Validators.required]],
+      time: [this.currentTime, [Validators.required]],
       milkingTime: [, [Validators.required, Validators.pattern('^[0-9]*$')]],
       quantity: [, [Validators.required, Validators.pattern('^[0-9]*$')]],
       fat: [, [Validators.required, Validators.pattern('^[0-9]*$')]],
       snf: [, [Validators.required, Validators.pattern('^[0-9]*$')]],
-      businessUnitId: [this.busUnitId],
+      businessUnitId: [this.busUnitId, [Validators.required]],
     });
+    console.log(
+      'Form initialized with businessUnitId:',
+      this.addMilkProductionForm.get('businessUnitId')?.value
+    );
   }
   onDialogHide() {
     this.addMilkProductionForm.reset();
+    this.addMilkProductionForm.patchValue({
+      businessUnitId: this.busUnitId,
+      date: [this.today],
+      time: [this.currentTime],
+    });
   }
   SearchBySearchKey(event: any) {
     if (event.key != 'Enter') {

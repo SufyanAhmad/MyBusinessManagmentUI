@@ -62,6 +62,7 @@ export class FeedComponent {
   businessUnitId: any = null;
   key: any = null;
   businessUnitName: any = '';
+  today: string = new Date().toISOString().split('T')[0];
   // for add feed popup
   addLoading: boolean = false;
   visible: boolean = false;
@@ -209,9 +210,9 @@ export class FeedComponent {
   initForm() {
     this.addFeedForm = this.formBuilder.group({
       name: [null, [Validators.required]],
-      businessUnitId: [this.busUnitId],
+      businessUnitId: [this.busUnitId, [Validators.required]],
       quantity: [, [Validators.required, Validators.pattern('^[0-9]*$')]],
-      date: [null, [Validators.required]],
+      date: [this.today, [Validators.required]],
       expiryDate: [null],
       feedTypeId: [null, [Validators.required]],
       note: [null],
@@ -219,6 +220,10 @@ export class FeedComponent {
   }
   onDialogHide() {
     this.addFeedForm.reset();
+    this.addFeedForm.patchValue({
+      businessUnitId: this.busUnitId,
+      date: [this.today],
+    });
   }
   loadFeedTypes() {
     this.masterService.getFeedTypes().subscribe(
