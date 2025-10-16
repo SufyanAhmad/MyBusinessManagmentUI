@@ -111,6 +111,17 @@ export interface FeedModel {
   note: String;
   feedTypeId: Number;
 }
+export interface FeedConsumptionModel {
+  feedTrackId: String;
+  feedTrackType: String;
+  dateTime: String;
+  quantity: Number;
+  isGiven: Boolean;
+  animalId: String;
+  feedId: String;
+  feedTrackTypeId: Number;
+  note: String;
+}
 // export interface MilkProductionModel {
 //   updatedBy?: String;
 //   updatedAt?: String;

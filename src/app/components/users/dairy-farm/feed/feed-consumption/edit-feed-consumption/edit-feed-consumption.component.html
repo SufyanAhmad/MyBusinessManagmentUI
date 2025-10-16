@@ -1,0 +1,206 @@
+<div class="container-fluid">
+  <div class="d-pointer">
+    <span class="breadcrumb" [routerLink]="['/superAdmin/business/units']"
+      >{{ this.businessUnitName }} /
+    </span>
+    <span
+      class="breadcrumb-bold"
+      style="cursor: pointer"
+      [routerLink]="['/dairyFarm/feed-consumption']"
+      >&nbsp;Feed Consumption /</span
+    >
+    <span class="breadcrumb-bold">&nbsp;Feed Consumption Detail</span>
+  </div>
+  <!-- User Header -->
+  <div
+    class="header-card d-flex align-items-center justify-content-between mb-4"
+  >
+    <div class="heading mb-0" style="color: #4079b0 !important">
+      {{ FeedConsumptionDetail.feedTrackType }}
+    </div>
+  </div>
+  <!-- Customer Details -->
+  <div
+    class="d-flex justify-content-between align-items-center"
+    style="margin-top: 70px"
+  >
+    <span class="heading" style="color: #4079b0 !important">
+      Feed Consumption Detail
+    </span>
+    <span *ngIf="isReadOnly" (click)="isReadOnly = false">
+      <button class="edit-btn">EDIT</button>
+    </span>
+    <span *ngIf="!isReadOnly" class="d-flex justify-content-end gap-4">
+      <button (click)="discardChanges()" type="button" class="btn-discard">
+        Discard
+      </button>
+      <button
+        type="button"
+        (click)="editFeedForm.valid && !editLoading ? editFeedDetail() : null"
+        [ngClass]="{
+          'btn-save': editFeedForm.valid && !editLoading,
+          'btn-disable': editFeedForm.invalid || editLoading
+        }"
+      >
+        Save &nbsp;
+        <span
+          *ngIf="editLoading"
+          class="spinner-border spinner-border-sm"
+          role="status"
+          aria-hidden="true"
+        ></span>
+      </button>
+    </span>
+  </div>
+  <form [formGroup]="editFeedForm">
+    <div class="row g-3 align-items-end mt-4">
+      <div class="col-md-4 mb-4 position-relative">
+        <span class="label"
+          >Feed Track Type<span class="required-icon">*</span>
+        </span>
+        <div class="alt-dropdown" [ngClass]="{ 'input-disable': isReadOnly }">
+          <p-select
+            [options]="FeedTrackTypesList"
+            optionLabel="type"
+            optionValue="id"
+            formControlName="feedTrackTypeId"
+            placeholder="Select Feed Track Type"
+          ></p-select>
+          <span
+            class="errorValidation"
+            *ngIf="
+              editFeedForm.get('feedTrackTypeId')?.touched &&
+              editFeedForm.get('feedTrackTypeId')?.hasError('required')
+            "
+          >
+            Required field
+          </span>
+        </div>
+      </div>
+      <div class="col-md-4 mb-4 position-relative">
+        <span class="label">Quantity<span class="required-icon">*</span></span>
+        <input
+          type="number"
+          class="input-felid"
+          [ngClass]="{ 'input-disable': isReadOnly }"
+          placeholder="Enter quantity..."
+          formControlName="quantity"
+        />
+        <span
+          class="errorValidation"
+          *ngIf="
+            editFeedForm.get('quantity')?.touched &&
+            editFeedForm.get('quantity')?.hasError('required')
+          "
+        >
+          Required field
+        </span>
+      </div>
+      <div class="col-md-4 mb-4 position-relative">
+        <span class="label">Date Time<span class="required-icon">*</span></span>
+        <input
+          type="datetime-local"
+          class="input-felid custom-date"
+          [ngClass]="{ 'input-disable': isReadOnly }"
+          placeholder="Enter  date time..."
+          formControlName="dateTime"
+        />
+        <span
+          class="errorValidation"
+          *ngIf="
+            editFeedForm.get('date')?.touched &&
+            editFeedForm.get('date')?.hasError('required')
+          "
+        >
+          Required field
+        </span>
+      </div>
+      <div
+        class="col-md-4 mb-4 position-relative"
+        *ngIf="FeedConsumptionDetail.feedTrackTypeId == 1"
+      >
+        <span class="label">Animal<span class="required-icon">*</span> </span>
+        <div class="alt-dropdown" [ngClass]="{ 'input-disable': isReadOnly }">
+          <p-select
+            [options]="AnimalList"
+            optionLabel="type"
+            optionValue="id"
+            formControlName="animalId"
+            placeholder="Select animal"
+          ></p-select>
+          <span
+            class="errorValidation"
+            *ngIf="
+              editFeedForm.get('animalId')?.touched &&
+              editFeedForm.get('animalId')?.hasError('required')
+            "
+          >
+            Required field
+          </span>
+        </div>
+      </div>
+      <div class="col-md-4 mb-4 position-relative">
+        <span class="label">Feeds<span class="required-icon">*</span> </span>
+        <div class="alt-dropdown" [ngClass]="{ 'input-disable': isReadOnly }">
+          <p-select
+            [options]="FeedsList"
+            optionLabel="type"
+            optionValue="id"
+            formControlName="feedId"
+            placeholder="Select feed"
+          ></p-select>
+          <span
+            class="errorValidation"
+            *ngIf="
+              editFeedForm.get('feedId')?.touched &&
+              editFeedForm.get('feedId')?.hasError('required')
+            "
+          >
+            Required field
+          </span>
+        </div>
+      </div>
+      <div
+        class="col-md-4 mb-4 position-relative"
+        *ngIf="FeedConsumptionDetail.feedTrackTypeId == 1"
+      >
+        <div class="mt-3 gap-3" style="display: flex">
+          <div style="display: flex">
+            <span class="label">Pending</span>
+            <span
+              ><input
+                class="form-check-input"
+                type="radio"
+                name="isGiven"
+                [value]="false"
+                [(ngModel)]="isGiven"
+                formControlName="isGiven"
+            /></span>
+          </div>
+          <div style="display: flex">
+            <span class="label" style="margin-left: 25px">Given</span>
+            <span
+              ><input
+                class="form-check-input"
+                type="radio"
+                name="isGiven"
+                [value]="true"
+                [(ngModel)]="isGiven"
+                formControlName="isGiven"
+            /></span>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-12 mb-4">
+        <span class="label">Note</span>
+        <textarea
+          formControlName="note"
+          class="input-felid my-input"
+          placeholder="Enter note..."
+          [ngClass]="{ 'input-disable': isReadOnly }"
+        ></textarea>
+      </div>
+    </div>
+  </form>
+</div>
+<p-toast />

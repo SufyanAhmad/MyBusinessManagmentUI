@@ -28,6 +28,7 @@ import { FeedStockComponent } from './feed/feed-stock/feed-stock.component';
 import { FeedTransactionsComponent } from './feed/feed-transactions/feed-transactions.component';
 import { FeedConsumptionComponent } from './feed/feed-consumption/feed-consumption.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { EditFeedConsumptionComponent } from './feed/feed-consumption/edit-feed-consumption/edit-feed-consumption.component';
 
 const routes: Routes = [
   {
@@ -74,6 +75,7 @@ const routes: Routes = [
       { path: 'feed-stock', component: FeedStockComponent },
       { path: 'feed-transactions', component: FeedTransactionsComponent },
       { path: 'feed-consumption', component: FeedConsumptionComponent },
+      { path: 'feed-consumption/:id', component: EditFeedConsumptionComponent },
       {
         path: 'milk-production',
         component: MilkProductionComponent,

@@ -254,13 +254,17 @@ export class AnimalComponent {
       placeOfBirth: [null],
       weight: [null],
       animalStatusId: [0, [Validators.required]],
-      businessUnitId: [this.busUnitId],
+      businessUnitId: [this.busUnitId, [Validators.required]],
       animalColorId: [0, [Validators.required]],
       birthTypeId: [0, [Validators.required]],
     });
   }
   onDialogHide() {
     this.addAnimalForm.reset();
+    this.addAnimalForm.patchValue({
+      businessUnitId: this.busUnitId,
+      purchaseDate: this.today,
+    });
   }
   SearchBySearchKey(event: any) {
     if (event.key != 'Enter') {

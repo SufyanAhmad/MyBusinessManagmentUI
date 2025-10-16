@@ -462,4 +462,36 @@ export class DairyFarmService {
         })
       );
   }
+  addFeedConsumption(data: any) {
+    return this.repositoryService
+      .post('FeedTrack/add-feed-track', data, true)
+      .pipe(
+        map((response: any) => {
+          return response;
+        })
+      );
+  }
+
+  getFeedConsumptionBySearchFilter(data: any) {
+    return this.repositoryService
+      .post(
+        'FeedTrack/get-feed-track-by-search-and-filter-with-pagination',
+        data,
+        true
+      )
+      .pipe(
+        map((response: any) => {
+          return response;
+        })
+      );
+  }
+  GetFeedConsumptionDetail(id: any) {
+    return this.repositoryService
+      .get('FeedTrack/get-feed-track/' + id, true)
+      .pipe(
+        map((response: any) => {
+          return response;
+        })
+      );
+  }
 }

@@ -5,7 +5,7 @@
     >
     <span class="breadcrumb-bold">&nbsp;Breed</span>
   </div>
-  <span class="d-flex flex-wrap justify-content-between">
+  <!-- <span class="d-flex flex-wrap justify-content-between">
     <span class="d-flex flex-wrap">
       <div class="position-relative searchinput mt-4 mb-3">
         <svg
@@ -110,28 +110,10 @@
         New Breed
       </button>
     </div>
-  </span>
+  </span> -->
   <div class="mat-elevation-z8 mt-4 rounded-table">
     <div class="table-responsive">
       <table mat-table matSort [dataSource]="dataSource">
-        <ng-container matColumnDef="breedId">
-          <th
-            mat-header-cell
-            *matHeaderCellDef
-            class="table-header"
-            style="min-width: 100px !important"
-          >
-            Breed Id
-          </th>
-          <td
-            mat-cell
-            *matCellDef="let element"
-            class="tableText-bold"
-            [routerLink]="['/dairyFarm/breed/', element.breedId]"
-          >
-            {{ element.breedRef }}
-          </td>
-        </ng-container>
         <ng-container matColumnDef="breedName">
           <th
             mat-header-cell
@@ -147,84 +129,7 @@
             class="tableText-bold"
             [routerLink]="['/dairyFarm/breed/', element.breedId]"
           >
-            {{ element.name }}
-          </td>
-        </ng-container>
-        <ng-container matColumnDef="type">
-          <th
-            mat-header-cell
-            *matHeaderCellDef
-            class="table-header"
-            style="min-width: 100px !important"
-          >
-            TYPE
-          </th>
-          <td mat-cell *matCellDef="let element">
-            <div
-              class="mat_table_btn"
-              *ngIf="element.animalTypeId == 1"
-              [style.background-color]="'#FFCE3A'"
-            >
-              {{ element.animalType }}
-            </div>
-            <div
-              class="mat_table_btn"
-              *ngIf="element.animalTypeId == 2"
-              [style.background-color]="'#7C9052'"
-            >
-              {{ element.animalType }}
-            </div>
-            <div
-              class="mat_table_btn"
-              *ngIf="element.animalTypeId == 3"
-              [style.background-color]="'#FF5C40'"
-            >
-              {{ element.animalType }}
-            </div>
-          </td>
-        </ng-container>
-
-        <ng-container matColumnDef="origin">
-          <th
-            mat-header-cell
-            *matHeaderCellDef
-            class="table-header"
-            style="min-width: 150px !important"
-          >
-            Origin
-          </th>
-          <td mat-cell *matCellDef="let element" class="tableText-thin">
-            {{ element.origin }}
-          </td>
-        </ng-container>
-        <ng-container matColumnDef="country">
-          <th
-            mat-header-cell
-            *matHeaderCellDef
-            class="table-header"
-            style="min-width: 150px !important"
-          >
-            Country
-          </th>
-          <td mat-cell *matCellDef="let element" class="tableText-thin">
-            {{ element.country }}
-          </td>
-        </ng-container>
-        <ng-container matColumnDef="note">
-          <th
-            mat-header-cell
-            *matHeaderCellDef
-            class="table-header"
-            style="min-width: 170px !important"
-          >
-            Note
-          </th>
-          <td
-            mat-cell
-            *matCellDef="let element"
-            class="tableText-thin one-line-text"
-          >
-            {{ element.note }}
+            {{ element.type }}
           </td>
         </ng-container>
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
@@ -232,7 +137,9 @@
       </table>
     </div>
   </div>
-  <app-data-not-found *ngIf="BreedList.length == 0 && !isLoadingResults" />
+  <app-data-not-found
+    *ngIf="!isLoadingResults && BreedList.length === 0"
+  ></app-data-not-found>
   <div class="skelton" *ngIf="isLoadingResults">
     <app-loading></app-loading>
   </div>
@@ -240,13 +147,14 @@
     pageSize="10"
     [length]="BreedList.length"
     showFirstLastButtons
-    aria-label="Select page of periodic elements"
+    (page)="updatePagedData($event)"
   >
+    >
   </mat-paginator>
 </div>
 <!-- Add breed -->
 
-<p-dialog
+<!-- <p-dialog
   header="Add Breed"
   [modal]="true"
   [(visible)]="visible"
@@ -358,5 +266,5 @@
       </button>
     </div>
   </form>
-</p-dialog>
+</p-dialog> -->
 <p-toast></p-toast>

@@ -84,16 +84,11 @@
               Total Employees : {{ item.totalEmployee }}
             </div>
 
-            <div class="d-flex align-items-center">
-              <button
-                (click)="
-                  addUserVisible = true;
-                  initUserForm();
-                  _businessUnitId = item.businessUnitId
-                "
-                class="btn"
-                style="min-width: 40px"
-              >
+            <div
+              class="d-flex align-items-center"
+              [routerLink]="['/superAdmin/employees/', item.businessUnitId]"
+            >
+              <button class="btn" style="min-width: 40px">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="18"

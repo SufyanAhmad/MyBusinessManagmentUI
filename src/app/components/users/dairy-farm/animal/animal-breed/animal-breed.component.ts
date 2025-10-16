@@ -18,8 +18,6 @@ import { masterModal } from '../../../../../models/master-model/master-model';
 import { BreedModel } from '../../../../../models/dairy-farm-model/dairy-farm-model';
 import { DairyFarmService } from '../../../../../services/dairy-farm.service';
 import { DialogModule } from 'primeng/dialog';
-import * as countries from 'i18n-iso-countries';
-import enLocale from 'i18n-iso-countries/langs/en.json';
 
 @Component({
   selector: 'app-animal-breed',
@@ -253,14 +251,6 @@ export class AnimalBreedComponent {
   onDialogHide() {
     this.addBreedForm.reset();
   }
-  loadCountries() {
-    countries.registerLocale(enLocale);
-    const names = countries.getNames('en', { select: 'official' });
-    this.countryList = Object.values(names).map((name) => ({
-      name: String(name),
-      value: String(name),
-    }));
-  }
   onAddBreedClick() {
     if (this.hasBreed) {
       this.messageService.add({
@@ -285,7 +275,6 @@ export class AnimalBreedComponent {
           };
           this.AnimalTypes.push(_data);
         }
-        this.loadCountries();
       },
       (error) => {
         if (error.status == 401) {

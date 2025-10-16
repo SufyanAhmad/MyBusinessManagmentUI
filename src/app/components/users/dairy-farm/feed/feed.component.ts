@@ -140,7 +140,6 @@ export class FeedComponent {
         (list) => {
           this.feedList = [];
           if (list && list.length > 0) {
-            debugger;
             this.dataSource.data = list;
             for (let a = 0; a < list.length; a++) {
               let feed: FeedModel = {

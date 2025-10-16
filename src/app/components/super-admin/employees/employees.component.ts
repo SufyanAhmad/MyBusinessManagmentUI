@@ -12,7 +12,12 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { CheckboxModule } from 'primeng/checkbox';
 import { SelectModule } from 'primeng/select';
 import { DialogModule } from 'primeng/dialog';
-import { ActivatedRoute, Router, RouterLink, RouterModule } from '@angular/router';
+import {
+  ActivatedRoute,
+  Router,
+  RouterLink,
+  RouterModule,
+} from '@angular/router';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import {
   CustomerModel,
@@ -86,7 +91,7 @@ export class EmployeesComponent {
     private messageService: MessageService,
     private accountService: AccountService,
     private router: Router,
-    private route: ActivatedRoute,
+    private route: ActivatedRoute
   ) {
     this.businessUnitId = this.route.snapshot.params['businessUnitId'];
   }
@@ -231,14 +236,18 @@ export class EmployeesComponent {
     );
   }
   initForm() {
+    const businessUnitId = this.route.snapshot.paramMap.get('businessUnitId');
     this.addEmployeeModel = this.formBuilder.group({
       name: [null, [Validators.required]],
       employeeTypeId: [0, [Validators.required]],
       salary: [null],
       joiningDate: [null, [Validators.required]],
       endDate: [null],
-      businessUnitId: ['', [Validators.required]],
+      businessUnitId: [businessUnitId || '', [Validators.required]],
     });
+    if (businessUnitId) {
+      this.visible = true;
+    }
   }
 
   SearchBySearchKey(event: any) {
@@ -276,7 +285,7 @@ export class EmployeesComponent {
       }
     );
   }
-  loadBusinessUnits() {
+  loadBusinessUnits(selectedId?: number) {
     this.masterService.getBusinessUnitTypesById(3).subscribe(
       (res) => {
         var dt = res;

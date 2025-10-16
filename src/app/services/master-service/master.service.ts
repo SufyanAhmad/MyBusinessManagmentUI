@@ -276,4 +276,18 @@ export class MasterService {
         })
       );
   }
+  getFeeds() {
+    return this.repositoryService.get('Master/get-feeds', true).pipe(
+      map((response: any) => {
+        return response;
+      })
+    );
+  }
+  getFeedTrackTypes() {
+    return this.repositoryService.get('Master/get-feed-track-types', true).pipe(
+      map((response: any) => {
+        return response;
+      })
+    );
+  }
 }

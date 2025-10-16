@@ -16,8 +16,6 @@ import { MasterService } from '../../../../../services/master-service/master.ser
 import { masterModal } from '../../../../../models/master-model/master-model';
 import { BreedModel } from '../../../../../models/dairy-farm-model/dairy-farm-model';
 import { DairyFarmService } from '../../../../../services/dairy-farm.service';
-import * as countries from 'i18n-iso-countries';
-import enLocale from 'i18n-iso-countries/langs/en.json';
 
 @Component({
   selector: 'app-edit-breed',
@@ -192,14 +190,6 @@ export class EditBreedComponent {
       note: [this.BreedDetail.note],
     });
   }
-  loadCountries() {
-    countries.registerLocale(enLocale);
-    const names = countries.getNames('en', { select: 'official' });
-    this.countryList = Object.values(names).map((name) => ({
-      name: String(name),
-      value: String(name),
-    }));
-  }
   loadAnimalTypes() {
     this.masterService.getAnimalTypes().subscribe(
       (res) => {
@@ -212,7 +202,6 @@ export class EditBreedComponent {
           };
           this.AnimalTypes.push(_data);
         }
-        this.loadCountries();
       },
       (error) => {
         if (error.status == 401) {
